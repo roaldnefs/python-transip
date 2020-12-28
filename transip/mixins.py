@@ -17,39 +17,21 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with python-transip.  If not, see <https://www.gnu.org/licenses/>.
 
-from typing import Optional
+from typing import Optional, List, Type
+from transip.base import ApiObject
 
+class ListMixin:
+    """Retrive a list of ApiObjects.
 
-class TransIPError(Exception):
+    Derived class must define ``_resp_list_attr``.
 
-    def __init__(self, message: str = "") -> None:
-        Exception.__init__(self, message)
-        self.message = message
+    ``_resp_list_attr``: The response attribute which lists all objects
+    """
 
-    def __str__(self) -> str:
-        return self.message
+    _resp_list_attr: Optional[str] = None
 
-
-class TransIPHTTPError(TransIPError):
-
-    def __init__(
-        self,
-        message: str = "",
-        response_code: Optional[int] = None
-    ) -> None:
-
-        TransIPError.__init__(self, message)
-        self.response_code = response_code
-
-    def __str__(self) -> str:
-        if self.response_code:
-            return "{code}: {message}".format(
-                code=self.response_code,
-                message=self.message
-            )
-        else:
-            return self.message
-
-
-class TransIPParsingError(TransIPError):
-    pass
+    def list(self, **kwargs) -> List[Type[ApiObject]]:
+        objs: List[Type[ApiObject]] = []
+        for obj in self.client.get(self._path)[self._resp_list_attr]:
+            objs.append(self._obj_cls(obj))
+        return objs
