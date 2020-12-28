@@ -19,7 +19,7 @@ def get_long_description() -> str:
 
 setup(
     name="python-transip",
-    version=None,
+    version=get_version(),
     description="Wrapper for the TransIP API",
     long_description=get_long_description(),
     long_description_content_type="text/markdown",
