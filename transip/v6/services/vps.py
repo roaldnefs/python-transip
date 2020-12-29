@@ -20,12 +20,14 @@
 from typing import Optional, Type
 
 from transip.base import ApiService, ApiObject
-from transip.mixins import ListMixin
+from transip.mixins import GetMixin, ListMixin
 from transip.v6.objects.vps import Vps
 
 
-class VpsService(ListMixin, ApiService):
+class VpsService(GetMixin, ListMixin, ApiService):
 
     _path: str = "/vps"
     _obj_cls: Optional[Type[ApiObject]] = Vps
+
     _resp_list_attr: str = "vpss"
+    _resp_get_attr: str = "vps"

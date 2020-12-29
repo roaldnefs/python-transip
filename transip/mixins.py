@@ -23,6 +23,30 @@ from transip import TransIP
 from transip.base import ApiObject
 
 
+class GetMixin:
+    """Retrieve an single ApiObject.
+
+    Derived class must define ``_resp_get_attr``.
+
+    ``_resp_get_attr``: The response attribute which contains the object
+    """
+    client: TransIP
+    _obj_cls: Optional[Type[ApiObject]]
+    _path: str
+
+    _resp_get_attr: Optional[str] = None
+
+    def get(self, id: str, **kwargs) -> Optional[Type[ApiObject]]:
+        if self._obj_cls or self._path or self._resp_get_attr:
+            path: str = "{path}/{id}".format(
+                path=self._path,
+                id=id
+            )
+            obj: Type[ApiObject] = self.client.get(path)[self._resp_get_attr]
+            return obj
+        return None
+
+
 class ListMixin:
     """Retrieve a list of ApiObjects.
 
