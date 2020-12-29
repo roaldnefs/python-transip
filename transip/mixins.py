@@ -42,7 +42,9 @@ class GetMixin:
                 path=self._path,
                 id=id
             )
-            obj: Type[ApiObject] = self.client.get(path)[self._resp_get_attr]
+            obj: Type[ApiObject] = self._obj_cls(  # type: ignore
+                self.client.get(path)[self._resp_get_attr]
+            )
             return obj
         return None
 
