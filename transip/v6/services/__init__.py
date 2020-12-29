@@ -17,5 +17,5 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with python-transip.  If not, see <https://www.gnu.org/licenses/>.
 
-from transip.v6.services.domain import DomainService
-from transip.v6.services.vps import VpsService
+from transip.v6.services.domain import DomainService  # noqa: 401
+from transip.v6.services.vps import VpsService  # noqa: 401

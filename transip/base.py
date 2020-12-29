@@ -26,7 +26,7 @@ class ApiObject:
     """Represents a TransIP API object."""
 
     _id_attr: str = "id"
-    
+
     def __init__(self, attrs) -> None:
         self.__dict__["_attrs"] = attrs
 
@@ -71,7 +71,7 @@ class ApiService:
     """Represents a TransIP API service."""
 
     _path: Optional[str] = None
-    _obj_cls: Optional[ApiObject] = None
+    _obj_cls: Optional[Type[ApiObject]] = None
 
     def __init__(self, client: TransIP) -> None:
         self.client: TransIP = client

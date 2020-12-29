@@ -69,7 +69,8 @@ class TransIP:
         self.session: requests.Session = requests.Session()
 
         # Dynamically import the services for the specified API version
-        services = importlib.import_module("transip.v{version}.services".format(
+        services = importlib.import_module(
+            "transip.v{version}.services".format(
                 version=api_version
             )
         )
@@ -82,7 +83,10 @@ class TransIP:
         """Return the API URL."""
         return self._url
 
-    def _get_headers(self, content_type: Optional[str] = None) -> Dict[str, str]:
+    def _get_headers(
+        self,
+        content_type: Optional[str] = None
+    ) -> Dict[str, str]:
         headers = self.headers.copy()
         if content_type:
             headers["Content-Type"] = content_type
@@ -125,12 +129,14 @@ class TransIP:
         if not data and json:
             content_type = "application/json"
 
-        headers: Dict[str, str] = self._get_headers(content_type) 
+        headers: Dict[str, str] = self._get_headers(content_type)
         request: requests.Request = requests.Request(
-            method, url, headers=headers, data=data, json=json, params=params, 
+            method, url, headers=headers, data=data, json=json, params=params,
         )
 
-        prepped: requests.PreparedRequest = self.session.prepare_request(request)
+        prepped: requests.PreparedRequest = self.session.prepare_request(
+            request
+        )
         response: requests.Response = self.session.send(prepped)
 
         if 200 <= response.status_code < 300:
@@ -178,7 +184,7 @@ class TransIP:
 
         try:
             return response.json()
-        except Exception as exc:
+        except Exception:
             raise TransIPParsingError(
                 message="Failed to parse the API response as JSON"
             )

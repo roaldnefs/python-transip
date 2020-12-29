@@ -23,4 +23,3 @@ from transip.base import ApiObject
 class Domain(ApiObject):
 
     _id_attr: str = "name"
-

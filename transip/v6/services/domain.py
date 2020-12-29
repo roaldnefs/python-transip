@@ -17,9 +17,9 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with python-transip.  If not, see <https://www.gnu.org/licenses/>.
 
-from typing import List, Type
+from typing import Optional, Type
 
-from transip.base import ApiService
+from transip.base import ApiService, ApiObject
 from transip.mixins import ListMixin
 from transip.v6.objects.domain import Domain
 
@@ -27,5 +27,5 @@ from transip.v6.objects.domain import Domain
 class DomainService(ListMixin, ApiService):
 
     _path: str = "/domains"
-    _obj_cls: Type[Domain] = Domain
+    _obj_cls: Optional[Type[ApiObject]] = Domain
     _resp_list_attr: str = "domains"

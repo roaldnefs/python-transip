@@ -17,5 +17,15 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with python-transip.  If not, see <https://www.gnu.org/licenses/>.
 
-from transip.v6.objects.domain import Domain  # noqa: 401
-from transip.v6.objects.vps import Vps  # noqa: 401
+import pytest
+
+from typing import Type
+
+from transip import TransIP
+
+
+@pytest.fixture
+def transip_minimal_client() -> TransIP:
+    return TransIP(
+        access_token="access_token"
+    )

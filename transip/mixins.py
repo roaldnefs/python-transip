@@ -19,6 +19,7 @@
 
 from typing import Optional, List, Type
 
+from transip import TransIP
 from transip.base import ApiObject
 
 
@@ -29,11 +30,15 @@ class ListMixin:
 
     ``_resp_list_attr``: The response attribute which lists all objects
     """
+    client: TransIP
+    _obj_cls: Optional[Type[ApiObject]]
+    _path: str
 
     _resp_list_attr: Optional[str] = None
 
     def list(self, **kwargs) -> List[Type[ApiObject]]:
         objs: List[Type[ApiObject]] = []
-        for obj in self.client.get(self._path)[self._resp_list_attr]:
-            objs.append(self._obj_cls(obj))
+        if self._obj_cls and self._path and self._resp_list_attr:
+            for obj in self.client.get(self._path)[self._resp_list_attr]:
+                objs.append(self._obj_cls(obj))  # type: ignore
         return objs
