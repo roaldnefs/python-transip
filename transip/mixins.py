@@ -18,10 +18,12 @@
 # along with python-transip.  If not, see <https://www.gnu.org/licenses/>.
 
 from typing import Optional, List, Type
+
 from transip.base import ApiObject
 
+
 class ListMixin:
-    """Retrive a list of ApiObjects.
+    """Retrieve a list of ApiObjects.
 
     Derived class must define ``_resp_list_attr``.
 
