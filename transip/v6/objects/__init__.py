@@ -17,5 +17,6 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with python-transip.  If not, see <https://www.gnu.org/licenses/>.
 
+from transip.v6.objects.availability_zone import AvailabilityZone  # noqa: 401
 from transip.v6.objects.domain import Domain  # noqa: 401
 from transip.v6.objects.vps import Vps  # noqa: 401
