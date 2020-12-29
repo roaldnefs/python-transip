@@ -27,4 +27,4 @@ $ python -m pip install python-transip
 
 ## Documentation
 
-See the [docs folder](docs/index.rst) for more detailed instructions and additional documentation.
+API Reference and User Guide available on [Read the Docs](https://python-transip.readthedocs.io/).

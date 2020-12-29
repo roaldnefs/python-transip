@@ -8,7 +8,7 @@ Welcome to python-transip's documentation!
 
 Release v\ |version|. (:ref:`Installation <install>`)
 
-.. image:: https://pepy.tech/badge/python-transip
+.. image:: https://pepy.tech/badge/python-transip/month
     :target: https://pepy.tech/project/python-transip
 
 .. image:: https://img.shields.io/pypi/l/python-transip.svg
