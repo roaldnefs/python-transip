@@ -43,10 +43,7 @@ class TransIPHTTPError(TransIPError):
 
     def __str__(self) -> str:
         if self.response_code:
-            return "{code}: {message}".format(
-                code=self.response_code,
-                message=self.message
-            )
+            return f"{self.response_code}: {self.message}"
         else:
             return self.message
 

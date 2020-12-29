@@ -40,18 +40,14 @@ class ApiObject:
         self.__dict__["_attrs"][name] = value
 
     def __str__(self) -> str:
-        return "{} => {}".format(type(self), self._attrs)
+        return f"{type(self)} => {self._attrs}"
 
     def __repr__(self) -> str:
         name = self.__class__.__name__
         if self._id_attr:
-            return "<{name} {id}:{value}>".format(
-                name=name,
-                id=self._id_attr,
-                value=self.get_id()
-            )
+            return f"<{name} {self._id_attr}:{self.get_id()}>"
         else:
-            return "<{name}>".format(name=name)
+            return f"<{name}>"
 
     def __dir__(self):
         return super().__dir__() + list(self.attrs)

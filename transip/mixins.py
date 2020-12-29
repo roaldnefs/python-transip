@@ -38,12 +38,8 @@ class GetMixin:
 
     def get(self, id: str, **kwargs) -> Optional[Type[ApiObject]]:
         if self._obj_cls or self._path or self._resp_get_attr:
-            path: str = "{path}/{id}".format(
-                path=self._path,
-                id=id
-            )
             obj: Type[ApiObject] = self._obj_cls(  # type: ignore
-                self.client.get(path)[self._resp_get_attr]
+                self.client.get(f"{self._path}/{id}")[self._resp_get_attr]
             )
             return obj
         return None

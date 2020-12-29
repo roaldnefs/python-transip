@@ -49,31 +49,20 @@ class TransIP:
     ) -> None:
 
         self._api_version: str = api_version
-        self._url: str = "https://api.transip.nl/v{version}".format(
-            version=api_version
-        )
+        self._url: str = f"https://api.transip.nl/v{api_version}"
         self._access_token: Optional[str] = access_token
 
         # Headers to use when making a request to TransIP
         self.headers: Dict[str, str] = {
-            "User-Agent": "{title}/{version}".format(
-                title=__title__,
-                version=__version__
-            ),
-            "Authorization": "Bearer {token}".format(
-                token=access_token
-            )
+            "User-Agent": f"{__title__}/{__version__}",
+            "Authorization": f"Bearer {access_token}"
         }
 
         # Initialize a session object for making requests
         self.session: requests.Session = requests.Session()
 
         # Dynamically import the services for the specified API version
-        services = importlib.import_module(
-            "transip.v{version}.services".format(
-                version=api_version
-            )
-        )
+        services = importlib.import_module(f"transip.v{api_version}.services")
 
         self.availability_zones: Type[Any] = (
             services.AvailabilityZoneService(self)  # type: ignore
@@ -96,10 +85,7 @@ class TransIP:
         return headers
 
     def _build_url(self, path: str) -> str:
-        return "{api_url}{path}".format(
-            api_url=self._url,
-            path=path
-        )
+        return f"{self._url}{path}"
 
     def _send(
         self,
