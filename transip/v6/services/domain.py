@@ -20,11 +20,11 @@
 from typing import Optional, Type
 
 from transip.base import ApiService, ApiObject
-from transip.mixins import GetMixin, ListMixin
+from transip.mixins import GetMixin, DeleteMixin, ListMixin
 from transip.v6.objects.domain import Domain
 
 
-class DomainService(GetMixin, ListMixin, ApiService):
+class DomainService(GetMixin, DeleteMixin, ListMixin, ApiService):
 
     _path: str = "/domains"
     _obj_cls: Optional[Type[ApiObject]] = Domain

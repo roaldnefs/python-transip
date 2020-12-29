@@ -49,6 +49,17 @@ class GetMixin:
         return None
 
 
+class DeleteMixin:
+    """Delete a single ApiObject."""
+
+    client: TransIP
+    _path: str
+
+    def delete(self, id: str, **kwargs) -> None:
+        if self._path:
+            self.client.delete(f"{self._path}/{id}")
+
+
 class ListMixin:
     """Retrieve a list of ApiObjects.
 
