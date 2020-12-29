@@ -11,6 +11,7 @@
 '2011-04-29'
 ```
 
+[![CI Tests](https://github.com/roaldnefs/python-transip/workflows/Test/badge.svg?event=push)](https://github.com/roaldnefs/python-transip/actions)
 [![Downloads](https://pepy.tech/badge/python-transip/month)](https://pepy.tech/project/python-transip/month)
 [![Supported Versions](https://img.shields.io/pypi/pyversions/python-transip.svg)](https://pypi.org/project/python-transip)
 [![Contributors](https://img.shields.io/github/contributors/roaldnefs/python-transip.svg)](https://github.com/roaldnefs/python-transip/graphs/contributors)
