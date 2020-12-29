@@ -75,6 +75,9 @@ class TransIP:
             )
         )
 
+        self.availability_zones: Type[Any] = (
+            services.AvailabilityZoneService(self)  # type: ignore
+        )
         self.domains: Type[Any] = services.DomainService(self)  # type: ignore
         self.vpss: Type[Any] = services.VpsService(self)  # type: ignore
 
