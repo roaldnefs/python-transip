@@ -27,7 +27,7 @@ from transip.exceptions import TransIPHTTPError, TransIPParsingError
 
 
 __title__ = "python-transip"
-__version__ = "0.0.1"
+__version__ = "0.1.0"
 __author__ = "Roald Nefs"
 __email__ = "info@roaldnefs.com"
 __copyright__ = "Copyright 2020, Roald Nefs"
