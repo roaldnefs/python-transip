@@ -87,6 +87,11 @@ object by its name::
     >>> print(f"{domain.name} was registered on {domain.registrationDate}")
     transipdemonstratie.nl was registered on 2011-04-29
 
+We could also cancel a single :class:`Domain <transip.v6.objects.Domain>`
+object by its name::
+
+    >>> client.domains.delete('transipdemonstratie.nl')
+
 VPSs
 ----
 
@@ -111,6 +116,11 @@ object by its name::
     >>> vps = client.vpss.get('transipdemo-vps')
     >>> print(f"{vps.name} runs {vps.operatingSystem} and has IP address: '{vps.ipAddress}'")
     transipdemo-vps runs FreeBSD 10.0-RELEASE and has IP address: '141.138.136.129'
+
+We could also cancel a single :class:`Vps <transip.v6.objects.Vps>`
+object by its name::
+
+    >>> client.vpss.delete('transipdemo-vps')
 
 Errors and Exceptions
 ---------------------
