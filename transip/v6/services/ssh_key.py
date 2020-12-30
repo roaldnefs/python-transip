@@ -17,7 +17,17 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with python-transip.  If not, see <https://www.gnu.org/licenses/>.
 
-from transip.v6.services.availability_zone import AvailabilityZoneService  # noqa: 401
-from transip.v6.services.domain import DomainService  # noqa: 401
-from transip.v6.services.ssh_key import SshKeyService  # noqa: 401
-from transip.v6.services.vps import VpsService  # noqa: 401
+from typing import Optional, Type
+
+from transip.base import ApiService, ApiObject
+from transip.mixins import GetMixin, DeleteMixin, ListMixin
+from transip.v6.objects.ssh_key import SshKey
+
+
+class SshKeyService(GetMixin, DeleteMixin, ListMixin, ApiService):
+
+    _path: str = "/ssh-keys"
+    _obj_cls: Optional[Type[ApiObject]] = SshKey
+
+    _resp_list_attr: str = "sshKeys"
+    _resp_get_attr: str = "sshKey"

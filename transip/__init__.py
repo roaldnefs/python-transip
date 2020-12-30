@@ -68,6 +68,7 @@ class TransIP:
             services.AvailabilityZoneService(self)  # type: ignore
         )
         self.domains: Type[Any] = services.DomainService(self)  # type: ignore
+        self.ssh_keys: Type[Any] = services.SshKeyService(self)  # type: ignore
         self.vpss: Type[Any] = services.VpsService(self)  # type: ignore
 
     @property
@@ -171,12 +172,14 @@ class TransIP:
             method, path, data=data, json=json, params=params
         )
 
-        try:
-            return response.json()
-        except Exception:
-            raise TransIPParsingError(
-                message="Failed to parse the API response as JSON"
-            )
+        if response.text:
+            try:
+                return response.json()
+            except Exception:
+                raise TransIPParsingError(
+                    message="Failed to parse the API response as JSON"
+                )
+        return None
 
     def get(
         self,
@@ -292,5 +295,5 @@ class TransIP:
             TransIPHTTPError: When the return code of the request is not 2xx
         """
         return self.request(
-            "GET", path, params=params
+            "DELETE", path, params=params
         )
