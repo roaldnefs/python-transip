@@ -17,8 +17,17 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with python-transip.  If not, see <https://www.gnu.org/licenses/>.
 
-from transip.v6.objects.availability_zone import AvailabilityZone  # noqa: 401
-from transip.v6.objects.invoice import Invoice  # noqa: 401
-from transip.v6.objects.domain import Domain  # noqa: 401
-from transip.v6.objects.ssh_key import SshKey  # noqa: 401
-from transip.v6.objects.vps import Vps  # noqa: 401
+from typing import Optional, Type
+
+from transip.base import ApiService, ApiObject
+from transip.mixins import GetMixin, ListMixin
+from transip.v6.objects.invoice import Invoice
+
+
+class InvoiceService(GetMixin, ListMixin, ApiService):
+
+    _path: str = "/invoices"
+    _obj_cls: Optional[Type[ApiObject]] = Invoice
+
+    _resp_list_attr: str = "invoices"
+    _resp_get_attr: str = "invoice"
