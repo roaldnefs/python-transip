@@ -71,7 +71,6 @@ service we can retrieve all domains in your TransIP account in the form of a
 :class:`Domain <transip.v6.objects.Domain>` object::
 
     >>> domains = client.domains.list()
-    >>> domains = client.domains.list()
     >>> for domain in domains:
     ...     print(domain)
     <class 'transip.v6.objects.domain.Domain'> => {'name': 'transipdemo.be', 'authCode': '##########', 'isTransferLocked': False, 'registrationDate': '2011-04-29', 'renewalDate': '2021-04-29', 'isWhitelabel': False, 'isDnsOnly': False, 'cancellationDate': '', 'cancellationStatus': '', 'hasActionRunning': False, 'supportsLocking': True, 'tags': []}
