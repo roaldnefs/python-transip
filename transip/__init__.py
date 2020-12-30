@@ -68,6 +68,9 @@ class TransIP:
             services.AvailabilityZoneService(self)  # type: ignore
         )
         self.domains: Type[Any] = services.DomainService(self)  # type: ignore
+        self.invoices: Type[Any] = (
+            services.InvoiceService(self)  # type: ignore
+        )
         self.ssh_keys: Type[Any] = services.SshKeyService(self)  # type: ignore
         self.vpss: Type[Any] = services.VpsService(self)  # type: ignore
 

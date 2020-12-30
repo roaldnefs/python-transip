@@ -91,6 +91,26 @@ object by its name::
 
     >>> client.domains.delete('transipdemonstratie.nl')
 
+Invoices
+--------
+
+Using the
+:class:`InvoiceService <transip.v6.services.InvoiceService>`
+service we can retrieve all invoices in your TransIP account in the form of a
+:class:`Invoice <transip.v6.objects.Invoice>` object::
+
+    >>> invoices = client.invoices.list()
+    >>> for invoice in invoices:
+    ...     print(invoice)
+    <class 'transip.v6.objects.invoice.Invoice'> => {'invoiceNumber': 'F0000.1911.0000.0004', 'creationDate': '2020-01-01', 'payDate': '2020-01-01', 'dueDate': '2020-02-01', 'invoiceStatus': 'waitsforpayment', 'currency': 'EUR', 'totalAmount': 1000, 'totalAmountInclVat': 1240}
+
+We could also retrieve a single :class:`Invoice <transip.v6.objects.Invoice>`
+object by its invoice number::
+
+    >>> invoice = client.invoices.get('F0000.1911.0000.0004')
+    >>> print(f"{invoice.invoiceNumber} has status '{invoice.invoiceStatus}'")
+    F0000.1911.0000.0004 has status 'waitsforpayment'
+
 VPSs
 ----
 
