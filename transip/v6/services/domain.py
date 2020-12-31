@@ -23,32 +23,82 @@ from transip.base import ApiService, ApiObject
 from transip.mixins import GetMixin, DeleteMixin, ListMixin
 
 
-class Domain(ApiObject):
-
-    _id_attr: str = "name"
-
-    def contacts(self):
-        service = WhoisContactService(self.service.client, parent=self)
-        return service.list()
-
-
 class WhoisContact(ApiObject):
 
     _id_attr: Optional[str] = None
 
 
+class WhoisContactService(ListMixin, ApiService):
+    """Service to manage domain contacts of a domain."""
+
+    _path: str = "/domains/{parent_id}/contacts"
+    _obj_cls: Optional[Type[ApiObject]] = WhoisContact
+
+    _resp_list_attr: str = "contacts"
+
+
+class DnsEntry(ApiObject):
+
+    _id_attr: Optional[str] = None
+
+
+class DnsEntryService(ListMixin, ApiService):
+    """Service to manage DNS entries of a domain."""
+
+    _path: str = "/domains/{parent_id}/dns"
+    _obj_cls: Optional[Type[ApiObject]] = DnsEntry
+
+    _resp_list_attr: str = "dnsEntries"
+
+
+class Nameserver(ApiObject):
+
+    _id_attr: Optional[str] = "hostname"
+
+
+class NameserverService(ListMixin, ApiService):
+    """Service to nameservers of a domain."""
+
+    _path: str = "/domains/{parent_id}/nameservers"
+    _obj_cls: Optional[Type[ApiObject]] = Nameserver
+
+    _resp_list_attr: str = "nameservers"
+
+
+class Domain(ApiObject):
+
+    _id_attr: str = "name"
+
+    @property
+    def contacts(self) -> WhoisContactService:
+        """Return the service to manage the WHOIS contacts of the domain."""
+        return WhoisContactService(
+            self.service.client,
+            parent=self  # type: ignore
+        )
+
+    @property
+    def dns(self) -> DnsEntryService:
+        """Return the service to manage the DNS entries of the domain."""
+        return DnsEntryService(
+            self.service.client,
+            parent=self  # type: ignore
+        )
+
+    @property
+    def nameservers(self) -> NameserverService:
+        """Return the service to manage the nameservers of the domain."""
+        return NameserverService(
+            self.service.client,
+            parent=self  # type: ignore
+        )
+
+
 class DomainService(GetMixin, DeleteMixin, ListMixin, ApiService):
+    """Service to manage domain."""
 
     _path: str = "/domains"
     _obj_cls: Optional[Type[ApiObject]] = Domain
 
     _resp_list_attr: str = "domains"
     _resp_get_attr: str = "domain"
-
-
-class WhoisContactService(ListMixin, ApiService):
-
-    _path: str = "/domains/{parent_id}/contacts"
-    _obj_cls: Optional[Type[ApiObject]] = WhoisContact
-
-    _resp_list_attr: str = "contacts"

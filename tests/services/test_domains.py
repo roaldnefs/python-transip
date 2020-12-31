@@ -21,7 +21,9 @@ from typing import Type, List
 import responses  # type: ignore
 
 from transip import TransIP
-from transip.v6.services.domain import Domain, WhoisContact
+from transip.v6.services.domain import (
+    Domain, WhoisContact, Nameserver, DnsEntry
+)
 
 
 @responses.activate
@@ -103,7 +105,100 @@ def test_domains_contacts_list(transip_minimal_client: Type[TransIP]) -> None:
     )
 
     domain: Type[Domain] = transip_minimal_client.domains.get("example.com")
-    contacts: List[Type[Domain]] = domain.contacts()  # type: ignore
+    contacts: List[Type[Domain]] = domain.contacts.list()  # type: ignore
     contact: Type[Domain] = contacts[0]
     assert len(contacts) == 1
     assert contact.companyName == "Example B.V."  # type: ignore
+
+
+@responses.activate
+def test_domains_nameservers_list(transip_minimal_client: Type[TransIP]) -> None:
+    responses.add(
+        responses.GET,
+        "https://api.transip.nl/v6/domains/example.com",
+        json={
+            "domain": {
+                "name": "example.com",
+                "authCode": "kJqfuOXNOYQKqh/jO4bYSn54YDqgAt1ksCe+ZG4Ud4nfpzw8qBsfR2JqAj7Ce12SxKcGD09v+yXd6lrm",
+                "isTransferLocked": False,
+                "registrationDate": "2016-01-01",
+                "renewalDate": "2020-01-01",
+                "isWhitelabel": False,
+                "cancellationDate": "2020-01-01 12:00:00",
+                "cancellationStatus": "signed",
+                "isDnsOnly": False,
+                "tags": [
+                    "customTag",
+                    "anotherTag"
+                ]
+            }
+        },
+        status=200,
+    )
+    responses.add(
+        responses.GET,
+        "https://api.transip.nl/v6/domains/example.com/nameservers",
+        json={
+            "nameservers": [
+                {
+                    "hostname": "ns0.transip.nl",
+                    "ipv4": "",
+                    "ipv6": ""
+                }
+            ]
+        },
+        status=200,
+    )
+
+    domain: Type[Domain] = transip_minimal_client.domains.get("example.com")
+    nameservers: List[Type[Nameserver]] = domain.nameservers.list()  # type: ignore
+    nameserver: Type[Nameserver] = nameservers[0]
+    assert len(nameservers) == 1
+    assert nameserver.get_id() == "ns0.transip.nl"  # type: ignore
+
+
+@responses.activate
+def test_domains_dns_list(transip_minimal_client: Type[TransIP]) -> None:
+    responses.add(
+        responses.GET,
+        "https://api.transip.nl/v6/domains/example.com",
+        json={
+            "domain": {
+                "name": "example.com",
+                "authCode": "kJqfuOXNOYQKqh/jO4bYSn54YDqgAt1ksCe+ZG4Ud4nfpzw8qBsfR2JqAj7Ce12SxKcGD09v+yXd6lrm",
+                "isTransferLocked": False,
+                "registrationDate": "2016-01-01",
+                "renewalDate": "2020-01-01",
+                "isWhitelabel": False,
+                "cancellationDate": "2020-01-01 12:00:00",
+                "cancellationStatus": "signed",
+                "isDnsOnly": False,
+                "tags": [
+                    "customTag",
+                    "anotherTag"
+                ]
+            }
+        },
+        status=200,
+    )
+    responses.add(
+        responses.GET,
+        "https://api.transip.nl/v6/domains/example.com/dns",
+        json={
+            "dnsEntries": [
+                {
+                    "name": "www",
+                    "expire": 86400,
+                    "type": "A",
+                    "content": "127.0.0.1"
+                }
+            ]
+        },
+        status=200,
+    )
+
+    domain: Type[Domain] = transip_minimal_client.domains.get("example.com")
+    entries: List[Type[DnsEntry]] = domain.dns.list()  # type: ignore
+    entry: Type[DnsEntry] = entries[0]
+    assert len(entries) == 1
+    assert entry.name == "www"  # type: ignore
