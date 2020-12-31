@@ -91,6 +91,29 @@ We could also cancel a single
 
     >>> client.domains.delete('transipdemonstratie.nl')
 
+DNS
+***
+
+We could also list the DNS entries as
+:class:`DnsEntry <transip.v6.services.domain.DnsEntry>` objects of a
+single :class:`Domain <transip.v6.services.domain.Domain>` object by its name::
+
+    >>> domain = client.domains.get('transipdemonstratie.nl')
+    >>> entries = domain.dns.list()
+    >>> for entry in entries:
+    ...     print(entry)
+    <class 'transip.v6.services.domain.DnsEntry'> => {'name': '@', 'expire': 300, 'type': 'A', 'content': '37.97.254.27'}
+    <class 'transip.v6.services.domain.DnsEntry'> => {'name': '@', 'expire': 300, 'type': 'AAAA', 'content': '2a01:7c8:3:1337::27'}
+    <class 'transip.v6.services.domain.DnsEntry'> => {'name': '@', 'expire': 86400, 'type': 'MX', 'content': '10 @'}
+    <class 'transip.v6.services.domain.DnsEntry'> => {'name': '@', 'expire': 300, 'type': 'TXT', 'content': 'v=spf1 ~all'}
+    <class 'transip.v6.services.domain.DnsEntry'> => {'name': 'ftp', 'expire': 86400, 'type': 'CNAME', 'content': '@'}
+    <class 'transip.v6.services.domain.DnsEntry'> => {'name': 'mail', 'expire': 86400, 'type': 'CNAME', 'content': '@'}
+    <class 'transip.v6.services.domain.DnsEntry'> => {'name': 'transip-A._domainkey', 'expire': 3600, 'type': 'CNAME', 'content': '_dkim-A.transip.email.'}
+    <class 'transip.v6.services.domain.DnsEntry'> => {'name': 'transip-B._domainkey', 'expire': 3600, 'type': 'CNAME', 'content': '_dkim-B.transip.email.'}
+    <class 'transip.v6.services.domain.DnsEntry'> => {'name': 'transip-C._domainkey', 'expire': 3600, 'type': 'CNAME', 'content': '_dkim-C.transip.email.'}
+    <class 'transip.v6.services.domain.DnsEntry'> => {'name': 'www', 'expire': 86400, 'type': 'CNAME', 'content': '@'}
+    <class 'transip.v6.services.domain.DnsEntry'> => {'name': '_dmarc', 'expire': 86400, 'type': 'TXT', 'content': 'v=DMARC1; p=none;'}
+
 Domain Contacts
 ***************
 
@@ -99,12 +122,27 @@ We could also list the contacts as
 single :class:`Domain <transip.v6.services.domain.Domain>` object by its name::
 
     >>> domain = client.domains.get('transipdemonstratie.nl')
-    >>> contacts = domain.contacts()
+    >>> contacts = domain.contacts.list()
     >>> for contact in contacts:
     ...     print(contact)
     <class 'transip.v6.services.domain.WhoisContact'> => {'type': 'registrant', 'firstName': 'TransIP', 'lastName': 'Demo', 'companyName': '', 'companyKvk': '', 'companyType': '', 'street': 'Schipholweg', 'number': '11e', 'postalCode': '2316 XB', 'city': 'LEIDEN', 'phoneNumber': '+31 715241919', 'faxNumber': '', 'email': 'feedback@transip.nl', 'country': 'nl'}
     <class 'transip.v6.services.domain.WhoisContact'> => {'type': 'administrative', 'firstName': 'TransIP', 'lastName': 'Demo', 'companyName': '', 'companyKvk': '', 'companyType': '', 'street': 'Schipholweg', 'number': '11e', 'postalCode': '2316 XB', 'city': 'LEIDEN', 'phoneNumber': '+31 715241919', 'faxNumber': '', 'email': 'feedback@transip.nl', 'country': 'nl'}
     <class 'transip.v6.services.domain.WhoisContact'> => {'type': 'technical', 'firstName': 'TransIP', 'lastName': 'Demo', 'companyName': '', 'companyKvk': '', 'companyType': '', 'street': 'Schipholweg', 'number': '11e', 'postalCode': '2316 XB', 'city': 'LEIDEN', 'phoneNumber': '+31 715241919', 'faxNumber': '', 'email': 'feedback@transip.nl', 'country': 'nl'}
+
+Nameservers
+***********
+
+We could also list the nameserver as
+:class:`Nameserver <transip.v6.services.domain.Nameserver>` objects of a
+single :class:`Domain <transip.v6.services.domain.Domain>` object by its name::
+
+    >>> domain = client.domains.get('transipdemonstratie.nl')
+    >>> nameservers = domain.nameservers.list()
+    >>> for nameserver in nameservers:
+    ...     print(nameserver)
+    <class 'transip.v6.services.domain.Nameserver'> => {'hostname': 'ns0.transip.net', 'ipv4': '', 'ipv6': ''}
+    <class 'transip.v6.services.domain.Nameserver'> => {'hostname': 'ns1.transip.nl', 'ipv4': '', 'ipv6': ''}
+    <class 'transip.v6.services.domain.Nameserver'> => {'hostname': 'ns2.transip.eu', 'ipv4': '', 'ipv6': ''}
 
 Invoices
 --------
