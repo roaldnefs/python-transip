@@ -32,14 +32,15 @@ class GetMixin:
     """
     client: TransIP
     _obj_cls: Optional[Type[ApiObject]]
-    _path: str
+    path: str
 
     _resp_get_attr: Optional[str] = None
 
     def get(self, id: str, **kwargs) -> Optional[Type[ApiObject]]:
-        if self._obj_cls or self._path or self._resp_get_attr:
+        if self._obj_cls or self.path or self._resp_get_attr:
             obj: Type[ApiObject] = self._obj_cls(  # type: ignore
-                self.client.get(f"{self._path}/{id}")[self._resp_get_attr]
+                self,
+                self.client.get(f"{self.path}/{id}")[self._resp_get_attr]
             )
             return obj
         return None
@@ -49,11 +50,11 @@ class DeleteMixin:
     """Delete a single ApiObject."""
 
     client: TransIP
-    _path: str
+    path: str
 
     def delete(self, id: str, **kwargs) -> None:
-        if self._path:
-            self.client.delete(f"{self._path}/{id}")
+        if self.path:
+            self.client.delete(f"{self.path}/{id}")
 
 
 class ListMixin:
@@ -64,14 +65,14 @@ class ListMixin:
     ``_resp_list_attr``: The response attribute which lists all objects
     """
     client: TransIP
+    path: str
     _obj_cls: Optional[Type[ApiObject]]
-    _path: str
 
     _resp_list_attr: Optional[str] = None
 
     def list(self, **kwargs) -> List[Type[ApiObject]]:
         objs: List[Type[ApiObject]] = []
-        if self._obj_cls and self._path and self._resp_list_attr:
-            for obj in self.client.get(self._path)[self._resp_list_attr]:
-                objs.append(self._obj_cls(obj))  # type: ignore
+        if self._obj_cls and self.path and self._resp_list_attr:
+            for obj in self.client.get(self.path)[self._resp_list_attr]:
+                objs.append(self._obj_cls(self, obj))  # type: ignore
         return objs

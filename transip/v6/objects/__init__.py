@@ -19,6 +19,6 @@
 
 from transip.v6.objects.availability_zone import AvailabilityZone  # noqa: 401
 from transip.v6.objects.invoice import Invoice  # noqa: 401
-from transip.v6.objects.domain import Domain  # noqa: 401
+# from transip.v6.objects.domain import Domain  # noqa: 401
 from transip.v6.objects.ssh_key import SshKey  # noqa: 401
 from transip.v6.objects.vps import Vps  # noqa: 401

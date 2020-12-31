@@ -25,10 +25,15 @@ from transip import TransIP
 class ApiObject:
     """Represents a TransIP API object."""
 
-    _id_attr: str = "id"
+    _id_attr: Optional[str] = "id"
 
-    def __init__(self, attrs) -> None:
-        self.__dict__["_attrs"] = attrs
+    def __init__(self, service, attrs) -> None:
+        self.__dict__.update(
+            {
+                "service": service,
+                "_attrs": attrs,
+            }
+        )
 
     def __getattr__(self, name: str) -> Any:
         try:
@@ -54,9 +59,9 @@ class ApiObject:
 
     def get_id(self) -> Any:
         """Returns the id of the object."""
-        if not hasattr(self, self._id_attr):
-            None
-        return getattr(self, self._id_attr)
+        if self._id_attr and hasattr(self, self._id_attr):
+            return getattr(self, self._id_attr)
+        return None
 
     @property
     def attrs(self):
@@ -69,5 +74,18 @@ class ApiService:
     _path: Optional[str] = None
     _obj_cls: Optional[Type[ApiObject]] = None
 
-    def __init__(self, client: TransIP) -> None:
+    def __init__(
+        self,
+        client: TransIP,
+        parent: Optional[Type[ApiObject]] = None
+    ) -> None:
         self.client: TransIP = client
+        self._parent: Optional[Type[ApiObject]] = parent
+
+    @property
+    def path(self) -> Optional[str]:
+        if self._path and self._parent:
+            return self._path.format(
+                parent_id=self._parent.get_id()  # type: ignore
+            )
+        return self._path
