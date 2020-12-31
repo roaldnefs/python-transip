@@ -21,7 +21,20 @@ from typing import Optional, Type
 
 from transip.base import ApiService, ApiObject
 from transip.mixins import GetMixin, DeleteMixin, ListMixin
-from transip.v6.objects.domain import Domain
+
+
+class Domain(ApiObject):
+
+    _id_attr: str = "name"
+
+    def contacts(self):
+        service = WhoisContactService(self.service.client, parent=self)
+        return service.list()
+
+
+class WhoisContact(ApiObject):
+
+    _id_attr: Optional[str] = None
 
 
 class DomainService(GetMixin, DeleteMixin, ListMixin, ApiService):
@@ -31,3 +44,11 @@ class DomainService(GetMixin, DeleteMixin, ListMixin, ApiService):
 
     _resp_list_attr: str = "domains"
     _resp_get_attr: str = "domain"
+
+
+class WhoisContactService(ListMixin, ApiService):
+
+    _path: str = "/domains/{parent_id}/contacts"
+    _obj_cls: Optional[Type[ApiObject]] = WhoisContact
+
+    _resp_list_attr: str = "contacts"

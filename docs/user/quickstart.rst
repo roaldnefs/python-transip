@@ -66,30 +66,45 @@ Domains
 -------
 
 Using the
-:class:`DomainService <transip.v6.services.DomainService>`
+:class:`DomainService <transip.v6.services.domain.DomainService>`
 service we can retrieve all domains in your TransIP account in the form of a
-:class:`Domain <transip.v6.objects.Domain>` object::
+:class:`Domain <transip.v6.services.domain.Domain>` object::
 
     >>> domains = client.domains.list()
     >>> for domain in domains:
     ...     print(domain)
-    <class 'transip.v6.objects.domain.Domain'> => {'name': 'transipdemo.be', 'authCode': '##########', 'isTransferLocked': False, 'registrationDate': '2011-04-29', 'renewalDate': '2021-04-29', 'isWhitelabel': False, 'isDnsOnly': False, 'cancellationDate': '', 'cancellationStatus': '', 'hasActionRunning': False, 'supportsLocking': True, 'tags': []}
-    <class 'transip.v6.objects.domain.Domain'> => {'name': 'transipdemo.de', 'authCode': '##########', 'isTransferLocked': False, 'registrationDate': '2011-04-29', 'renewalDate': '2021-04-29', 'isWhitelabel': False, 'isDnsOnly': False, 'cancellationDate': '', 'cancellationStatus': '', 'hasActionRunning': False, 'supportsLocking': False, 'tags': []}
-    <class 'transip.v6.objects.domain.Domain'> => {'name': 'transipdemo.net', 'authCode': '##########', 'isTransferLocked': True, 'registrationDate': '2011-04-29', 'renewalDate': '2021-04-29', 'isWhitelabel': False, 'isDnsOnly': False, 'cancellationDate': '', 'cancellationStatus': '', 'hasActionRunning': False, 'supportsLocking': True, 'tags': []}
-    <class 'transip.v6.objects.domain.Domain'> => {'name': 'transipdemonstratie.com', 'authCode': '##########', 'isTransferLocked': True, 'registrationDate': '2011-04-29', 'renewalDate': '2021-04-29', 'isWhitelabel': False, 'isDnsOnly': False, 'cancellationDate': '', 'cancellationStatus': '', 'hasActionRunning': False, 'supportsLocking': True, 'tags': []}
-    <class 'transip.v6.objects.domain.Domain'> => {'name': 'transipdemonstratie.nl', 'authCode': '##########', 'isTransferLocked': False, 'registrationDate': '2011-04-29', 'renewalDate': '2021-04-29', 'isWhitelabel': False, 'isDnsOnly': False, 'cancellationDate': '', 'cancellationStatus': '', 'hasActionRunning': False, 'supportsLocking': False, 'tags': []}
+    <class 'transip.v6.services.domain.Domain'> => {'name': 'transipdemo.be', 'authCode': '##########', 'isTransferLocked': False, 'registrationDate': '2011-04-29', 'renewalDate': '2021-04-29', 'isWhitelabel': False, 'isDnsOnly': False, 'cancellationDate': '', 'cancellationStatus': '', 'hasActionRunning': False, 'supportsLocking': True, 'tags': []}
+    <class 'transip.v6.services.domain.Domain'> => {'name': 'transipdemo.de', 'authCode': '##########', 'isTransferLocked': False, 'registrationDate': '2011-04-29', 'renewalDate': '2021-04-29', 'isWhitelabel': False, 'isDnsOnly': False, 'cancellationDate': '', 'cancellationStatus': '', 'hasActionRunning': False, 'supportsLocking': False, 'tags': []}
+    <class 'transip.v6.services.domain.Domain'> => {'name': 'transipdemo.net', 'authCode': '##########', 'isTransferLocked': True, 'registrationDate': '2011-04-29', 'renewalDate': '2021-04-29', 'isWhitelabel': False, 'isDnsOnly': False, 'cancellationDate': '', 'cancellationStatus': '', 'hasActionRunning': False, 'supportsLocking': True, 'tags': []}
+    <class 'transip.v6.services.domain.Domain'> => {'name': 'transipdemonstratie.com', 'authCode': '##########', 'isTransferLocked': True, 'registrationDate': '2011-04-29', 'renewalDate': '2021-04-29', 'isWhitelabel': False, 'isDnsOnly': False, 'cancellationDate': '', 'cancellationStatus': '', 'hasActionRunning': False, 'supportsLocking': True, 'tags': []}
+    <class 'transip.v6.services.domain.Domain'> => {'name': 'transipdemonstratie.nl', 'authCode': '##########', 'isTransferLocked': False, 'registrationDate': '2011-04-29', 'renewalDate': '2021-04-29', 'isWhitelabel': False, 'isDnsOnly': False, 'cancellationDate': '', 'cancellationStatus': '', 'hasActionRunning': False, 'supportsLocking': False, 'tags': []}
 
-We could also retrieve a single :class:`Domain <transip.v6.objects.Domain>`
-object by its name::
+We could also retrieve a single
+:class:`Domain <transip.v6.services.domain.Domain>` object by its name::
 
     >>> domain = client.domains.get('transipdemonstratie.nl')
     >>> print(f"{domain.name} was registered on {domain.registrationDate}")
     transipdemonstratie.nl was registered on 2011-04-29
 
-We could also cancel a single :class:`Domain <transip.v6.objects.Domain>`
-object by its name::
+We could also cancel a single
+:class:`Domain <transip.v6.services.domain.Domain>` object by its name::
 
     >>> client.domains.delete('transipdemonstratie.nl')
+
+Domain Contacts
+***************
+
+We could also list the contacts as
+:class:`WhoisContact <transip.v6.services.domain.WhoisContact>` objects of a
+single :class:`Domain <transip.v6.services.domain.Domain>` object by its name::
+
+    >>> domain = client.domains.get('transipdemonstratie.nl')
+    >>> contacts = domain.contacts()
+    >>> for contact in contacts:
+    ...     print(contact)
+    <class 'transip.v6.services.domain.WhoisContact'> => {'type': 'registrant', 'firstName': 'TransIP', 'lastName': 'Demo', 'companyName': '', 'companyKvk': '', 'companyType': '', 'street': 'Schipholweg', 'number': '11e', 'postalCode': '2316 XB', 'city': 'LEIDEN', 'phoneNumber': '+31 715241919', 'faxNumber': '', 'email': 'feedback@transip.nl', 'country': 'nl'}
+    <class 'transip.v6.services.domain.WhoisContact'> => {'type': 'administrative', 'firstName': 'TransIP', 'lastName': 'Demo', 'companyName': '', 'companyKvk': '', 'companyType': '', 'street': 'Schipholweg', 'number': '11e', 'postalCode': '2316 XB', 'city': 'LEIDEN', 'phoneNumber': '+31 715241919', 'faxNumber': '', 'email': 'feedback@transip.nl', 'country': 'nl'}
+    <class 'transip.v6.services.domain.WhoisContact'> => {'type': 'technical', 'firstName': 'TransIP', 'lastName': 'Demo', 'companyName': '', 'companyKvk': '', 'companyType': '', 'street': 'Schipholweg', 'number': '11e', 'postalCode': '2316 XB', 'city': 'LEIDEN', 'phoneNumber': '+31 715241919', 'faxNumber': '', 'email': 'feedback@transip.nl', 'country': 'nl'}
 
 Invoices
 --------

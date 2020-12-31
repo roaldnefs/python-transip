@@ -18,6 +18,9 @@
 # along with python-transip.  If not, see <https://www.gnu.org/licenses/>.
 
 from transip.v6.services.availability_zone import AvailabilityZoneService  # noqa: 401
+from transip.v6.services.domain import (  # noqa: 401
+    DomainService, WhoisContactService, Domain, WhoisContact
+)
 from transip.v6.services.domain import DomainService  # noqa: 401
 from transip.v6.services.invoice import InvoiceService  # noqa: 401
 from transip.v6.services.ssh_key import SshKeyService  # noqa: 401
