@@ -21,7 +21,6 @@ from typing import Optional, Type
 
 from transip.base import ApiService, ApiObject
 from transip.mixins import GetMixin, ListMixin
-from transip.v6.objects.invoice import Invoice
 
 
 class Invoice(ApiObject):

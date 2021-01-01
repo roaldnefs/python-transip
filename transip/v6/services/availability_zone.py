@@ -21,7 +21,6 @@ from typing import Optional, Type
 
 from transip.base import ApiService, ApiObject
 from transip.mixins import ListMixin
-from transip.v6.objects.availability_zone import AvailabilityZone
 
 
 class AvailabilityZone(ApiObject):

@@ -21,7 +21,7 @@ from typing import Type, List
 import responses  # type: ignore
 
 from transip import TransIP
-from transip.v6.objects import SshKey
+from transip.v6.services.ssh_key import SshKey
 
 
 @responses.activate

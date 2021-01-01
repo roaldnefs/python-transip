@@ -21,7 +21,6 @@ from typing import Optional, Type
 
 from transip.base import ApiService, ApiObject
 from transip.mixins import GetMixin, DeleteMixin, ListMixin
-from transip.v6.objects.ssh_key import SshKey
 
 
 class SshKey(ApiObject):

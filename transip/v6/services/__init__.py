@@ -21,7 +21,7 @@ from transip.v6.services.availability_zone import (  # noqa: 401
     AvailabilityZoneService, AvailabilityZone
 )
 from transip.v6.services.domain import (  # noqa: 401
-    DomainService, Domain, 
+    DomainService, Domain,
     WhoisContactService, WhoisContact,
     NameserverService, Nameserver,
     DnsEntryService, DnsEntry
