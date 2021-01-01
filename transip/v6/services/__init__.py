@@ -17,11 +17,21 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with python-transip.  If not, see <https://www.gnu.org/licenses/>.
 
-from transip.v6.services.availability_zone import AvailabilityZoneService  # noqa: 401
-from transip.v6.services.domain import (  # noqa: 401
-    DomainService, WhoisContactService, Domain, WhoisContact
+from transip.v6.services.availability_zone import (  # noqa: 401
+    AvailabilityZoneService, AvailabilityZone
 )
-from transip.v6.services.domain import DomainService  # noqa: 401
-from transip.v6.services.invoice import InvoiceService  # noqa: 401
-from transip.v6.services.ssh_key import SshKeyService  # noqa: 401
-from transip.v6.services.vps import VpsService  # noqa: 401
+from transip.v6.services.domain import (  # noqa: 401
+    DomainService, Domain, 
+    WhoisContactService, WhoisContact,
+    NameserverService, Nameserver,
+    DnsEntryService, DnsEntry
+)
+from transip.v6.services.invoice import (  # noqa: 401
+    InvoiceService, Invoice
+)
+from transip.v6.services.ssh_key import (  # noqa: 401
+    SshKeyService, SshKey
+)
+from transip.v6.services.vps import (  # noqa: 401
+    VpsService, Vps
+)

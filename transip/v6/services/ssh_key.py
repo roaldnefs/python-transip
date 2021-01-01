@@ -24,6 +24,11 @@ from transip.mixins import GetMixin, DeleteMixin, ListMixin
 from transip.v6.objects.ssh_key import SshKey
 
 
+class SshKey(ApiObject):
+
+    _id_attr: str = "id"
+
+
 class SshKeyService(GetMixin, DeleteMixin, ListMixin, ApiService):
 
     _path: str = "/ssh-keys"

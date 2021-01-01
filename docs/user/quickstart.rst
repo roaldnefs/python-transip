@@ -46,13 +46,13 @@ Availability Zones
 Using the
 :class:`AvailabilityZoneService <transip.v6.services.AvailabilityZoneService>`
 service we can retrieve all availability zone on TransIP if the form of an
-:class:`AvailabilityZone <transip.v6.objects.AvailabilityZone>` object::
+:class:`AvailabilityZone <transip.v6.services.availability_zone.AvailabilityZone>` object::
 
     >>> zones = client.availability_zones.list()
     >>> for zone in zones:
     ...     print(zone)
-    <class 'transip.v6.objects.availability_zone.AvailabilityZone'> => {'name': 'ams0', 'country': 'nl', 'isDefault': False}
-    <class 'transip.v6.objects.availability_zone.AvailabilityZone'> => {'name': 'rtm0', 'country': 'nl', 'isDefault': True}
+    <class 'transip.v6.services.availability_zone.AvailabilityZone'> => {'name': 'ams0', 'country': 'nl', 'isDefault': False}
+    <class 'transip.v6.services.availability_zone.AvailabilityZone'> => {'name': 'rtm0', 'country': 'nl', 'isDefault': True}
 
 We could for example print information about the default TransIP availability
 zone::
@@ -150,15 +150,15 @@ Invoices
 Using the
 :class:`InvoiceService <transip.v6.services.InvoiceService>`
 service we can retrieve all invoices in your TransIP account in the form of a
-:class:`Invoice <transip.v6.objects.Invoice>` object::
+:class:`Invoice <transip.v6.services.invoice.Invoice>` object::
 
     >>> invoices = client.invoices.list()
     >>> for invoice in invoices:
     ...     print(invoice)
-    <class 'transip.v6.objects.invoice.Invoice'> => {'invoiceNumber': 'F0000.1911.0000.0004', 'creationDate': '2020-01-01', 'payDate': '2020-01-01', 'dueDate': '2020-02-01', 'invoiceStatus': 'waitsforpayment', 'currency': 'EUR', 'totalAmount': 1000, 'totalAmountInclVat': 1240}
+    <class 'transip.v6.services.invoice.Invoice'> => {'invoiceNumber': 'F0000.1911.0000.0004', 'creationDate': '2020-01-01', 'payDate': '2020-01-01', 'dueDate': '2020-02-01', 'invoiceStatus': 'waitsforpayment', 'currency': 'EUR', 'totalAmount': 1000, 'totalAmountInclVat': 1240}
 
-We could also retrieve a single :class:`Invoice <transip.v6.objects.Invoice>`
-object by its invoice number::
+We could also retrieve a single
+:class:`Invoice <transip.v6.services.invoice.Invoice>` object by its invoice number::
 
     >>> invoice = client.invoices.get('F0000.1911.0000.0004')
     >>> print(f"{invoice.invoiceNumber} has status '{invoice.invoiceStatus}'")
@@ -170,26 +170,26 @@ VPSs
 Using the
 :class:`VpsService <transip.v6.services.VpsService>`
 service we can retrieve all VPSs in your TransIP account in the form of a
-:class:`Vps <transip.v6.objects.Vps>` object::
+:class:`Vps <transip.v6.services.vps.Vps>` object::
 
     >>> vpss = client.vpss.list()
     >>> for vps in vpss:
     ...     print(vps)
-    <class 'transip.v6.objects.vps.Vps'> => {'name': 'transipdemo-vps', 'description': '', 'productName': 'vps-bladevps-x1', 'operatingSystem': 'FreeBSD 10.0-RELEASE', 'diskSize': 52428800, 'memorySize': 1048576, 'cpus': 3, 'status': 'running', 'ipAddress': '141.138.136.129', 'macAddress': '52:54:00:19:a7:20', 'currentSnapshots': 1, 'maxSnapshots': 1, 'isLocked': False, 'isBlocked': False, 'isCustomerLocked': False, 'availabilityZone': 'ams0', 'tags': ['customTag', 'anotherTag']}
-    <class 'transip.v6.objects.vps.Vps'> => {'name': 'transipdemo-vps2', 'description': '', 'productName': 'vps-bladevps-x1', 'operatingSystem': 'Debian 7', 'diskSize': 52428800, 'memorySize': 1048576, 'cpus': 1, 'status': 'stopped', 'ipAddress': '149.210.192.184', 'macAddress': '52:54:00:51:39:ff', 'currentSnapshots': 0, 'maxSnapshots': 0, 'isLocked': False, 'isBlocked': False, 'isCustomerLocked': False, 'availabilityZone': 'ams0', 'tags': []}
-    <class 'transip.v6.objects.vps.Vps'> => {'name': 'transipdemo-vps3', 'description': '', 'productName': 'vps-bladevps-x1', 'operatingSystem': 'Debian 7', 'diskSize': 52428800, 'memorySize': 1048576, 'cpus': 2, 'status': 'running', 'ipAddress': '149.210.192.185', 'macAddress': '52:54:00:d2:6a:9f', 'currentSnapshots': 1, 'maxSnapshots': 1, 'isLocked': False, 'isBlocked': False, 'isCustomerLocked': True, 'availabilityZone': 'ams0', 'tags': []}
-    <class 'transip.v6.objects.vps.Vps'> => {'name': 'transipdemo-vps4', 'description': '', 'productName': 'vps-bladevps-x1', 'operatingSystem': 'Ubuntu 14.04 LTS', 'diskSize': 52428800, 'memorySize': 1048576, 'cpus': 1, 'status': 'running', 'ipAddress': '149.210.192.186', 'macAddress': '52:54:00:db:27:25', 'currentSnapshots': 0, 'maxSnapshots': 3, 'isLocked': False, 'isBlocked': False, 'isCustomerLocked': False, 'availabilityZone': 'ams0', 'tags': []}
-    <class 'transip.v6.objects.vps.Vps'> => {'name': 'transipdemo-vps5', 'description': '', 'productName': 'vps-bladevps-x4', 'operatingSystem': 'DirectAdmin 1.45.0 + CentOS 6.5', 'diskSize': 157286400, 'memorySize': 4194304, 'cpus': 2, 'status': 'running', 'ipAddress': '149.210.192.187', 'macAddress': '52:54:00:0c:0d:f3', 'currentSnapshots': 0, 'maxSnapshots': 1, 'isLocked': False, 'isBlocked': False, 'isCustomerLocked': False, 'availabilityZone': 'ams0', 'tags': []}
-    <class 'transip.v6.objects.vps.Vps'> => {'name': 'transipdemo-vps6', 'description': '', 'productName': 'vps-bladevps-pro-x32', 'operatingSystem': 'Plesk Onyx Web Pro Edition 17.8.11 + CentOS 7', 'diskSize': 1048576000, 'memorySize': 33554432, 'cpus': 6, 'status': 'running', 'ipAddress': '149.210.192.188', 'macAddress': '52:54:00:7a:96:03', 'currentSnapshots': 0, 'maxSnapshots': 1, 'isLocked': False, 'isBlocked': False, 'isCustomerLocked': False, 'availabilityZone': 'ams0', 'tags': []}
+    <class 'transip.v6.services.vps.Vps'> => {'name': 'transipdemo-vps', 'description': '', 'productName': 'vps-bladevps-x1', 'operatingSystem': 'FreeBSD 10.0-RELEASE', 'diskSize': 52428800, 'memorySize': 1048576, 'cpus': 3, 'status': 'running', 'ipAddress': '141.138.136.129', 'macAddress': '52:54:00:19:a7:20', 'currentSnapshots': 1, 'maxSnapshots': 1, 'isLocked': False, 'isBlocked': False, 'isCustomerLocked': False, 'availabilityZone': 'ams0', 'tags': ['customTag', 'anotherTag']}
+    <class 'transip.v6.services.vps.Vps'> => {'name': 'transipdemo-vps2', 'description': '', 'productName': 'vps-bladevps-x1', 'operatingSystem': 'Debian 7', 'diskSize': 52428800, 'memorySize': 1048576, 'cpus': 1, 'status': 'stopped', 'ipAddress': '149.210.192.184', 'macAddress': '52:54:00:51:39:ff', 'currentSnapshots': 0, 'maxSnapshots': 0, 'isLocked': False, 'isBlocked': False, 'isCustomerLocked': False, 'availabilityZone': 'ams0', 'tags': []}
+    <class 'transip.v6.services.vps.Vps'> => {'name': 'transipdemo-vps3', 'description': '', 'productName': 'vps-bladevps-x1', 'operatingSystem': 'Debian 7', 'diskSize': 52428800, 'memorySize': 1048576, 'cpus': 2, 'status': 'running', 'ipAddress': '149.210.192.185', 'macAddress': '52:54:00:d2:6a:9f', 'currentSnapshots': 1, 'maxSnapshots': 1, 'isLocked': False, 'isBlocked': False, 'isCustomerLocked': True, 'availabilityZone': 'ams0', 'tags': []}
+    <class 'transip.v6.services.vps.Vps'> => {'name': 'transipdemo-vps4', 'description': '', 'productName': 'vps-bladevps-x1', 'operatingSystem': 'Ubuntu 14.04 LTS', 'diskSize': 52428800, 'memorySize': 1048576, 'cpus': 1, 'status': 'running', 'ipAddress': '149.210.192.186', 'macAddress': '52:54:00:db:27:25', 'currentSnapshots': 0, 'maxSnapshots': 3, 'isLocked': False, 'isBlocked': False, 'isCustomerLocked': False, 'availabilityZone': 'ams0', 'tags': []}
+    <class 'transip.v6.services.vps.Vps'> => {'name': 'transipdemo-vps5', 'description': '', 'productName': 'vps-bladevps-x4', 'operatingSystem': 'DirectAdmin 1.45.0 + CentOS 6.5', 'diskSize': 157286400, 'memorySize': 4194304, 'cpus': 2, 'status': 'running', 'ipAddress': '149.210.192.187', 'macAddress': '52:54:00:0c:0d:f3', 'currentSnapshots': 0, 'maxSnapshots': 1, 'isLocked': False, 'isBlocked': False, 'isCustomerLocked': False, 'availabilityZone': 'ams0', 'tags': []}
+    <class 'transip.v6.services.vps.Vps'> => {'name': 'transipdemo-vps6', 'description': '', 'productName': 'vps-bladevps-pro-x32', 'operatingSystem': 'Plesk Onyx Web Pro Edition 17.8.11 + CentOS 7', 'diskSize': 1048576000, 'memorySize': 33554432, 'cpus': 6, 'status': 'running', 'ipAddress': '149.210.192.188', 'macAddress': '52:54:00:7a:96:03', 'currentSnapshots': 0, 'maxSnapshots': 1, 'isLocked': False, 'isBlocked': False, 'isCustomerLocked': False, 'availabilityZone': 'ams0', 'tags': []}
 
-We could also retrieve a single :class:`Vps <transip.v6.objects.Vps>`
+We could also retrieve a single :class:`Vps <transip.v6.services.vps.Vps>`
 object by its name::
 
     >>> vps = client.vpss.get('transipdemo-vps')
     >>> print(f"{vps.name} runs {vps.operatingSystem} and has IP address: '{vps.ipAddress}'")
     transipdemo-vps runs FreeBSD 10.0-RELEASE and has IP address: '141.138.136.129'
 
-We could also cancel a single :class:`Vps <transip.v6.objects.Vps>`
+We could also cancel a single :class:`Vps <transip.v6.services.vps.Vps>`
 object by its name::
 
     >>> client.vpss.delete('transipdemo-vps')

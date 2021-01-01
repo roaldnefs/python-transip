@@ -24,6 +24,11 @@ from transip.mixins import GetMixin, ListMixin
 from transip.v6.objects.invoice import Invoice
 
 
+class Invoice(ApiObject):
+
+    _id_attr: str = "invoiceNumber"
+
+
 class InvoiceService(GetMixin, ListMixin, ApiService):
 
     _path: str = "/invoices"

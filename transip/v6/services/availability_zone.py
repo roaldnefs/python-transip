@@ -24,6 +24,11 @@ from transip.mixins import ListMixin
 from transip.v6.objects.availability_zone import AvailabilityZone
 
 
+class AvailabilityZone(ApiObject):
+
+    _id_attr: str = "name"
+
+
 class AvailabilityZoneService(ListMixin, ApiService):
 
     _path: str = "/availability-zones"
