@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with python-transip.  If not, see <https://www.gnu.org/licenses/>.
 
-from typing import Optional, List, Type
+from typing import Optional, List, Type, Dict, Any
 
 from transip import TransIP
 from transip.base import ApiObject
@@ -76,3 +76,19 @@ class ListMixin:
             for obj in self.client.get(self.path)[self._resp_list_attr]:
                 objs.append(self._obj_cls(self, obj))  # type: ignore
         return objs
+
+
+class CreateMixin:
+    """
+    Create a new ApiObject.
+    """
+
+    client: TransIP
+    path: str
+
+    def create(self, data: Optional[Dict[str, Any]]=None, **kwargs):
+        if data is None:
+            data = {}
+
+        if self.path:
+            self.client.post(self.path, json=data)

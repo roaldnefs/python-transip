@@ -17,8 +17,9 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with python-transip.  If not, see <https://www.gnu.org/licenses/>.
 
-from typing import Type, List
+from typing import Type, List, Tuple, Any, Dict
 import responses  # type: ignore
+import json
 
 from transip import TransIP
 from transip.v6.services.ssh_key import SshKey
@@ -82,3 +83,25 @@ def test_ssh_keys_delete(transip_minimal_client: Type[TransIP]) -> None:
         transip_minimal_client.ssh_keys.delete(ssh_key_id)
     except Exception as exc:
         assert False, f"'transip.TransIP.ssh_keys.delete' raised an exception {exc}"
+
+
+@responses.activate
+def test_ssh_keys_create(transip_minimal_client: Type[TransIP]) -> None:
+    ssh_key_data: Dict[str, str] = {
+        "sshKey": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDf2pxWX/yhUBDyk2LPhvRtI0LnVO8PyR5Zt6AHrnhtLGqK+8YG9EMlWbCCWrASR+Q1hFQG example",
+        "description": "Jim key"
+    }
+
+    responses.add(
+        responses.POST,
+        "https://api.transip.nl/v6/ssh-keys",
+        status=201,
+        content_type='application/json',
+        match=[
+            responses.json_params_matcher(ssh_key_data),
+        ]
+    )
+
+    transip_minimal_client.ssh_keys.create(ssh_key_data)
+
+    assert len(responses.calls) == 1
