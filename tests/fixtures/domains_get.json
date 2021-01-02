@@ -1,0 +1,17 @@
+{
+    "domain": {
+        "name": "example.com",
+        "authCode": "kJqfuOXNOYQKqh/jO4bYSn54YDqgAt1ksCe+ZG4Ud4nfpzw8qBsfR2JqAj7Ce12SxKcGD09v+yXd6lrm",
+        "isTransferLocked": false,
+        "registrationDate": "2016-01-01",
+        "renewalDate": "2020-01-01",
+        "isWhitelabel": false,
+        "cancellationDate": "2020-01-01 12:00:00",
+        "cancellationStatus": "signed",
+        "isDnsOnly": false,
+        "tags": [
+            "customTag",
+            "anotherTag"
+        ]
+    }
+}

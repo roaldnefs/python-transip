@@ -24,6 +24,13 @@ from typing import Type
 from transip import TransIP
 
 
+@pytest.fixture(scope="class")
+def minimal_client_class(request):
+    request.cls.client = TransIP(
+        access_token="access_token"
+    )
+
+
 @pytest.fixture
 def transip_minimal_client() -> TransIP:
     return TransIP(

@@ -20,7 +20,9 @@
 from typing import Optional, Type
 
 from transip.base import ApiService, ApiObject
-from transip.mixins import GetMixin, DeleteMixin, ListMixin
+from transip.mixins import (
+    CreateMixin, GetMixin, DeleteMixin, ListMixin, CreateAttrsTuple
+)
 
 
 class WhoisContact(ApiObject):
@@ -42,13 +44,18 @@ class DnsEntry(ApiObject):
     _id_attr: Optional[str] = None
 
 
-class DnsEntryService(ListMixin, ApiService):
+class DnsEntryService(CreateMixin, ListMixin, ApiService):
     """Service to manage DNS entries of a domain."""
 
     _path: str = "/domains/{parent_id}/dns"
     _obj_cls: Optional[Type[ApiObject]] = DnsEntry
 
     _resp_list_attr: str = "dnsEntries"
+    _req_create_attr: str = "dnsEntry"
+    _create_attrs: Optional[CreateAttrsTuple] = (
+        ("name", "expire", "type", "content"),  # required
+        tuple()  # optional
+    )
 
 
 class Nameserver(ApiObject):
@@ -94,7 +101,7 @@ class Domain(ApiObject):
         )
 
 
-class DomainService(GetMixin, DeleteMixin, ListMixin, ApiService):
+class DomainService(CreateMixin, GetMixin, DeleteMixin, ListMixin, ApiService):
     """Service to manage domain."""
 
     _path: str = "/domains"
@@ -102,3 +109,8 @@ class DomainService(GetMixin, DeleteMixin, ListMixin, ApiService):
 
     _resp_list_attr: str = "domains"
     _resp_get_attr: str = "domain"
+
+    _create_attrs: Optional[CreateAttrsTuple] = (
+        ("domainName",),  # required
+        ("contacts", "nameservers", "dnsEntries")  # optional
+    )

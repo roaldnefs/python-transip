@@ -1,0 +1,8 @@
+{
+    "dnsEntry": {
+        "name": "www",
+        "expire": 86400,
+        "type": "A",
+        "content": "127.0.0.1"
+    }
+}
