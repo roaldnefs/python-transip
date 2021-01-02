@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2020 Roald Nefs <info@roaldnefs.com>
+# Copyright (C) 2021 Roald Nefs <info@roaldnefs.com>
 #
 # This file is part of python-transip.
 
@@ -17,28 +17,16 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with python-transip.  If not, see <https://www.gnu.org/licenses/>.
 
-from typing import Optional, Type
-
-from transip.base import ApiService, ApiObject
-from transip.mixins import (
-    GetMixin, DeleteMixin, ListMixin, CreateMixin, CreateAttrsTuple
-)
+from typing import Any
+import json
+import os
 
 
-class SshKey(ApiObject):
-
-    _id_attr: str = "id"
-
-
-class SshKeyService(GetMixin, CreateMixin, DeleteMixin, ListMixin, ApiService):
-
-    _path: str = "/ssh-keys"
-    _obj_cls: Optional[Type[ApiObject]] = SshKey
-
-    _resp_list_attr: str = "sshKeys"
-    _resp_get_attr: str = "sshKey"
-
-    _create_attrs: Optional[CreateAttrsTuple] = (
-        ("sshKey",),  # required
-        ("description",)  # optional
+def load_fixture(path) -> Any:
+    """Load a JSON fixture from the fixtures directory."""
+    fixtures: str = os.path.join(
+        os.path.dirname(os.path.realpath(__file__)),
+        "fixtures"
     )
+    with open(os.path.join(fixtures, path)) as fixture:
+        return json.load(fixture)

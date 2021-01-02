@@ -1,0 +1,9 @@
+{
+    "nameservers": [
+        {
+            "hostname": "ns0.transip.nl",
+            "ipv4": "",
+            "ipv6": ""
+        }
+    ]
+}

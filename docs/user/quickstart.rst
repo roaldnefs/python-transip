@@ -114,6 +114,20 @@ single :class:`Domain <transip.v6.services.domain.Domain>` object by its name::
     <class 'transip.v6.services.domain.DnsEntry'> => {'name': 'www', 'expire': 86400, 'type': 'CNAME', 'content': '@'}
     <class 'transip.v6.services.domain.DnsEntry'> => {'name': '_dmarc', 'expire': 86400, 'type': 'TXT', 'content': 'v=DMARC1; p=none;'}
 
+
+It's also possible to create a new DNS entry for a single
+:class:`Domain <transip.v6.services.domain.Domain>`::
+
+    >>> domain = client.domains.get('transipdemonstratie.nl')
+    >>> dns_entry_data = {
+    ...     "name": "www",
+    ...     "expire": 86400,
+    ...     "type": "A",
+    ...     "content": "127.0.0.1"
+    ... }
+    >>> domain.dns.create(dns_entry_data)
+
+
 Domain Contacts
 ***************
 
