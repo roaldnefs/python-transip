@@ -102,7 +102,7 @@ class Domain(ApiObject):
 
 
 class DomainService(CreateMixin, GetMixin, DeleteMixin, ListMixin, ApiService):
-    """Service to manage domain."""
+    """Service to manage domains."""
 
     _path: str = "/domains"
     _obj_cls: Optional[Type[ApiObject]] = Domain
