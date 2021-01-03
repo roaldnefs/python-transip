@@ -21,7 +21,8 @@ from typing import Optional, Type
 
 from transip.base import ApiService, ApiObject
 from transip.mixins import (
-    GetMixin, DeleteMixin, ListMixin, CreateMixin, CreateAttrsTuple
+    GetMixin, DeleteMixin, ListMixin, CreateMixin, UpdateMixin,
+    CreateAttrsTuple, UpdateAttrsTuple
 )
 
 
@@ -30,7 +31,8 @@ class SshKey(ApiObject):
     _id_attr: str = "id"
 
 
-class SshKeyService(GetMixin, CreateMixin, DeleteMixin, ListMixin, ApiService):
+class SshKeyService(GetMixin, CreateMixin, UpdateMixin, DeleteMixin, ListMixin,
+                    ApiService):
 
     _path: str = "/ssh-keys"
     _obj_cls: Optional[Type[ApiObject]] = SshKey
@@ -41,4 +43,8 @@ class SshKeyService(GetMixin, CreateMixin, DeleteMixin, ListMixin, ApiService):
     _create_attrs: Optional[CreateAttrsTuple] = (
         ("sshKey",),  # required
         ("description",)  # optional
+    )
+    _update_attrs: Optional[UpdateAttrsTuple] = (
+        ("description",),  # required
+        tuple()  # optional
     )
