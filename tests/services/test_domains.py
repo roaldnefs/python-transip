@@ -27,7 +27,7 @@ from transip import TransIP
 from transip.v6.services.domain import (
     Domain, WhoisContact, Nameserver, DnsEntry
 )
-from tests.utils import load_fixture
+from tests.utils import load_responses_fixture
 
 
 @pytest.mark.usefixtures("minimal_client_class")
@@ -38,35 +38,7 @@ class DomainsTest(unittest.TestCase):
 
     def setUp(self):
         # Setup mocked responses for the /domains endpoint
-        responses.add(
-            responses.GET, "https://api.transip.nl/v6/domains/example.com",
-            json=load_fixture("domains_get.json"), status=200,
-            content_type='application/json',
-        )
-        responses.add(
-            responses.GET,
-            "https://api.transip.nl/v6/domains/example.com/contacts",
-            json=load_fixture("contacts_list.json"), status=200,
-            content_type='application/json',
-        )
-        responses.add(
-            responses.GET,
-            "https://api.transip.nl/v6/domains/example.com/nameservers",
-            json=load_fixture("nameservers_list.json"), status=200,
-            content_type='application/json',
-        )
-        responses.add(
-            responses.GET, "https://api.transip.nl/v6/domains/example.com/dns",
-            json=load_fixture("dns_list.json"), status=200,
-            content_type='application/json',
-        )
-        responses.add(
-            responses.POST, "https://api.transip.nl/v6/domains/example.com/dns",
-            status=201, content_type='application/json',
-            match=[
-                responses.json_params_matcher(load_fixture("dns_create.json")),
-            ]
-    )
+        load_responses_fixture("domains.json")
 
     @responses.activate
     def test_get(self) -> None:

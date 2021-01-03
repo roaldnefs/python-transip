@@ -20,6 +20,7 @@
 from typing import Any
 import json
 import os
+import responses  # type: ignore
 
 
 def load_fixture(path) -> Any:
@@ -30,3 +31,40 @@ def load_fixture(path) -> Any:
     )
     with open(os.path.join(fixtures, path)) as fixture:
         return json.load(fixture)
+
+
+def load_responses_fixture(path) -> None:
+    """Load a JSON fixture containing all the API response examples."""
+
+    def get_responses_method(method: str) -> str:
+        """
+        Raises:
+            ValueError: if the specified method is invalid.
+        """
+        method = method.upper()
+        if method == "GET":
+            return responses.GET
+        elif method == "POST":
+            return responses.POST
+        elif method == "DELETE":
+            return responses.DELETE
+        elif method == "PUT":
+            return responses.PUT
+        elif method == "PATCH":
+            return responses.PATCH
+        raise ValueError(f"Unable to find method '{method}' in responses")
+    
+    fixture = load_fixture(path)
+    for response in fixture:
+        match = []
+        if response.get("match_json"):
+            match.append(responses.json_params_matcher(response["match_json"]))
+
+        responses.add(
+            get_responses_method(response["method"]),
+            url=response["url"],
+            json=response.get("json"),
+            status=response["status"],
+            content_type=response.get("content_type", "application/json"),
+            match=match
+        )

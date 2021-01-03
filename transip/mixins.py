@@ -28,6 +28,8 @@ CreateAttrsTuple = Tuple[
     Union[Tuple[()], Tuple[str, ...]],
     Union[Tuple[()], Tuple[str, ...]]
 ]
+# Typing alias for the _update_attrs attribute in the UpdateMixin
+UpdateAttrsTuple = CreateAttrsTuple
 
 
 class GetMixin:
@@ -83,6 +85,69 @@ class ListMixin:
             for obj in self.client.get(self.path)[self._resp_list_attr]:
                 objs.append(self._obj_cls(self, obj))  # type: ignore
         return objs
+
+
+class UpdateMixin:
+    """Update an ApiObject.
+    """
+
+    client: TransIP
+    path: str
+
+    _req_update_attr: Optional[str] = None
+    _update_attrs: Optional[CreateAttrsTuple] = None
+
+    def get_update_attrs(self) -> Tuple[
+        Union[Tuple[()], Tuple[str, ...]],
+        Union[Tuple[()], Tuple[str, ...]]
+    ]:
+        """Return the required and optional attributes for updating a new
+        object.
+
+        Returns:
+            tuple: a tuple containing a tuple of required and optional
+                attributes.
+        """
+        if not self._update_attrs:
+            return (tuple(), tuple())
+        else:
+            return self._update_attrs
+
+    def _check_update_attrs(self, attrs) -> None:
+        """Check required attributes.
+
+        Raises:
+            AttributeError: If any of the required attributes is missing.
+        """
+        required, optional = self.get_update_attrs()
+        missing = [attr for attr in required if attr not in attrs]
+
+        if missing:
+            attrs_str = "', '".join(missing)
+            raise AttributeError((
+                f"'{self.__class__.__name__}' object has no "
+                f"attribute{'s'[:len(missing)!=1]} '{attrs_str}'"
+            ))
+
+    def update(
+        self,
+        id: Any,
+        data: Optional[Dict[str, Any]] = None,
+        **kwargs
+    ) -> None:
+        if data is None:
+            data = {}
+
+        # Check if all required attributes are supplied
+        self._check_update_attrs(data)
+
+        # Some endpoints require the attributes to be packed in dictionary with
+        # a specific key while others endpoint do not
+        if self._req_update_attr:
+            data = {self._req_update_attr: data}
+
+        if self.path:
+            self.client.put(f"{self.path}/{id}", json=data)
 
 
 class CreateMixin:
