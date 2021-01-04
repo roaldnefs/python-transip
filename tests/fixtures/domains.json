@@ -1,0 +1,96 @@
+[
+    {
+        "method": "GET",
+        "url": "https://api.transip.nl/v6/domains/example.com",
+        "json": {
+            "domain": {
+                "name": "example.com",
+                "authCode": "kJqfuOXNOYQKqh/jO4bYSn54YDqgAt1ksCe+ZG4Ud4nfpzw8qBsfR2JqAj7Ce12SxKcGD09v+yXd6lrm",
+                "isTransferLocked": false,
+                "registrationDate": "2016-01-01",
+                "renewalDate": "2020-01-01",
+                "isWhitelabel": false,
+                "cancellationDate": "2020-01-01 12:00:00",
+                "cancellationStatus": "signed",
+                "isDnsOnly": false,
+                "tags": [
+                    "customTag",
+                    "anotherTag"
+                ]
+            }
+        },
+        "status": 200,
+        "content_type": "application/json"
+    },
+    {
+        "method": "GET",
+        "url": "https://api.transip.nl/v6/domains/example.com/contacts",
+        "json": {
+            "contacts": [
+                {
+                    "type": "registrant",
+                    "firstName": "John",
+                    "lastName": "Doe",
+                    "companyName": "Example B.V.",
+                    "companyKvk": "83057825",
+                    "companyType": "BV",
+                    "street": "Easy street",
+                    "number": "12",
+                    "postalCode": "1337 XD",
+                    "city": "Leiden",
+                    "phoneNumber": "+31 715241919",
+                    "faxNumber": "+31 715241919",
+                    "email": "example@example.com",
+                    "country": "nl"
+                }
+            ]
+        },
+        "status": 200,
+        "content_type": "application/json"
+    },
+    {
+        "method": "GET",
+        "url": "https://api.transip.nl/v6/domains/example.com/nameservers",
+        "json": {
+            "nameservers": [
+                {
+                    "hostname": "ns0.transip.nl",
+                    "ipv4": "",
+                    "ipv6": ""
+                }
+            ]
+        },
+        "status": 200,
+        "content_type": "application/json"
+    },
+    {
+        "method": "GET",
+        "url": "https://api.transip.nl/v6/domains/example.com/dns",
+        "json": {
+            "dnsEntries": [
+                {
+                    "name": "www",
+                    "expire": 86400,
+                    "type": "A",
+                    "content": "127.0.0.1"
+                }
+            ]
+        },
+        "status": 200,
+        "content_type": "application/json"
+    },
+    {
+        "method": "POST",
+        "url": "https://api.transip.nl/v6/domains/example.com/dns",
+        "status": 201,
+        "content_type": "application/json",
+        "match_json": {
+            "dnsEntry": {
+                "name": "www",
+                "expire": 86400,
+                "type": "A",
+                "content": "127.0.0.1"
+            }
+        }
+    }
+]
