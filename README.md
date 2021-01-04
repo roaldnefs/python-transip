@@ -16,13 +16,13 @@
 # Retrieve a list of VPSs
 >>> for vps in client.vpss.list():
 ...     print(vps)
-<class 'transip.v6.services.vps.Vps'> => {'name': 'transipdemo-vps', 'productName': 'vps-bladevps-x1', ... }
+<class 'transip.v6.objects.Vps'> => {'name': 'transipdemo-vps', 'productName': 'vps-bladevps-x1', ... }
 # Retrieve a domain and list its DNS-records
 >>> domain = client.domains.get('transipdemo.net')
 >>> for entry in domain.dns.list():
 ...     print(entry)
-<class 'transip.v6.services.domain.DnsEntry'> => {'name': '*', 'expire': 300, 'type': 'A', 'content': '95.170.70.223'}
-<class 'transip.v6.services.domain.DnsEntry'> => {'name': '@', 'expire': 300, 'type': 'A', 'content': '95.170.70.223'}
+<class 'transip.v6.objects.DnsEntry'> => {'name': '*', 'expire': 300, 'type': 'A', 'content': '95.170.70.223'}
+<class 'transip.v6.objects.DnsEntry'> => {'name': '@', 'expire': 300, 'type': 'A', 'content': '95.170.70.223'}
 # Add a new DNS-record
 >>> domain.dns.create({'name': '@', 'expire': 300, 'type': 'TXT', 'content': 'Python'})
 ```

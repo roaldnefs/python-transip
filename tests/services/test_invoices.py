@@ -21,7 +21,7 @@ from typing import Type, List
 import responses  # type: ignore
 
 from transip import TransIP
-from transip.v6.services.invoice import Invoice
+from transip.v6.objects import Invoice
 
 
 @responses.activate
