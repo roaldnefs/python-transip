@@ -24,9 +24,7 @@ import pytest
 from typing import Type, List, Dict, Any, Union
 
 from transip import TransIP
-from transip.v6.services.domain import (
-    Domain, WhoisContact, Nameserver, DnsEntry
-)
+from transip.v6.objects import Domain, WhoisContact, Nameserver, DnsEntry
 from tests.utils import load_responses_fixture
 
 

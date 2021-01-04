@@ -24,7 +24,7 @@ import pytest
 import unittest
 
 from transip import TransIP
-from transip.v6.services.ssh_key import SshKey
+from transip.v6.objects import SshKey
 from tests.utils import load_responses_fixture
 
 

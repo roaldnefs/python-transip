@@ -62,17 +62,17 @@ class TransIP:
         self.session: requests.Session = requests.Session()
 
         # Dynamically import the services for the specified API version
-        services = importlib.import_module(f"transip.v{api_version}.services")
+        objects = importlib.import_module(f"transip.v{api_version}.objects")
 
         self.availability_zones: Type[Any] = (
-            services.AvailabilityZoneService(self)  # type: ignore
+            objects.AvailabilityZoneService(self)  # type: ignore
         )
-        self.domains: Type[Any] = services.DomainService(self)  # type: ignore
+        self.domains: Type[Any] = objects.DomainService(self)  # type: ignore
         self.invoices: Type[Any] = (
-            services.InvoiceService(self)  # type: ignore
+            objects.InvoiceService(self)  # type: ignore
         )
-        self.ssh_keys: Type[Any] = services.SshKeyService(self)  # type: ignore
-        self.vpss: Type[Any] = services.VpsService(self)  # type: ignore
+        self.ssh_keys: Type[Any] = objects.SshKeyService(self)  # type: ignore
+        self.vpss: Type[Any] = objects.VpsService(self)  # type: ignore
 
     @property
     def url(self) -> str:
