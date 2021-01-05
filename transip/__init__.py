@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2020 Roald Nefs <info@roaldnefs.com>
+# Copyright (C) 2020, 2021 Roald Nefs <info@roaldnefs.com>
 #
 # This file is part of python-transip.
 
@@ -27,10 +27,10 @@ from transip.exceptions import TransIPHTTPError, TransIPParsingError
 
 
 __title__ = "python-transip"
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __author__ = "Roald Nefs"
 __email__ = "info@roaldnefs.com"
-__copyright__ = "Copyright 2020, Roald Nefs"
+__copyright__ = "Copyright 2020-2021, Roald Nefs"
 __license__ = "LGPL3"
 
 
