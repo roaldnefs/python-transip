@@ -1,0 +1,115 @@
+[
+    {
+        "method": "GET",
+        "url": "https://api.transip.nl/v6/colocations",
+        "json": {
+            "colocations": [
+                {
+                    "name": "example2",
+                    "ipRanges": ["2a01:7c8:c038:6::/64"]
+                }
+            ]
+        },
+        "status": 200,
+        "content_type": "application/json"
+    },
+    {
+        "method": "GET",
+        "url": "https://api.transip.nl/v6/colocations/example2",
+        "json": {
+            "colocation": {
+                "name": "example2",
+                "ipRanges": ["2a01:7c8:c038:6::/64"]
+            }
+        },
+        "status": 200,
+        "content_type": "application/json"
+    },
+    {
+        "method": "GET",
+        "url": "https://api.transip.nl/v6/colocations/example2/ip-addresses",
+        "json": {
+            "ipAddresses": [
+                {
+                    "address": "37.97.254.6",
+                    "subnetMask": "255.255.255.0",
+                    "gateway": "37.97.254.1",
+                    "dnsResolvers": [
+                        "195.8.195.8",
+                        "195.135.195.135"
+                    ],
+                    "reverseDns": "example.com"
+                }
+            ]
+        },
+        "status": 200,
+        "content_type": "application/json"
+    },
+    {
+        "method": "GET",
+        "url": "https://api.transip.nl/v6/colocations/example2/ip-addresses/37.97.254.6",
+        "json": {
+            "ipAddress": {
+                "address": "37.97.254.6",
+                "subnetMask": "255.255.255.0",
+                "gateway": "37.97.254.1",
+                "dnsResolvers": [
+                    "195.8.195.8",
+                    "195.135.195.135"
+                ],
+                "reverseDns": "example.com"
+            }
+        },
+        "status": 200,
+        "content_type": "application/json"
+    },
+    {
+        "method": "POST",
+        "url": "https://api.transip.nl/v6/colocations/example2/ip-addresses",
+        "status": 201,
+        "content_type": "application/json",
+        "match_json": {
+            "ipAddress": "2a01:7c8:3:1337::6",
+            "reverseDns": "example.com"
+        }
+    },
+    {
+        "method": "PUT",
+        "url": "https://api.transip.nl/v6/colocations/example2/ip-addresses/37.97.254.6",
+        "status": 204,
+        "content_type": "application/json",
+        "match_json": {
+            "ipAddress": {
+                "address": "37.97.254.6",
+                "subnetMask": "255.255.255.0",
+                "gateway": "37.97.254.1",
+                "dnsResolvers": [
+                    "195.8.195.8",
+                    "195.135.195.135"
+                ],
+                "reverseDns": "example.com"
+            }
+        }
+    },
+    {
+        "method": "DELETE",
+        "url": "https://api.transip.nl/v6/colocations/example2/ip-addresses/37.97.254.6",
+        "status": 204,
+        "content_type": "application/json"
+    },
+    {
+        "method": "POST",
+        "url": "https://api.transip.nl/v6/colocations/example2/remote-hands",
+        "status": 201,
+        "content_type": "application/json",
+        "match_json": {
+            "remoteHands": {
+                "coloName": "example2",
+                "contactName": "Herman Kaakdorst",
+                "phoneNumber": "+31 612345678",
+                "expectedDuration": 15,
+                "instructions": "Reboot server with label Loadbalancer0"
+            }
+        }
+    }
+]

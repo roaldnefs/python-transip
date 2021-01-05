@@ -36,7 +36,7 @@ class SshKeysTest(unittest.TestCase):
 
     def setUp(self):
         # Setup mocked responses for the /ssh-keys endpoint
-        load_responses_fixture("ssh-keys.json")
+        load_responses_fixture("account.json")
 
     @responses.activate
     def test_list(self) -> None:

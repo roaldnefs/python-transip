@@ -1,0 +1,133 @@
+[
+    {
+        "method": "GET",
+        "url": "https://api.transip.nl/v6/invoices",
+        "json": {
+            "invoices": [
+                {
+                    "invoiceNumber": "F0000.1911.0000.0004",
+                    "creationDate": "2020-01-01",
+                    "payDate": "2020-01-01",
+                    "dueDate": "2020-02-01",
+                    "invoiceStatus": "waitsforpayment",
+                    "currency": "EUR",
+                    "totalAmount": 1000,
+                    "totalAmountInclVat": 1240
+                }
+            ]
+        },
+        "status": 200,
+        "content_type": "application/json"
+    },
+    {
+        "method": "GET",
+        "url": "https://api.transip.nl/v6/invoices/F0000.1911.0000.0004",
+        "json": {
+            "invoice": {
+                "invoiceNumber": "F0000.1911.0000.0004",
+                "creationDate": "2020-01-01",
+                "payDate": "2020-01-01",
+                "dueDate": "2020-02-01",
+                "invoiceStatus": "waitsforpayment",
+                "currency": "EUR",
+                "totalAmount": 1000,
+                "totalAmountInclVat": 1240
+            }
+        },
+        "status": 200,
+        "content_type": "application/json"
+    },
+    {
+        "method": "GET",
+        "url": "https://api.transip.nl/v6/invoices/F0000.1911.0000.0004/invoice-items",
+        "json": {
+            "invoiceItems": [
+                {
+                    "product": "Big Storage Disk 2000 GB",
+                    "description": "Big Storage Disk 2000 GB (example-bigstorage)",
+                    "isRecurring": false,
+                    "date": "2020-01-01",
+                    "quantity": 1,
+                    "price": 1000,
+                    "priceInclVat": 1210,
+                    "vat": 210,
+                    "vatPercentage": 21,
+                    "discounts": [
+                        {
+                            "description": "Korting (20% Black Friday)",
+                            "amount": -500
+                        }
+                    ]
+                }
+            ]
+        },
+        "status": 200,
+        "content_type": "application/json"
+    },
+    {
+        "method": "GET",
+        "url": "https://api.transip.nl/v6/invoices/F0000.1911.0000.0004/pdf",
+        "json": {
+            "pdf": "Y205elpYTWdZWEpsSUhKbFpDd2dabXh2ZDJWeWN5QmhjbVVnWW14MVpTd2dkR2hsY21VZ2MyaHZkV3hrSUdKbElHRWdjR1JtSUdobGNtVWdZblYwSUdsMElHbHpJR2RzZFdVdQ==="
+        },
+        "status": 200,
+        "content_type": "application/json"
+    },
+    {
+        "method": "GET",
+        "url": "https://api.transip.nl/v6/ssh-keys",
+        "json": {
+            "sshKeys": [
+                {
+                    "id": 123,
+                    "key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDf2pxWX/yhUBDyk2LPhvRtI0LnVO8PyR5Zt6AHrnhtLGqK+8YG9EMlWbCCWrASR+Q1hFQG example",
+                    "description": "Jim key",
+                    "creationDate": "2020-12-01 15:25:01",
+                    "fingerprint": "bb:22:43:69:2b:0d:3e:16:58:91:27:8a:62:29:97:d1"
+                }
+            ]
+        },
+        "status": 200,
+        "content_type": "application/json"
+    },
+    {
+        "method": "GET",
+        "url": "https://api.transip.nl/v6/ssh-keys/123",
+        "json": {
+            "sshKey": {
+                "id": 123,
+                "key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDf2pxWX/yhUBDyk2LPhvRtI0LnVO8PyR5Zt6AHrnhtLGqK+8YG9EMlWbCCWrASR+Q1hFQG example",
+                "description": "Jim key",
+                "creationDate": "2020-12-01 15:25:01",
+                "fingerprint": "bb:22:43:69:2b:0d:3e:16:58:91:27:8a:62:29:97:d1"
+            }
+        },
+        "status": 200,
+        "content_type": "application/json"
+    },
+    {
+        "method": "POST",
+        "url": "https://api.transip.nl/v6/ssh-keys",
+        "status": 201,
+        "content_type": "application/json",
+        "match_json": {
+            "sshKey": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDf2pxWX/yhUBDyk2LPhvRtI0LnVO8PyR5Zt6AHrnhtLGqK+8YG9EMlWbCCWrASR+Q1hFQG example",
+            "description": "Jim key"
+        }
+    },
+    {
+        "method": "PUT",
+        "url": "https://api.transip.nl/v6/ssh-keys/123",
+        "status": 204,
+        "content_type": "application/json",
+        "match_json": {
+            "description": "Jim key"
+        }
+    },
+    {
+        "method": "DELETE",
+        "url": "https://api.transip.nl/v6/ssh-keys/123",
+        "status": 204,
+        "content_type": "application/json"
+    }
+]

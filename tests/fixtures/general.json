@@ -1,0 +1,91 @@
+[
+    {
+        "method": "GET",
+        "url": "https://api.transip.nl/v6/products",
+        "json": {
+            "products": {
+                "vps": [
+                    {
+                        "name": "example-product-name",
+                        "description": "This is an example product",
+                        "price": 499,
+                        "recurringPrice": 799
+                    }
+                ],
+                "vpsAddon": [
+                    {
+                        "name": "example-product-name",
+                        "description": "This is an example product",
+                        "price": 499,
+                        "recurringPrice": 799
+                    }
+                ],
+                "haip": [
+                    {
+                        "name": "example-product-name",
+                        "description": "This is an example product",
+                        "price": 499,
+                        "recurringPrice": 799
+                    }
+                ],
+                "bigStorage": [
+                    {
+                        "name": "example-product-name",
+                        "description": "This is an example product",
+                        "price": 499,
+                        "recurringPrice": 799
+                    }
+                ],
+                "privateNetworks": [
+                    {
+                        "name": "example-product-name",
+                        "description": "This is an example product",
+                        "price": 499,
+                        "recurringPrice": 799
+                    }
+                ]
+            }
+        },
+        "status": 200,
+        "content_type": "application/json"
+    },
+    {
+        "method": "GET",
+        "url": "https://api.transip.nl/v6/products/ipv4Addresses/elements",
+        "json": {
+            "productElements": [
+                {
+                    "name": "ipv4Addresses",
+                    "description": "amount of ipv4Addresses for a vps",
+                    "amount": 1
+                }
+            ]
+        },
+        "status": 200,
+        "content_type": "application/json"
+    },
+    {
+        "method": "GET",
+        "url": "https://api.transip.nl/v6/availability-zones",
+        "json": {
+            "availabilityZones": [
+                {
+                    "name": "ams0",
+                    "country": "nl",
+                    "isDefault": true
+                }
+            ]
+        },
+        "status": 200,
+        "content_type": "application/json"
+    },
+    {
+        "method": "GET",
+        "url": "https://api.transip.nl/v6/api-test",
+        "json": {
+            "ping": "pong"
+        },
+        "status": 200,
+        "content_type": "application/json"
+    }
+]
