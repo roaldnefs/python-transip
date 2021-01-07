@@ -20,7 +20,7 @@
 from typing import Optional, List, Type, Dict, Any, Tuple, Union
 
 from transip import TransIP
-from transip.base import ApiObject
+from transip.base import ApiObject, ApiService
 
 
 # Typing alias for the _create_attrs attribute in the CreateMixin
@@ -64,6 +64,16 @@ class DeleteMixin:
     def delete(self, id: str, **kwargs) -> None:
         if self.path:
             self.client.delete(f"{self.path}/{id}")
+
+
+class ObjectDeleteMixin:
+    """Delete a single ApiObject."""
+
+    service: ApiService
+
+    def delete(self) -> None:
+        if self.get_id():  # type: ignore
+            self.service.delete(self.get_id())  # type: ignore
 
 
 class ListMixin:
