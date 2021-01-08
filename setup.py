@@ -28,6 +28,7 @@ setup(
     license="LGPLv3",
     url="https://github.com/roaldnefs/python-transip",
     packages=find_packages(),
+    include_package_data=True,
     install_requires=["requests>=2.25.1"],
     python_requires=">=3.6.12",
     entry_points={},
