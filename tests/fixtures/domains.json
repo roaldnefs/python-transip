@@ -52,7 +52,7 @@
         "url": "https://api.transip.nl/v6/domains",
         "status": 201,
         "content_type": "application/json",
-        "match_json": {
+        "match_json_params": {
             "domainName": "example.com",
             "contacts": [
                 {
@@ -94,7 +94,7 @@
         "url": "https://api.transip.nl/v6/domains",
         "status": 201,
         "content_type": "application/json",
-        "match_json": {
+        "match_json_params": {
             "domainName": "example.com",
             "authCode": "CYPMaVH+9MRjXGBc3InzHs7vNSUBPOjwpZm3GO+iDLHnFLtiP7sOKqW5JD1WeUpevZM6q1qS5YH9dGSp",
             "contacts": [
@@ -137,7 +137,7 @@
         "url": "https://api.transip.nl/v6/domains/example.com",
         "status": 204,
         "content_type": "application/json",
-        "match_json": {
+        "match_json_params": {
             "domain": {
                 "name": "example.com",
                 "authCode": "kJqfuOXNOYQKqh/jO4bYSn54YDqgAt1ksCe+ZG4Ud4nfpzw8qBsfR2JqAj7Ce12SxKcGD09v+yXd6lrm",
@@ -160,7 +160,7 @@
         "url": "https://api.transip.nl/v6/domains/example.com",
         "status": 204,
         "content_type": "application/json",
-        "match_json": {
+        "match_json_params": {
             "endTime": "end"
         }
     },
@@ -186,7 +186,7 @@
         "url": "https://api.transip.nl/v6/domains/example.com/branding",
         "status": 204,
         "content_type": "application/json",
-        "match_json": {
+        "match_json_params": {
             "branding": {
                 "companyName": "Example B.V.",
                 "supportEmail": "admin@example.com",
@@ -229,7 +229,7 @@
         "url": "https://api.transip.nl/v6/domains/example.com/contacts",
         "status": 204,
         "content_type": "application/json",
-        "match_json": {
+        "match_json_params": {
             "contacts": [
                 {
                     "type": "registrant",
@@ -271,7 +271,7 @@
         "url": "https://api.transip.nl/v6/domains/example.com/dns",
         "status": 201,
         "content_type": "application/json",
-        "match_json": {
+        "match_json_params": {
             "dnsEntry": {
                 "name": "www",
                 "expire": 86400,
@@ -300,7 +300,7 @@
         "url": "https://api.transip.nl/v6/domains/example.com/nameservers",
         "status": 204,
         "content_type": "application/json",
-        "match_json": {
+        "match_json_params": {
             "nameservers": [
                 {
                     "hostname": "ns0.transip.nl",

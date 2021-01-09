@@ -68,7 +68,7 @@
         "url": "https://api.transip.nl/v6/colocations/example2/ip-addresses",
         "status": 201,
         "content_type": "application/json",
-        "match_json": {
+        "match_json_params": {
             "ipAddress": "2a01:7c8:3:1337::6",
             "reverseDns": "example.com"
         }
@@ -78,7 +78,7 @@
         "url": "https://api.transip.nl/v6/colocations/example2/ip-addresses/37.97.254.6",
         "status": 204,
         "content_type": "application/json",
-        "match_json": {
+        "match_json_params": {
             "ipAddress": {
                 "address": "37.97.254.6",
                 "subnetMask": "255.255.255.0",
@@ -102,7 +102,7 @@
         "url": "https://api.transip.nl/v6/colocations/example2/remote-hands",
         "status": 201,
         "content_type": "application/json",
-        "match_json": {
+        "match_json_params": {
             "remoteHands": {
                 "coloName": "example2",
                 "contactName": "Herman Kaakdorst",
