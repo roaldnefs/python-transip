@@ -3,7 +3,7 @@
 # Copyright (C) 2021 Roald Nefs <info@roaldnefs.com>
 #
 # This file is part of python-transip.
-
+#
 # python-transip is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -13,7 +13,7 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License for more details.
-
+#
 # You should have received a copy of the GNU Lesser General Public License
 # along with python-transip.  If not, see <https://www.gnu.org/licenses/>.
 
@@ -23,7 +23,7 @@ import os
 import responses  # type: ignore
 
 
-def load_responses_fixture(path) -> None:
+def load_responses_fixtures(path) -> None:
     """Load a JSON fixture containing all the API response examples."""
 
     def _load_json_fixtures(path: str) -> List[Dict[str, Any]]:
