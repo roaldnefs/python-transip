@@ -9,6 +9,10 @@ First, make sure that:
 
 * python-transip is :ref:`installed <install>`
 
+Then you should be able to import the module::
+
+    >>> import transip
+
 Below you'll find some simple example to get started.
 
 Authentication
@@ -17,7 +21,20 @@ Authentication
 In order to make requests to the TransIP API we need to authenticate yourself
 using an access token. To get an access token, you should first login to the
 TransIP control panel. You can then generate a new token which will only be
-valid for limited time.
+valid for limited time or generate a private key to allow python-transip to
+request a access token on initialization.
+
+Example of authentication using a private key::
+
+    >>> PRIVATE_KEY = """-----BEGIN RSA PRIVATE KEY-----
+    ... ...
+    ... -----END RSA PRIVATE KEY-----""" 
+    >>> client = transip.TransIP(login="demouser", private_key=PRIVATE_KEY)
+    >>> client = transip.TransIP(login="demouser", private_key_file='/path/to/private.key')
+
+Example authentication using an access token::
+
+    >>> client = transip.TransIP(access_token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImN3MiFSbDU2eDNoUnkjelM4YmdOIn0.eyJpc3MiOiJhcGkudHJhbnNpcC5ubCIsImF1ZCI6ImFwaS50cmFuc2lwLm5sIiwianRpIjoiY3cyIVJsNTZ4M2hSeSN6UzhiZ04iLCJpYXQiOjE1ODIyMDE1NTAsIm5iZiI6MTU4MjIwMTU1MCwiZXhwIjoyMTE4NzQ1NTUwLCJjaWQiOiI2MDQ0OSIsInJvIjpmYWxzZSwiZ2siOmZhbHNlLCJrdiI6dHJ1ZX0.fYBWV4O5WPXxGuWG-vcrFWqmRHBm9yp0PHiYh_oAWxWxCaZX2Rf6WJfc13AxEeZ67-lY0TA2kSaOCp0PggBb_MGj73t4cH8gdwDJzANVxkiPL1Saqiw2NgZ3IHASJnisUWNnZp8HnrhLLe5ficvb1D9WOUOItmFC2ZgfGObNhlL2y-AMNLT4X7oNgrNTGm-mespo0jD_qH9dK5_evSzS3K8o03gu6p19jxfsnIh8TIVRvNdluYC2wo4qDl5EW5BEZ8OSuJ121ncOT1oRpzXB0cVZ9e5_UVAEr9X3f26_Eomg52-PjrgcRJ_jPIUYbrlo06KjjX2h0fzMr21ZE023Gw")
 
 TransIP also provide a **demo token** to authenticate yourself as the TransIP
 demo user in test mode::
