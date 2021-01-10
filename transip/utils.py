@@ -75,15 +75,22 @@ def generate_message_signature(
     return b64_bytes.decode('ascii')
 
 
-def generate_nonce(length: int) -> str:
+def generate_nonce(length: int, alphabet: str = None) -> str:
     """
     Generate a nonce.
 
     Args:
         length (int): The number of characters to return.
+        alphabet (str): The alphabet to choose characters from, defaults to
+            ascii leters and digits.
 
     Returns:
         str: The nonce of specified characters.
     """
-    alphabet: str = string.ascii_letters + string.digits
+    if not length >= 1:
+        raise ValueError(
+            "The specified nonce length must greater or equal to 1"
+        )
+
+    alphabet = alphabet or (string.ascii_letters + string.digits)
     return ''.join(secrets.choice(alphabet) for i in range(length))
