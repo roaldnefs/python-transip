@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2020, 2021 Roald Nefs <info@roaldnefs.com>
+# Copyright (C) 2021 Roald Nefs <info@roaldnefs.com>
 #
 # This file is part of python-transip.
 #
@@ -18,22 +18,22 @@
 # along with python-transip.  If not, see <https://www.gnu.org/licenses/>.
 
 import unittest
-import responses  # type: ignore
+import string
 
-from transip import TransIP
-from tests.utils import load_responses_fixtures
+from cryptography.hazmat.primitives.asymmetric.rsa import RSAPrivateKey
+
+from transip.utils import (
+    load_rsa_private_key, generate_message_signature, generate_nonce
+)
 
 
-class TransIPTest(unittest.TestCase):
-    """Test the TransIP client class."""
+class UtilsTest(unittest.TestCase):
+    """Test the transip.utils functions."""
 
-    client: TransIP
     privkey: str
 
     @classmethod
     def setUpClass(cls) -> None:
-        """Set up a minimal TransIP client and RSA private key."""
-        cls.client = TransIP(access_token='ACCESS_TOKEN')
         cls.privkey: str = (  # type: ignore
             "-----BEGIN RSA PRIVATE KEY-----\n"
             "MIIEpAIBAAKCAQEAsUSEHsMuB380OUZQWDyyND4q8lEuJAgNnMkO8s5NGwzP8XSi\n"
@@ -64,34 +64,49 @@ class TransIPTest(unittest.TestCase):
             "-----END RSA PRIVATE KEY-----"
         )
 
-    def setUp(self) -> None:
-        """Setup mocked responses for the '/auth' endpoint."""
-        load_responses_fixtures("auth.json")
-
-    def test_base_url(self) -> None:
-        """Test the base URL of the API."""
-        url: str = self.client.url
-
-        assert url == "https://api.transip.nl/v6"
-
-    def test_authorization_header(self) -> None:
-        """Test if the Authorization header is set correctly."""
-        auth_header: str = self.client.headers["Authorization"]
-
-        assert auth_header == "Bearer ACCESS_TOKEN"
-
-    @responses.activate
-    def test_private_key_authorization_header(self) -> None:
+    def test_load_rsa_private_key(self) -> None:
         """
-        Test if TransIP instances initialized with a private key, results in
-        the 'Authorization' header containing the access token returned by the
-        mocked response.
+        Test the content of a RSA private key can be converted to a
+        RSAPrivateKey instance.
         """
-        client: TransIP = TransIP(login="testuser", private_key=self.privkey)
-        auth_header: str = self.client.headers["Authorization"]
+        self.assertTrue(isinstance(load_rsa_private_key(self.privkey), RSAPrivateKey))
 
-        # Assert a single request is made to the mocked TransIP API
-        self.assertEqual(len(responses.calls), 1)
-        # Assert the 'Authorization' header contains the access token returned
-        # by the mocked response
-        self.assertEqual(auth_header, "Bearer ACCESS_TOKEN")
+    def test_generate_message_signature(self) -> None:
+        """
+        Test message signature generation using the defined RSA private key.
+
+        Example message encoded using:
+        https://8gwifi.org/rsasignverifyfunctions.jsp
+        """
+        message: str = "A message for signing"
+        encoded: str = ("NFi2v07lhYmyTarOtIfpw50W25ukKWjtqsVzti/Y2RiGKPEzJQtFZ"
+                        "QaYJCFfIn8HfYjdbzOTK5DIFxwL8NCJK3Mb+wxZOkO4NDJC7mVgdO"
+                        "I6VuET4F3Er4ZjO4pkMLSaV6B0Mcm/yj8Wom1lfeRZxItDXPAbkMj"
+                        "47Ywsx7enAEXfrZrYwHy+rWLPN6WWCrCDWAJGu7lz5+YIy7rpLyRx"
+                        "Ff57QkMMJal0VCWyQUx+JBMdoW7rGVN1u+AxRY0yFj+QxWRB1z0JC"
+                        "E0Xmur+gQ+4+rgIEDE6VU2VY0A8+SY7hyRb2JN8yoLAeI+21ODwo5"
+                        "h/x1zw3Bstyzuvzo0QmHp7Mw==")
+
+        self.assertTrue(
+            generate_message_signature(message, self.privkey) == encoded
+        )
+
+    def test_generate_nonce_length(self) -> None:
+        """
+        Test the length of the generated nonce and whether or not an
+        exception is thrown for invalid lengths.
+        """
+        # Test valid lengths
+        for length in [1, 2, 32]:
+            self.assertTrue(len(generate_nonce(length)) == length)
+
+        # Test invalid lengths
+        for length in [0, -1]:
+            self.assertRaises(ValueError, generate_nonce, length)
+
+    def test_generate_nonce_alphabet(self) -> None:
+        """
+        Test if the generated nonce only contains characters from the alphabet.
+        """
+        alphabet: str = 'a'
+        self.assertTrue(generate_nonce(3, alphabet) == 'aaa')

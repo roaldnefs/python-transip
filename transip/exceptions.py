@@ -23,7 +23,7 @@ from typing import Optional
 class TransIPError(Exception):
 
     def __init__(self, message: str = "") -> None:
-        Exception.__init__(self, message)
+        super().__init__(message)
         self.message = message
 
     def __str__(self) -> str:
@@ -38,7 +38,7 @@ class TransIPHTTPError(TransIPError):
         response_code: Optional[int] = None
     ) -> None:
 
-        TransIPError.__init__(self, message)
+        super().__init__(message)
         self.response_code = response_code
 
     def __str__(self) -> str:

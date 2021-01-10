@@ -1,47 +1,49 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2020 Roald Nefs <info@roaldnefs.com>
+# Copyright (C) 2020, 2021 Roald Nefs <info@roaldnefs.com>
 #
 # This file is part of python-transip.
-
+#
 # python-transip is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-
+#
 # python-transip is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License for more details.
-
+#
 # You should have received a copy of the GNU Lesser General Public License
 # along with python-transip.  If not, see <https://www.gnu.org/licenses/>.
 
-from typing import Type, List, Tuple, Any, Dict
+from typing import List, Tuple, Any, Dict
 import responses  # type: ignore
-import json
-import pytest
 import unittest
 
 from transip import TransIP
 from transip.v6.objects import SshKey
-from tests.utils import load_responses_fixture
+from tests.utils import load_responses_fixtures
 
 
-@pytest.mark.usefixtures("minimal_client_class")
 class SshKeysTest(unittest.TestCase):
     """Test the SshKeyService."""
 
-    client: Type[TransIP]
+    client: TransIP
 
-    def setUp(self):
-        # Setup mocked responses for the /ssh-keys endpoint
-        load_responses_fixture("account.json")
+    @classmethod
+    def setUpClass(cls) -> None:
+        """Set up a minimal TransIP client for using the ssh-key services."""
+        cls.client = TransIP(access_token='ACCESS_TOKEN')
+
+    def setUp(self) -> None:
+        """Setup mocked responses for the '/ssh-keys' endpoint."""
+        load_responses_fixtures("account.json")
 
     @responses.activate
     def test_list(self) -> None:
-        ssh_keys: List[Type[SshKey]] = self.client.ssh_keys.list()
-        ssh_key: Type[SshKey] = ssh_keys[0]
+        ssh_keys: List[SshKey] = self.client.ssh_keys.list()
+        ssh_key: SshKey = ssh_keys[0]
 
         assert len(ssh_keys) == 1
         assert ssh_key.get_id() == 123  # type: ignore
@@ -49,7 +51,7 @@ class SshKeysTest(unittest.TestCase):
     @responses.activate
     def test_get(self) -> None:
         ssh_key_id: int = 123
-        ssh_key: Type[SshKey] = self.client.ssh_keys.get(ssh_key_id)
+        ssh_key: SshKey = self.client.ssh_keys.get(ssh_key_id)
 
         assert ssh_key.get_id() == 123  # type: ignore
 
@@ -60,6 +62,16 @@ class SshKeysTest(unittest.TestCase):
             self.client.ssh_keys.delete(ssh_key_id)
         except Exception as exc:
             assert False, f"'transip.TransIP.ssh_keys.delete' raised an exception {exc}"
+
+    @responses.activate
+    def test_delete_object(self) -> None:
+        ssh_key_id: int = 123
+        ssh_key: SshKey = self.client.ssh_keys.get(ssh_key_id)
+
+        try:
+            ssh_key.delete()  # type: ignore
+        except Exception as exc:
+            assert False, f"'transip.v6.objects.SshKey.delete' raised an exception {exc}"
 
     @responses.activate
     def test_create(self) -> None:

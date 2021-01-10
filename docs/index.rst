@@ -29,7 +29,10 @@ Release v\ |version|. (:ref:`Installation <install>`)
 
     >>> import transip
     # Initialize a TransIP API client
-    >>> client = transip.TransIP(access_token="TOKEN")
+    >>> client = transip.TransIP(
+    ...     login="demouser",
+    ...     private_key_file="/path/to/private.key"
+    ... )
     # Retrieve a list of VPSs
     >>> for vps in client.vpss.list():
     ...     print(vps)
