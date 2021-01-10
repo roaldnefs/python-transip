@@ -18,11 +18,11 @@
 # along with python-transip.  If not, see <https://www.gnu.org/licenses/>.
 """Wrapper for the TransIP API."""
 
+from typing import Dict, Optional, Any, Type, Union
+
 import importlib
 import requests
-import base64
-
-from typing import Dict, Optional, Any, Type
+import os
 
 from transip.exceptions import TransIPHTTPError, TransIPParsingError
 from transip.utils import generate_message_signature, generate_nonce
@@ -44,7 +44,7 @@ class TransIP:
         api_version (str): TransIP API version to use
         access_token (str): The TransIP API access token
         private_key (str): The content of the private key for accessing the
-            TransIP API 
+            TransIP API
         private_key_file (str): Path to the private key for accessing the
             TransIP API
     """
@@ -69,7 +69,7 @@ class TransIP:
         self.session: requests.Session = requests.Session()
 
         # Set authentication information
-        self._login: str = login
+        self._login: Optional[str] = login
         self._access_token: Optional[str] = access_token
         self._private_key: Optional[str] = private_key
         self._private_key_file: Optional[str] = private_key_file
@@ -116,7 +116,6 @@ class TransIP:
             TransIPParsingError: If the requested access token couldn't be
                 extracted from the API response.
         """
-
         url: str = self._build_url('/auth')
         payload: Dict[str, Any] = {
             "login": self._login,
@@ -137,14 +136,22 @@ class TransIP:
         }
 
         headers: Dict[str, str] = self.headers.copy()
-        request: requests.Request = requests.Request("POST", url, headers=headers, json=payload)
-        prepped: requests.PreparedRequest = self.session.prepare_request(request)
+        request: requests.Request = requests.Request(
+            "POST", url, headers=headers, json=payload
+        )
+        prepped: requests.PreparedRequest = self.session.prepare_request(
+            request
+        )
 
         # Get the prepped body for signature generation
-        body: str = prepped.body
+        body: Union[bytes, str] = prepped.body or ''
+        if isinstance(body, bytes):
+            body = body.decode('ascii')
 
         # Generate a signature if the request body
-        signature: str = generate_message_signature(body, self._private_key)
+        signature: str = generate_message_signature(
+            body, self._private_key  # type: ignore
+        )
 
         # Add 'Signature' header to the prepared request
         prepped.headers["Signature"] = signature
@@ -165,13 +172,13 @@ class TransIP:
 
         Returns:
             str: The private key content
-        
+
         Raises:
             RuntimeError: If the private key file doesn't exist
         """
-        if os.path.exists(self._private_key_file):
+        if os.path.exists(self._private_key_file):  # type: ignore
             try:
-                with open(self._private_key_file) as keyfile:
+                with open(self._private_key_file) as keyfile:  # type: ignore
                     return keyfile.read()
             except IOError as exc:
                 raise RuntimeError("The private key couldn't be read") from exc
@@ -181,11 +188,12 @@ class TransIP:
     def _set_auth_info(self) -> None:
         """
         Set authentication information based upon the defined attributes.
-        
+
         Raises:
             ValueError: If the required attributes are not defined.
         """
-        if not self._access_token and not self._private_key and not self._private_key_file:
+        if (not self._access_token and not self._private_key and not
+                self._private_key_file):
             raise ValueError(
                 "At least one of access_token, private_key and "
                 "private_key_file should be defined"
@@ -270,7 +278,7 @@ class TransIP:
     def _validate_response(self, response: requests.Response) -> Any:
         """
         Validate the API response.
-        
+
         Raises:
             TransIPHTTPError: When the return code of the request is not 2xx
             TransIPParsingError: When the content couldn't be parsed as JSON

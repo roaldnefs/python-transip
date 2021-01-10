@@ -17,8 +17,9 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with python-transip.  If not, see <https://www.gnu.org/licenses/>.
 
+from typing import Union
+
 import base64
-import os
 import secrets
 import string
 
@@ -29,45 +30,49 @@ from cryptography.hazmat.primitives.hashes import SHA512
 from cryptography.hazmat.primitives.asymmetric.padding import PKCS1v15
 
 
-def load_rsa_private_key(key: str) -> RSAPrivateKey:
+def load_rsa_private_key(key: Union[bytes, str]) -> RSAPrivateKey:
     """
     Convert the private key string to RSAPrivateKey object.
-    
+
     Returns:
         RSAPrivateKey: The private RSA key.
     """
     # Convert the key string to bytes
     if isinstance(key, str):
-        key: bytes = key.encode()
-    
+        key = key.encode()
+
     return serialization.load_pem_private_key(
         key, password=None, backend=default_backend()
     )
 
 
-def generate_message_signature(message: str, private_key: str) -> str:
+def generate_message_signature(
+    message: Union[str, bytes],
+    private_key: Union[RSAPrivateKey, str]
+) -> str:
     """Return the BASE64 encoded SHA514 signature of a message.
-    
+
     Args:
         message (str): The message to sign.
         private_key (str): The private key content used to sign the message.
-    
+
     Returns:
         str: The BASE64 encoded SHA514 signature of a message.
     """
     # Convert the message string to bytes
     if isinstance(message, str):
-        message: bytes = message.encode()
+        message = message.encode()
 
     # Convert the private key content to a RSAPrivateKey object
     if isinstance(private_key, str):
-        private_key: RSAPrivateKey = load_rsa_private_key(private_key)
+        private_key = load_rsa_private_key(private_key)
 
     # Sign the message using the RSAPrivateKey object
-    signature: str = private_key.sign(message, PKCS1v15(), SHA512())
+    signature: bytes = private_key.sign(message, PKCS1v15(), SHA512())
 
     # Return the BASE64 encoded SHA512 signature
-    return base64.b64encode(signature)
+    b64_bytes: bytes = base64.b64encode(signature)
+    return b64_bytes.decode('ascii')
 
 
 def generate_nonce(length: int) -> str:
@@ -80,5 +85,5 @@ def generate_nonce(length: int) -> str:
     Returns:
         str: The nonce of specified characters.
     """
-    alphabet = string.ascii_letters + string.digits
+    alphabet: str = string.ascii_letters + string.digits
     return ''.join(secrets.choice(alphabet) for i in range(length))
