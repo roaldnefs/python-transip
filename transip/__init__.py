@@ -29,7 +29,7 @@ from transip.utils import generate_message_signature, generate_nonce
 
 
 __title__ = "python-transip"
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 __author__ = "Roald Nefs"
 __email__ = "info@roaldnefs.com"
 __copyright__ = "Copyright 2020-2021, Roald Nefs"
