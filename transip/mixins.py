@@ -3,17 +3,17 @@
 # Copyright (C) 2020, 2021 Roald Nefs <info@roaldnefs.com>
 #
 # This file is part of python-transip.
-
+#
 # python-transip is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-
+#
 # python-transip is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License for more details.
-
+#
 # You should have received a copy of the GNU Lesser General Public License
 # along with python-transip.  If not, see <https://www.gnu.org/licenses/>.
 
@@ -33,7 +33,8 @@ UpdateAttrsTuple = CreateAttrsTuple
 
 
 class GetMixin:
-    """Retrieve an single ApiObject.
+    """
+    Retrieve an single ApiObject.
 
     Derived class must define ``_resp_get_attr``.
 
@@ -45,7 +46,7 @@ class GetMixin:
 
     _resp_get_attr: Optional[str] = None
 
-    def get(self, id: str, **kwargs) -> Optional[Type[ApiObject]]:
+    def get(self, id: str) -> Optional[Type[ApiObject]]:
         if self._obj_cls or self.path or self._resp_get_attr:
             obj: Type[ApiObject] = self._obj_cls(  # type: ignore
                 self,
@@ -61,7 +62,7 @@ class DeleteMixin:
     client: TransIP
     path: str
 
-    def delete(self, id: str, **kwargs) -> None:
+    def delete(self, id: str) -> None:
         if self.path:
             self.client.delete(f"{self.path}/{id}")
 
@@ -77,7 +78,8 @@ class ObjectDeleteMixin:
 
 
 class ListMixin:
-    """Retrieve a list of ApiObjects.
+    """
+    Retrieve a list of ApiObjects.
 
     Derived class must define ``_resp_list_attr``.
 
@@ -89,7 +91,7 @@ class ListMixin:
 
     _resp_list_attr: Optional[str] = None
 
-    def list(self, **kwargs) -> List[Type[ApiObject]]:
+    def list(self) -> List[Type[ApiObject]]:
         objs: List[Type[ApiObject]] = []
         if self._obj_cls and self.path and self._resp_list_attr:
             for obj in self.client.get(self.path)[self._resp_list_attr]:
@@ -111,8 +113,8 @@ class UpdateMixin:
         Union[Tuple[()], Tuple[str, ...]],
         Union[Tuple[()], Tuple[str, ...]]
     ]:
-        """Return the required and optional attributes for updating a new
-        object.
+        """
+        Return the required and optional attributes for updating a new object.
 
         Returns:
             tuple: a tuple containing a tuple of required and optional
@@ -124,7 +126,8 @@ class UpdateMixin:
             return self._update_attrs
 
     def _check_update_attrs(self, attrs) -> None:
-        """Check required attributes.
+        """
+        Check required attributes.
 
         Raises:
             AttributeError: If any of the required attributes is missing.
@@ -171,7 +174,8 @@ class CreateMixin:
     _create_attrs: Optional[CreateAttrsTuple] = None
 
     def _check_create_attrs(self, attrs) -> None:
-        """Check required attributes.
+        """
+        Check required attributes.
 
         Raises:
             AttributeError: If any of the required attributes is missing.
@@ -190,8 +194,8 @@ class CreateMixin:
         Union[Tuple[()], Tuple[str, ...]],
         Union[Tuple[()], Tuple[str, ...]]
     ]:
-        """Return the required and optional attributes for creating a new
-        object.
+        """
+        Return the required and optional attributes for creating a new object.
 
         Returns:
             tuple: a tuple containing a tuple of required and optional
@@ -202,7 +206,7 @@ class CreateMixin:
         else:
             return self._create_attrs
 
-    def create(self, data: Optional[Dict[str, Any]] = None, **kwargs):
+    def create(self, data: Optional[Dict[str, Any]] = None):
         if data is None:
             data = {}
 

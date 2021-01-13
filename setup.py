@@ -6,6 +6,10 @@ from setuptools import find_packages
 
 
 def get_version() -> str:
+    """
+    Return the project version without having to import the module itself as it
+    might not have been loaded yet.
+    """
     with open("transip/__init__.py") as file:
         for line in file:
             if line.startswith("__version__"):
@@ -13,8 +17,15 @@ def get_version() -> str:
 
 
 def get_long_description() -> str:
+    """
+    Return the full description of the project. The full description consists
+    of the combined README.md and CHANGELOG.md files.
+    """
     with open("README.md", "r") as file:
-        return file.read()
+        readme = file.read()
+    with open("CHANGELOG.md", "r") as file:
+        changelog = file.read()
+    return readme + changelog
 
 
 setup(

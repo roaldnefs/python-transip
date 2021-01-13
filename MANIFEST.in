@@ -1,4 +1,4 @@
-include COPYING COPYING.LESSER README.md
+include COPYING COPYING.LESSER README.md CHANGELOG.md
 include tox.ini
 recursive-include requirements *
 recursive-include docs *.py *.rst user/*rst Makefile make.bat
