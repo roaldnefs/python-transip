@@ -42,7 +42,7 @@ class SshKeysTest(unittest.TestCase):
 
     @responses.activate
     def test_list(self) -> None:
-        ssh_keys: List[SshKey] = self.client.ssh_keys.list()
+        ssh_keys: List[SshKey] = self.client.ssh_keys.list()  # type: ignore
         ssh_key: SshKey = ssh_keys[0]
 
         assert len(ssh_keys) == 1
@@ -51,7 +51,7 @@ class SshKeysTest(unittest.TestCase):
     @responses.activate
     def test_get(self) -> None:
         ssh_key_id: int = 123
-        ssh_key: SshKey = self.client.ssh_keys.get(ssh_key_id)
+        ssh_key: SshKey = self.client.ssh_keys.get(ssh_key_id)  # type: ignore
 
         assert ssh_key.get_id() == 123  # type: ignore
 
@@ -59,14 +59,14 @@ class SshKeysTest(unittest.TestCase):
     def test_delete(self) -> None:
         ssh_key_id: int = 123
         try:
-            self.client.ssh_keys.delete(ssh_key_id)
+            self.client.ssh_keys.delete(ssh_key_id)  # type: ignore
         except Exception as exc:
             assert False, f"'transip.TransIP.ssh_keys.delete' raised an exception {exc}"
 
     @responses.activate
     def test_delete_object(self) -> None:
         ssh_key_id: int = 123
-        ssh_key: SshKey = self.client.ssh_keys.get(ssh_key_id)
+        ssh_key: SshKey = self.client.ssh_keys.get(ssh_key_id)  # type: ignore
 
         try:
             ssh_key.delete()  # type: ignore
@@ -79,7 +79,7 @@ class SshKeysTest(unittest.TestCase):
             "sshKey": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDf2pxWX/yhUBDyk2LPhvRtI0LnVO8PyR5Zt6AHrnhtLGqK+8YG9EMlWbCCWrASR+Q1hFQG example",
             "description": "Jim key"
         }
-        self.client.ssh_keys.create(ssh_key_data)
+        self.client.ssh_keys.create(ssh_key_data)  # type: ignore
 
         assert len(responses.calls) == 1
 
@@ -91,6 +91,8 @@ class SshKeysTest(unittest.TestCase):
         }
 
         try:
-            self.client.ssh_keys.update(ssh_key_id, ssh_key_data)
+            self.client.ssh_keys.update(  # type: ignore
+                ssh_key_id, ssh_key_data
+            )
         except Exception as exc:
             assert False, f"'transip.TransIP.ssh_keys.update' raised an exception {exc}"

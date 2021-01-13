@@ -27,6 +27,23 @@ from transip.mixins import (
 )
 
 
+class ApiTestService(ApiService):
+
+    _path: str = "/api-test"
+
+    def test(self):
+        """
+        A simple test to make sure everything is working.
+
+        Returns:
+            bool: True if everything is working, False otherwise.
+        """
+        response = self.client.get(f"{self.path}")
+        if response.get('ping') == 'pong':
+            return True
+        return False
+
+
 class AvailabilityZone(ApiObject):
 
     _id_attr: str = "name"

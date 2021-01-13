@@ -18,7 +18,8 @@
 # along with python-transip.  If not, see <https://www.gnu.org/licenses/>.
 """Wrapper for the TransIP API."""
 
-from typing import Dict, Optional, Any, Type, Union
+from typing import Dict, Optional, Any, Type, Union, TYPE_CHECKING
+from types import ModuleType
 
 import importlib
 import requests
@@ -34,6 +35,12 @@ __author__ = "Roald Nefs"
 __email__ = "info@roaldnefs.com"
 __copyright__ = "Copyright 2020-2021, Roald Nefs"
 __license__ = "LGPL3"
+
+
+if TYPE_CHECKING:
+    # Imports only needed for type checking. These will not be imported at
+    # runtime.
+    from transip.base import ApiService
 
 
 class TransIP:
@@ -76,17 +83,28 @@ class TransIP:
         self._set_auth_info()
 
         # Dynamically import the services for the specified API version
-        objects = importlib.import_module(f"transip.v{api_version}.objects")
+        objects: ModuleType = (
+            importlib.import_module(f"transip.v{api_version}.objects")
+        )
 
-        self.availability_zones: Type[Any] = (
+        self.api_test: Type['ApiService'] = (
+            objects.ApiTestService(self)  # type: ignore
+        )
+        self.availability_zones: Type['ApiService'] = (
             objects.AvailabilityZoneService(self)  # type: ignore
         )
-        self.domains: Type[Any] = objects.DomainService(self)  # type: ignore
-        self.invoices: Type[Any] = (
+        self.domains: Type['ApiService'] = (
+            objects.DomainService(self)  # type: ignore
+        )
+        self.invoices: Type['ApiService'] = (
             objects.InvoiceService(self)  # type: ignore
         )
-        self.ssh_keys: Type[Any] = objects.SshKeyService(self)  # type: ignore
-        self.vpss: Type[Any] = objects.VpsService(self)  # type: ignore
+        self.ssh_keys: Type['ApiService'] = (
+            objects.SshKeyService(self)  # type: ignore
+        )
+        self.vpss: Type['ApiService'] = (
+            objects.VpsService(self)  # type: ignore
+        )
 
     @property
     def url(self) -> str:
