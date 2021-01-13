@@ -42,4 +42,4 @@ class ApiTestTest(unittest.TestCase):
     @responses.activate
     def test_test(self) -> None:
         """Test if the API test returns True."""
-        self.assertTrue(self.client.api_test.test())
+        self.assertTrue(self.client.api_test.test())  # type: ignore
