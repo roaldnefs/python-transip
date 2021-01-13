@@ -45,7 +45,7 @@ class GetMixin:
 
     _resp_get_attr: Optional[str] = None
 
-    def get(self, id: str, **kwargs) -> Optional[Type[ApiObject]]:
+    def get(self, id: str) -> Optional[Type[ApiObject]]:
         if self._obj_cls or self.path or self._resp_get_attr:
             obj: Type[ApiObject] = self._obj_cls(  # type: ignore
                 self,
@@ -61,7 +61,7 @@ class DeleteMixin:
     client: TransIP
     path: str
 
-    def delete(self, id: str, **kwargs) -> None:
+    def delete(self, id: str) -> None:
         if self.path:
             self.client.delete(f"{self.path}/{id}")
 
@@ -89,7 +89,7 @@ class ListMixin:
 
     _resp_list_attr: Optional[str] = None
 
-    def list(self, **kwargs) -> List[Type[ApiObject]]:
+    def list(self) -> List[Type[ApiObject]]:
         objs: List[Type[ApiObject]] = []
         if self._obj_cls and self.path and self._resp_list_attr:
             for obj in self.client.get(self.path)[self._resp_list_attr]:
@@ -202,7 +202,7 @@ class CreateMixin:
         else:
             return self._create_attrs
 
-    def create(self, data: Optional[Dict[str, Any]] = None, **kwargs):
+    def create(self, data: Optional[Dict[str, Any]] = None):
         if data is None:
             data = {}
 
