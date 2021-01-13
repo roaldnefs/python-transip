@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2020, 2012 Roald Nefs <info@roaldnefs.com>
+# Copyright (C) 2020, 2021 Roald Nefs <info@roaldnefs.com>
 #
 # This file is part of python-transip.
 #
@@ -43,13 +43,13 @@ class DomainsTest(unittest.TestCase):
 
     @responses.activate
     def test_get(self) -> None:
-        domain: Domain = self.client.domains.get("example.com")
+        domain: Domain = self.client.domains.get("example.com")  # type: ignore
 
         assert domain.get_id() == "example.com"  # type: ignore
 
     @responses.activate
     def test_contacts_list(self) -> None:
-        domain: Domain = self.client.domains.get("example.com")
+        domain: Domain = self.client.domains.get("example.com")  # type: ignore
         contacts: List[Domain] = domain.contacts.list()  # type: ignore
         contact: Domain = contacts[0]
 
@@ -58,7 +58,7 @@ class DomainsTest(unittest.TestCase):
 
     @responses.activate
     def test_nameservers_list(self) -> None:
-        domain: Domain = self.client.domains.get("example.com")
+        domain: Domain = self.client.domains.get("example.com")  # type: ignore
         nameservers: List[Nameserver] = domain.nameservers.list()  # type: ignore
         nameserver: Nameserver = nameservers[0]
 
@@ -67,7 +67,7 @@ class DomainsTest(unittest.TestCase):
 
     @responses.activate
     def test_dns_list(self) -> None:
-        domain: Domain = self.client.domains.get("example.com")
+        domain: Domain = self.client.domains.get("example.com")  # type: ignore
         entries: List[DnsEntry] = domain.dns.list()  # type: ignore
         entry: DnsEntry = entries[0]
 
@@ -82,7 +82,7 @@ class DomainsTest(unittest.TestCase):
             "type": "A",
             "content": "127.0.0.1"
         }
-        domain: Domain = self.client.domains.get("example.com")
+        domain: Domain = self.client.domains.get("example.com")  # type: ignore
         domain.dns.create(dns_entry_data)  # type: ignore
 
         assert len(responses.calls) == 2

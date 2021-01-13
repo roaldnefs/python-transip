@@ -1,6 +1,13 @@
 [
     {
         "method": "GET",
+        "url": "https://api.transip.nl/v6/api-test",
+        "json": {"ping": "pong"},
+        "status": 200,
+        "content_type": "application/json"
+    },
+    {
+        "method": "GET",
         "url": "https://api.transip.nl/v6/products",
         "json": {
             "products": {
