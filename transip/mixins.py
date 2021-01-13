@@ -33,7 +33,8 @@ UpdateAttrsTuple = CreateAttrsTuple
 
 
 class GetMixin:
-    """Retrieve an single ApiObject.
+    """
+    Retrieve an single ApiObject.
 
     Derived class must define ``_resp_get_attr``.
 
@@ -77,7 +78,8 @@ class ObjectDeleteMixin:
 
 
 class ListMixin:
-    """Retrieve a list of ApiObjects.
+    """
+    Retrieve a list of ApiObjects.
 
     Derived class must define ``_resp_list_attr``.
 
@@ -111,8 +113,8 @@ class UpdateMixin:
         Union[Tuple[()], Tuple[str, ...]],
         Union[Tuple[()], Tuple[str, ...]]
     ]:
-        """Return the required and optional attributes for updating a new
-        object.
+        """
+        Return the required and optional attributes for updating a new object.
 
         Returns:
             tuple: a tuple containing a tuple of required and optional
@@ -124,7 +126,8 @@ class UpdateMixin:
             return self._update_attrs
 
     def _check_update_attrs(self, attrs) -> None:
-        """Check required attributes.
+        """
+        Check required attributes.
 
         Raises:
             AttributeError: If any of the required attributes is missing.
@@ -171,7 +174,8 @@ class CreateMixin:
     _create_attrs: Optional[CreateAttrsTuple] = None
 
     def _check_create_attrs(self, attrs) -> None:
-        """Check required attributes.
+        """
+        Check required attributes.
 
         Raises:
             AttributeError: If any of the required attributes is missing.
@@ -190,8 +194,8 @@ class CreateMixin:
         Union[Tuple[()], Tuple[str, ...]],
         Union[Tuple[()], Tuple[str, ...]]
     ]:
-        """Return the required and optional attributes for creating a new
-        object.
+        """
+        Return the required and optional attributes for creating a new object.
 
         Returns:
             tuple: a tuple containing a tuple of required and optional
