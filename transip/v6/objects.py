@@ -172,9 +172,30 @@ class DomainService(CreateMixin, GetMixin, DeleteMixin, ListMixin, ApiService):
     )
 
 
+class InvoiceItem(ApiObject):
+    pass
+
+
+class InvoiceItemService(ListMixin, ApiService):
+    """Service to items of an invoice."""
+
+    _path: str = "/invoices/{parent_id}/invoice-items"
+    _obj_cls: Optional[Type[ApiObject]] = InvoiceItem
+
+    _resp_list_attr: str = "invoiceItems"
+
+
 class Invoice(ApiObject):
 
     _id_attr: str = "invoiceNumber"
+
+    @property
+    def items(self) -> InvoiceItemService:
+        """Return the service to manage the items of an invoice"""
+        return InvoiceItemService(
+            self.service.client,
+            parent=self  # type: ignore
+        )
 
 
 class InvoiceService(GetMixin, ListMixin, ApiService):
