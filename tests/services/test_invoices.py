@@ -22,7 +22,7 @@ import responses  # type: ignore
 import unittest
 
 from transip import TransIP
-from transip.v6.objects import Invoice
+from transip.v6.objects import Invoice, InvoiceItem
 from tests.utils import load_responses_fixtures
 
 class InvoicesTest(unittest.TestCase):
@@ -44,12 +44,24 @@ class InvoicesTest(unittest.TestCase):
         invoices: List[Invoice] = self.client.invoices.list()  # type: ignore
         invoice: Invoice = invoices[0]
     
-        assert len(invoices) == 1
-        assert invoice.get_id() == "F0000.1911.0000.0004"  # type: ignore
+        self.assertEqual(len(invoices), 1)
+        self.assertEqual(invoice.get_id(), "F0000.1911.0000.0004")  # type: ignore
 
     @responses.activate
     def test_get(self) -> None:
         invoice_id: str = "F0000.1911.0000.0004"
         invoice: Invoice = self.client.invoices.get(invoice_id)  # type: ignore
 
-        assert invoice.get_id() == "F0000.1911.0000.0004"  # type: ignore
+        self.assertEqual(invoice.get_id(), "F0000.1911.0000.0004")  # type: ignore
+
+    @responses.activate
+    def test_items_list(self) -> None:
+        invoice: Invoice = self.client.invoices.get("F0000.1911.0000.0004")  # type: ignore
+        items: List[InvoiceItem] = invoice.items.list()  # type: ignore
+
+        self.assertEqual(len(items), 1)
+        self.assertEqual(items[0].product, "Big Storage Disk 2000 GB")  # type: ignore
+
+        # Expect the get_id() method to return None as the invoice items don't
+        # have a specific ID attribute.
+        self.assertIsNone(items[0].get_id())  # type: ignore
