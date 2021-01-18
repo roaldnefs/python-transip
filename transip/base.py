@@ -32,17 +32,21 @@ class ApiObject:
             {
                 "service": service,
                 "_attrs": attrs,
+                "_updated_attrs": {}
             }
         )
 
     def __getattr__(self, name: str) -> Any:
         try:
-            return self.__dict__["_attrs"][name]
+            return self.__dict__["_updated_attrs"][name]
         except KeyError:
-            raise AttributeError(name)
+            try:
+                return self.__dict__["_attrs"][name]
+            except KeyError:
+                raise AttributeError(name)
 
     def __setattr__(self, name: str, value: Any) -> None:
-        self.__dict__["_attrs"][name] = value
+        self.__dict__["_updated_attrs"][name] = value
 
     def __str__(self) -> str:
         return f"{type(self)} => {self._attrs}"
@@ -65,7 +69,12 @@ class ApiObject:
 
     @property
     def attrs(self):
-        return self.__dict__["_attrs"]
+        """
+        Returns a dictionary containing all the attributes.
+        """
+        attrs = self.__dict__["_updated_attrs"].copy()
+        attrs.update(self.__dict__["_attrs"])
+        return attrs
 
 
 class ApiService:

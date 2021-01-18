@@ -22,7 +22,7 @@ from typing import Optional, Type
 from transip.base import ApiService, ApiObject
 from transip.mixins import (
     GetMixin, DeleteMixin, ListMixin, CreateMixin, UpdateMixin,
-    ObjectDeleteMixin,
+    ObjectDeleteMixin, ObjectUpdateMixin,
     CreateAttrsTuple, UpdateAttrsTuple
 )
 
@@ -57,7 +57,7 @@ class AvailabilityZoneService(ListMixin, ApiService):
     _resp_list_attr: str = "availabilityZones"
 
 
-class SshKey(ObjectDeleteMixin, ApiObject):
+class SshKey(ObjectDeleteMixin, ObjectUpdateMixin, ApiObject):
 
     _id_attr: str = "id"
 
