@@ -77,6 +77,33 @@ class ObjectDeleteMixin:
             self.service.delete(self.get_id())  # type: ignore
 
 
+class ObjectUpdateMixin:
+    """Update a single ApiObject."""
+
+    service: ApiService
+    _updated_attrs: Any
+
+    def _get_updated_data(self) -> Union[Dict, Dict[str, Any]]:
+        updated_data = {}
+        required, optional = self.service.get_update_attrs()  # type: ignore
+        # Add all required attributes, even if they haven't been updated
+        for attr in required:
+            updated_data[attr] = getattr(self, attr)
+        updated_data.update(self._updated_attrs)
+        return updated_data
+
+    def update(self) -> None:
+        """
+        Update the changes made to the object.
+        """
+        updated_data = self._get_updated_data()
+        if not updated_data:
+            return
+
+        obj_id = self.get_id()  # type: ignore
+        self.service.update(obj_id, updated_data)  # type: ignore
+
+
 class ListMixin:
     """
     Retrieve a list of ApiObjects.

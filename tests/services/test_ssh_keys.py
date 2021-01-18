@@ -65,13 +65,22 @@ class SshKeysTest(unittest.TestCase):
 
     @responses.activate
     def test_delete_object(self) -> None:
-        ssh_key_id: int = 123
-        ssh_key: SshKey = self.client.ssh_keys.get(ssh_key_id)  # type: ignore
+        ssh_key: SshKey = self.client.ssh_keys.get(123)  # type: ignore
 
         try:
             ssh_key.delete()  # type: ignore
         except Exception as exc:
             assert False, f"'transip.v6.objects.SshKey.delete' raised an exception {exc}"
+
+    @responses.activate
+    def test_update_object(self) -> None:
+        ssh_key: SshKey = self.client.ssh_keys.get(123)  # type: ignore
+        ssh_key.description = "Jim key"
+
+        try:
+            ssh_key.update()
+        except Exception as exc:
+            assert False, f"'transip.v6.objects.SshKey.update' raised an exception {exc}"
 
     @responses.activate
     def test_create(self) -> None:
