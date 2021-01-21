@@ -17,6 +17,9 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with python-transip.  If not, see <https://www.gnu.org/licenses/>.
 
+import os
+import base64
+
 from typing import Optional, Type
 
 from transip.base import ApiService, ApiObject
@@ -25,6 +28,7 @@ from transip.mixins import (
     ObjectDeleteMixin, ObjectUpdateMixin,
     CreateAttrsTuple, UpdateAttrsTuple
 )
+from transip.exceptions import TransIPIOError
 
 
 class ApiTestService(ApiService):
@@ -196,6 +200,44 @@ class Invoice(ApiObject):
             self.service.client,
             parent=self  # type: ignore
         )
+
+    def pdf(self, file_path: str) -> Optional[str]:
+        """
+        Write a invoice to a PDF file.
+
+        Args:
+            file_path (str): Path to PDF file, if the path is a directory to
+                PDF is saved using its invoice number.
+
+        Returns:
+            str: The absolute path to the saved PDF file.
+
+        Raises:
+            TransIPIOError: If the PDF data couldn't be written to file.
+        """
+        invoice_id = self.get_id()
+        if not invoice_id:
+            return None
+
+        # Retrieve the base64 encoded PDF data
+        encoded = self.service.client.get(f"/invoices/{invoice_id}/pdf")["pdf"]
+        data = base64.b64decode(encoded.encode('ascii'))
+
+        file_path = os.path.abspath(file_path)
+        if os.path.isdir(file_path):
+            file_path = os.path.join(file_path, f"{invoice_id}.pdf")
+        if os.path.exists(file_path):
+            raise TransIPIOError(f"File {file_path} already exists")
+
+        try:
+            with open(file_path, 'wb') as pdf_file:
+                pdf_file.write(data)
+        except OSError as exc:
+            raise TransIPIOError(
+                f"Unable to write PDF file {file_path}"
+            ) from exc
+
+        return file_path
 
 
 class InvoiceService(GetMixin, ListMixin, ApiService):
