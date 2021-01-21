@@ -17,9 +17,11 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with python-transip.  If not, see <https://www.gnu.org/licenses/>.
 
-from typing import List, Tuple, Any, Dict
+from typing import List, Tuple, Any, Dict, Optional
 import responses  # type: ignore
 import unittest
+import tempfile
+import os
 
 from transip import TransIP
 from transip.v6.objects import Invoice, InvoiceItem
@@ -29,6 +31,7 @@ class InvoicesTest(unittest.TestCase):
     """Test the InvoiceService."""
 
     client: TransIP
+    tmp_dir: Optional[tempfile.TemporaryDirectory]
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -65,3 +68,17 @@ class InvoicesTest(unittest.TestCase):
         # Expect the get_id() method to return None as the invoice items don't
         # have a specific ID attribute.
         self.assertIsNone(items[0].get_id())  # type: ignore
+
+    @responses.activate
+    def test_pdf(self) -> None:
+        """
+        Check if the invoice can be written to a PDF file.
+        """
+        invoice_id = "F0000.1911.0000.0004"
+        invoice: Invoice = self.client.invoices.get(invoice_id)  # type: ignore
+
+        # Write the invoice to a PDF file in a temporary directory.
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            expected = os.path.join(tmp_dir, f"{invoice_id}.pdf")
+            actual = invoice.pdf(tmp_dir)
+            self.assertEqual(actual, expected)

@@ -50,3 +50,7 @@ class TransIPHTTPError(TransIPError):
 
 class TransIPParsingError(TransIPError):
     pass
+
+
+class TransIPIOError(TransIPError):
+    pass
