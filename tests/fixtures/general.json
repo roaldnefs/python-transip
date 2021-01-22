@@ -13,7 +13,7 @@
             "products": {
                 "vps": [
                     {
-                        "name": "example-product-name",
+                        "name": "vps-bladevps-x4",
                         "description": "This is an example product",
                         "price": 499,
                         "recurringPrice": 799
@@ -58,7 +58,7 @@
     },
     {
         "method": "GET",
-        "url": "https://api.transip.nl/v6/products/ipv4Addresses/elements",
+        "url": "https://api.transip.nl/v6/products/vps-bladevps-x4/elements",
         "json": {
             "productElements": [
                 {

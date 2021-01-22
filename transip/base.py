@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2020 Roald Nefs <info@roaldnefs.com>
+# Copyright (C) 2020, 2021 Roald Nefs <info@roaldnefs.com>
 #
 # This file is part of python-transip.
 #
@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with python-transip.  If not, see <https://www.gnu.org/licenses/>.
 
-from typing import Optional, Type, Any
+from typing import Optional, Type, Any, Union
 
 from transip import TransIP
 
@@ -61,8 +61,8 @@ class ApiObject:
     def __dir__(self):
         return super().__dir__() + list(self.attrs)
 
-    def get_id(self) -> Any:
-        """Returns the id of the object."""
+    def get_id(self) -> Union[Optional[int], Optional[str]]:
+        """Returns the ID of the object."""
         if self._id_attr and hasattr(self, self._id_attr):
             return getattr(self, self._id_attr)
         return None

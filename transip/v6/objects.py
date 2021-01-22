@@ -20,7 +20,7 @@
 import os
 import base64
 
-from typing import Optional, Type
+from typing import Optional, Type, List
 
 from transip.base import ApiService, ApiObject
 from transip.mixins import (
@@ -46,6 +46,58 @@ class ApiTestService(ApiService):
         if response.get('ping') == 'pong':
             return True
         return False
+
+
+class ProductElement(ApiObject):
+
+    _id_attr: str = "name"
+
+
+class ProductElementService(ListMixin, ApiService):
+    """Service to manage elements of a product."""
+
+    _path: str = "/products/{parent_id}/elements"
+    _obj_cls: Optional[Type[ApiObject]] = ProductElement
+
+    _resp_list_attr: str = "productElements"
+
+
+class Product(ApiObject):
+
+    _id_attr: Optional[str] = "name"
+
+    @property
+    def elements(self) -> ProductElementService:
+        """Return the service to manage the elements of the product."""
+        return ProductElementService(
+            self.service.client,
+            parent=self  # type: ignore
+        )
+
+
+class ProductService(ListMixin, ApiService):
+    """Service to manage products."""
+
+    _path: str = "/products"
+    _obj_cls: Optional[Type[ApiObject]] = Product
+
+    _resp_list_attr: str = "products"
+
+    def list(self) -> List[Type[ApiObject]]:
+        """
+        Retrieve a list of products.
+
+        Overwrites the default list() method of the ListMixin as the products
+        are stored in further down in the result dictionary.
+        """
+        objs: List[Type[ApiObject]] = []
+        data = self.client.get(self.path)[self._resp_list_attr]
+        # Loop over the individual product lists of all product categories,
+        # e.g. vps, haip
+        for obj_list in data.values():
+            for obj in obj_list:
+                objs.append(self._obj_cls(self, obj))  # type: ignore
+        return objs
 
 
 class AvailabilityZone(ApiObject):
