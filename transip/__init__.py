@@ -93,6 +93,9 @@ class TransIP:
         self.availability_zones: Type['ApiService'] = (
             objects.AvailabilityZoneService(self)  # type: ignore
         )
+        self.products: Type['ApiService'] = (
+            objects.ProductService(self)  # type: ignore
+        )
         self.domains: Type['ApiService'] = (
             objects.DomainService(self)  # type: ignore
         )
