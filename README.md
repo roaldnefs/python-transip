@@ -15,9 +15,12 @@
     - [Authentication](#authentication)
 - [General](#general)
     - [Products](#products)
+        - [The **Product** class](#the-product-class)
+        - [The **ProductElement** class](#the-productelement-class)
         - [List all products](#list-all-products)
         - [List specifications for product](#list-specifications-for-product)
     - [Availability Zones](#availability-zones)
+        - [The **AvailabilityZone** class](#the-availabilityzone-class)
         - [List availability zones](#list-availability-zones)
     - [API Test](#api-test)
 - [Account](#account)
@@ -29,6 +32,7 @@
         - [List invoice items by invoice number](#list-invoice-items-by-invoice-number)
         - [Retrieve an invoice as PDF file](#retrieve-an-invoice-as-PDF-file)
     - [SSH Keys](#ssh-keys)
+        - [The **SshKey** class](#the-sshkey-class)
         - [List all SSH keys](#list-all-ssh-keys)
         - [Get SSH key by id](#get-ssh-key-by-id)
         - [Add a new SSH key](#add-a-new-ssh-key)
@@ -87,9 +91,9 @@ Alternatively you can also authenticate by providing an access token. This is es
 
 ```python
 import transip
+from transip.v6 import DEMO_TOKEN
 
 # You can initialize a TransIP client using an access token directly.
-DEMO_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImN3MiFSbDU2eDNoUnkjelM4YmdOIn0.eyJpc3MiOiJhcGkudHJhbnNpcC5ubCIsImF1ZCI6ImFwaS50cmFuc2lwLm5sIiwianRpIjoiY3cyIVJsNTZ4M2hSeSN6UzhiZ04iLCJpYXQiOjE1ODIyMDE1NTAsIm5iZiI6MTU4MjIwMTU1MCwiZXhwIjoyMTE4NzQ1NTUwLCJjaWQiOiI2MDQ0OSIsInJvIjpmYWxzZSwiZ2siOmZhbHNlLCJrdiI6dHJ1ZX0.fYBWV4O5WPXxGuWG-vcrFWqmRHBm9yp0PHiYh_oAWxWxCaZX2Rf6WJfc13AxEeZ67-lY0TA2kSaOCp0PggBb_MGj73t4cH8gdwDJzANVxkiPL1Saqiw2NgZ3IHASJnisUWNnZp8HnrhLLe5ficvb1D9WOUOItmFC2ZgfGObNhlL2y-AMNLT4X7oNgrNTGm-mespo0jD_qH9dK5_evSzS3K8o03gu6p19jxfsnIh8TIVRvNdluYC2wo4qDl5EW5BEZ8OSuJ121ncOT1oRpzXB0cVZ9e5_UVAEr9X3f26_Eomg52-PjrgcRJ_jPIUYbrlo06KjjX2h0fzMr21ZE023Gw"
 client = transip.TransIP(access_token=DEMO_TOKEN)
 ```
 
@@ -97,6 +101,31 @@ client = transip.TransIP(access_token=DEMO_TOKEN)
 The [general TransIP API](https://api.transip.nl/rest/docs.html#general) resources allow you to manage products, availability zones and call the API test resource.
 ### Products
 Manage available TransIP products and product specifications.
+
+### The **Product** class
+When listing all products available on TransIP, a list of **transip.v6.objects.Product** objects is returned.
+
+**_class_ Product**
+
+The **Product** class makes the following attributes available:
+
+- **name**: The name of the product.
+- **description**: The product description.
+- **price**: The price in cents.
+- **recurringPrice**: The recurring price for the product in cents.
+- **elements**: The service to list detailed information on the product elements.
+
+### The **ProductElement** class
+When listing all product elements of a **transip.v6.objects.Product** object, a list of **transip.v6.objects.ProductElement** objects is returned.
+
+**_class_ ProductElement**
+
+The **ProductElement** class makes the following attributes available:
+
+- **name**: The name of the product element.
+- **description**: The product element description.
+- **amount**: The amount.
+
 #### List all products
 Retrieve al list of products with, there name, description and price.
 
@@ -135,6 +164,18 @@ for product in client.products.list():
 
 ### Availability Zones
 Manage TransIP availability zones.
+
+### The **AvailabilityZone** class
+When listing all the available availability zones on TransIP, a list of **transip.v6.objects.AvailabilityZone** objects is returned.
+
+**_class_ AvailabilityZone**
+
+The **AvailabilityZone** class makes the following attributes available:
+
+- **name**: The name of the availability zone.
+- **country**: The 2 letter code for the country the AvailabilityZone is in.
+- **isDefault**: If true this is the default zone new VPSes and clones are created in
+
 #### List availability zones
 Retrieve the available availability zones:
 ```python
@@ -285,18 +326,125 @@ invoice.pdf('/path/to/invoices/')
 **Note:** when using the demo access token, the API currently doesn't list any invoices.
 
 ### SSH Keys
+### The **SshKey** class
+When listing all SSH keys attached to your TransIP account, a list of **transip.v6.objects.SshKey** objects is returned.
+
+**_class_ SshKey**
+
+The **SshKey** class makes the following attributes available:
+
+- **id**: The SSH key identifier.
+- **key**: The SSH key.
+- **description**: The SSH key description (_max 255 chars_).
+- **creationDate**: The date when this SSH key was added (_timezone: Europe/Amsterdam_)
+- **fingerprint**: MD5 fingerprint of SSH key.
+
+The class has the following methods:
+
+- **delete()** will delete the SSH key in your TransIP account.
+- **update()** will send the updated attributes to the TransIP API.
+
 #### List all SSH keys
+Retrieve all SSH keys attached to your TransIP account by calling **transip.TransIP.ssh_keys.list()**. This will return a list of **transip.v6.objects.SshKey** objects.
+
+For example:
+```python
+import transip
+# Initialize a client using the TransIP demo token.
+client = transip.TransIP(access_token=transip.v6.DEMO_TOKEN)
+
+# List all SSH keys attached to your TransIP account.
+ssh_keys = client.ssh_keys.list()
+# Show SSH key information on the screen.
+for ssh_key in ssh_keys:
+    print(f"SSH key {ssh_key.id} has fingerprint {ssh_key.fingerprint}")
+```
+
+**Note:** when using the demo access token, the API currently doesn't list any SSH keys.
+
 #### Get SSH key by id
+Retrieve a single SSH key attached to your TransIP account by its ID by calling **transip.TransIP.ssh_key.get(_id_)**. This will return a **transip.v6.objects.SshKey** object.
+
+For example:
+```python
+import transip
+# Initialize a client using the TransIP demo token.
+client = transip.TransIP(access_token=transip.v6.DEMO_TOKEN)
+
+# Retrieve a SSH key by its ID (provided by TransIP).
+invoice = client.ssh_keys.get(123)
+# Show SSH key information on the screen.
+print(f"SSH key {ssh_key.id} has fingerprint {ssh_key.fingerprint}")
+```
+
+**Note:** when using the demo access token, the API currently doesn't list any SSH keys.
+
 #### Add a new SSH key
+Add a new SSH key to your TransIP account by calling **transip.TransIP.ssh_key.create(_data_)**. The **data** keyword argument requires a dictionary with the **sshKey** and **description** attributes.
+
+For example:
+```python
+import transip
+# Initialize a client using the TransIP demo token.
+client = transip.TransIP(access_token=transip.v6.DEMO_TOKEN)
+
+# Data used to create a new SSH key.
+key_data = {
+    "sshKey": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDf2pxWX/yhUBDyk2LPhvRtI0LnVO8PyR5Zt6AHrnhtLGqK+8YG9EMlWbCCWrASR+Q1hFQG example",
+    "description": "Jim key"
+}
+# Add the new SSH key to your TransIP account.
+client.ssh_keys.create(key_data)
+```
+
+**Note:** when using the demo access token, the API currently doesn't list any SSH keys.
+
 #### Update an SSH key
+Update an existing SSH key in your TransIP account by calling **transip.TransIP.ssh_key.update(_id_, _data_)**. The **id** keyword argument is the ID of the SSH key provided by TransIP and **data** keyword argument requires a dictionary with the **sshKey** and **description** attributes.
+
+For example:
+```python
+import transip
+# Initialize a client using the TransIP demo token.
+client = transip.TransIP(access_token=transip.v6.DEMO_TOKEN)
+
+# Dictionary containing the new description of the SSH key
+key_data = {
+    "description": "Jim key"
+}
+# Update SSH key (ID: 123) with the new description.
+client.ssh_keys.update(123, key_data)
+```
+
+The **transip.v6.objects.SshKey** class also provides a **update()** method to update a **SshKey** object from an instance after changing any of the update-able attributes.
+
+**Note:** when using the demo access token, the API currently doesn't list any SSH keys.
+
 #### Delete an SSH key
+Delete an existing SSH key in your TransIP account by calling **transip.TransIP.ssh_key.delete(_id_)**. The **id** keyword argument is the ID of the SSH key provided by TransIP.
+
+For example:
+```python
+import transip
+# Initialize a client using the TransIP demo token.
+client = transip.TransIP(access_token=transip.v6.DEMO_TOKEN)
+
+# Delete SSH key with ID 123.
+client.ssh_keys.delete(123)
+```
+
+The **transip.v6.objects.SshKey** class also provides a **delete()** method to delete a **SshKey** object from an instance.
+
+**Note:** when using the demo access token, the API currently doesn't list any SSH keys.
 
 ## Domains
+The documentation for managing **domains** and related resources has not yet been documented. Feel free to file an [issue](https://github.com/roaldnefs/python-transip/issues/new/choose) for adding the missing section(s) in the documentation.
 
 ## VPS
+The documentation for managing **VPSs** and related resources has not yet been documented. Feel free to file an [issue](https://github.com/roaldnefs/python-transip/issues/new/choose) for adding the missing section(s) in the documentation.
 
 ## HA-IP
+The documentation for managing **HA-IPs** and related resources has not yet been documented. Feel free to file an [issue](https://github.com/roaldnefs/python-transip/issues/new/choose) for adding the missing section(s) in the documentation.
 
 ## Colocation
-
-
+The documentation for managing **colocations** and related resources has not yet been documented. Feel free to file an [issue](https://github.com/roaldnefs/python-transip/issues/new/choose) for adding the missing section(s) in the documentation.
