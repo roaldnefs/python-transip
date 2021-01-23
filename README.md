@@ -41,8 +41,13 @@
 - [Domain](#domain)
     - [Domains](#domains)
         - [The **Domain** class](#the-domain-class)
+        - [List all domains](#list-all-domains)
+        - [Retrieve an existing domain](#retrieve-an-existing-domain)
     - [DNS](#dns)
         - [The **DnsEntry** class](#the-dnsentry-class)
+        - [List all DNS entries for a domain](#list-all-dns-entries-for-a-domain)
+        - [Add a new single DNS entry to a domain](#add-a-new-single-dns-entry-to-a-domain)
+        - [Remove a DNS entry from a domain](#remove-a-dns-entry-from-a-domain)
 - [VPS](#vps)
 - [HA-IP](#ha-ip)
 - [Colocation](#colocation)
@@ -106,7 +111,7 @@ The [general TransIP API](https://api.transip.nl/rest/docs.html#general) resourc
 ### Products
 Manage available TransIP products and product specifications.
 
-### The **Product** class
+#### The **Product** class
 When listing all products available on TransIP, a list of **transip.v6.objects.Product** objects is returned.
 
 **_class_ Product**
@@ -119,7 +124,7 @@ The **Product** class makes the following attributes available:
 - **recurringPrice**: The recurring price for the product in cents.
 - **elements**: The service to list detailed information on the product elements.
 
-### The **ProductElement** class
+#### The **ProductElement** class
 When listing all product elements of a **transip.v6.objects.Product** object, a list of **transip.v6.objects.ProductElement** objects is returned.
 
 **_class_ ProductElement**
@@ -169,7 +174,7 @@ for product in client.products.list():
 ### Availability Zones
 Manage TransIP availability zones.
 
-### The **AvailabilityZone** class
+#### The **AvailabilityZone** class
 When listing all the available availability zones on TransIP, a list of **transip.v6.objects.AvailabilityZone** objects is returned.
 
 **_class_ AvailabilityZone**
@@ -216,7 +221,7 @@ The [account TransIP API](https://api.transip.nl/rest/docs.html#account) resourc
 ### Invoices
 Manage invoices attached to your TransIP account.
 
-### The **Invoice** class
+#### The **Invoice** class
 When listing all invoices attached to your TransIP account, a list of **transip.v6.objects.Invoice** objects is returned.
 
 **_class_ Invoice**
@@ -234,7 +239,7 @@ The **Invoice** class makes the following attributes available:
 - **items**: The service to list detailed information on the individual invoice items.
 
 
-### The **InvoiceItem** class
+#### The **InvoiceItem** class
 When listing all invoices items attached to a **transip.v6.objects.Invoice** object, a list of **transip.v6.objects.InvoiceItem** objects is returned.
 
 **_class_ InvoiceItem**
@@ -449,7 +454,7 @@ The documentation for managing **domains** and related resources has not yet com
 ### Domains
 Manage domains.
 
-### The **Domain** class
+#### The **Domain** class
 When listing all domains in your TransIP account, a list of **transip.v6.objects.Domain** objects is returned.
 
 **_class_ Domain**
@@ -470,9 +475,40 @@ The **Domain** class makes the following attributes available:
 - **dns**: The service to manage the DNS-records of the domain.
 - **nameservers**: The service to manage the nameservers of the domain.
 
+#### List all domains
+Retrieve all domains registered in your TransIP account by calling **transip.TransIP.domains.list()**. This will return a list of **transip.v6.objects.Domain** objects.
+
+For example:
+```python
+import transip
+# Initialize a client using the TransIP demo token.
+client = transip.TransIP(access_token=transip.v6.DEMO_TOKEN)
+
+# List all domains.
+domains = client.domains.list()
+# Show domain information on the screen.
+for domain in domains:
+    print(f"Domain {domain.name} was registered at {domain.registrationDate}")
+```
+
+#### Retrieve an existing domain
+Retrieve a single domain registered ion your TransIP account by its ID by calling **transip.TransIP.domains.get(_name_)**. This will return a **transip.v6.objects.Domain** object.
+
+For example:
+```python
+import transip
+# Initialize a client using the TransIP demo token.
+client = transip.TransIP(access_token=transip.v6.DEMO_TOKEN)
+
+# Retrieve a domain by its name
+domain = client.domains.get('transipdemonstratie.nl')
+# Show domain information on the screen.
+print(f"Domain {domain.name} was registered at {domain.registrationDate}")
+```
+
 ### DNS
 Manage DNS records of a domain. Any changes made here will be pushed to the TransIP nameservers.
-### The **DnsEntry** class
+#### The **DnsEntry** class
 
 When listing all DNS-records of a **transip.v6.objects.Domain** object, a list of **transip.v6.objects.DnsEntry** objects is returned.
 
@@ -488,6 +524,70 @@ The **DnsEntry** class makes the following attributes available:
 The class has the following methods:
 
 - **delete()** will delete the DNS-record from the domain.
+
+#### List all DNS entries for a domain
+Retrieve the DNS records of a single domain registered in your TransIP account by calling **dns.list()** on a **transip.v6.objects.Domain** object. This will return a list of **transip.v6.objects.DnsEntry** objects.
+
+For example:
+```python
+import transip
+# Initialize a client using the TransIP demo token.
+client = transip.TransIP(access_token=transip.v6.DEMO_TOKEN)
+
+# Retrieve a domain by its name.
+domain = client.domains.get('transipdemonstratie.nl')
+# Retrieve the DNS records of a single domain.
+records = domain.dns.list()
+# Show the DNS record information on the screen.
+for record in records:
+    print(f"DNS: {record.name} {record.expire} {record.type} {record.content}")
+```
+
+#### Add a new single DNS entry to a domain
+Add an new DNS record to a domain by calling **dns.create(_data_)** on a **transip.v6.objects.Domain** object. The **data** keyword argument a dictionary containing the **name**, **expire**, **type** and **content** attributes.
+
+For example:
+```python
+import transip
+# Initialize a client using the TransIP demo token.
+client = transip.TransIP(access_token=transip.v6.DEMO_TOKEN)
+
+# Retrieve a domain by its name.
+domain = client.domains.get('transipdemonstratie.nl')
+# Dictionary containing the information for a single DNS record.
+dns_entry_data = {
+    "name": "www",
+    "expire": 86400,
+    "type": "A",
+    "content": "127.0.0.1"
+}
+# Add the DNS record to the domain.
+domain.delete(dns_entry_data)
+```
+
+#### Remove a DNS entry from a domain
+Delete an existing DNS record from a domain by calling **dns.delete(_data_)** on a **transip.v6.objects.Domain** object. The **data** keyword argument a dictionary containing the **name**, **expire**, **type** and **content** attributes.
+
+For example:
+```python
+import transip
+# Initialize a client using the TransIP demo token.
+client = transip.TransIP(access_token=transip.v6.DEMO_TOKEN)
+
+# Retrieve a domain by its name.
+domain = client.domains.get('transipdemonstratie.nl')
+# Dictionary containing the information for a single DNS record.
+dns_entry_data = {
+    "name": "www",
+    "expire": 86400,
+    "type": "A",
+    "content": "127.0.0.1"
+}
+# Delete the DNS record from the domain.
+domain.delete(dns_entry_data)
+```
+
+The **transip.v6.objects.DnsEntry** class also provides a **delete()** method to delete a **DnsEntry** object from an instance.
 
 ## VPS
 The documentation for managing **VPSs** and related resources has not yet been documented. Feel free to file an [issue](https://github.com/roaldnefs/python-transip/issues/new/choose) for adding the missing section(s) in the documentation.
