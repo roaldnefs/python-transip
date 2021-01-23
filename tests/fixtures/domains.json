@@ -267,6 +267,20 @@
         "content_type": "application/json"
     },
     {
+        "method": "DELETE",
+        "url": "https://api.transip.nl/v6/domains/example.com/dns",
+        "status": 204,
+        "content_type": "application/json",
+        "match_json_params": {
+            "dnsEntry": {
+                "name": "www",
+                "expire": 86400,
+                "type": "A",
+                "content": "127.0.0.1"
+            }
+        }
+    },
+    {
         "method": "POST",
         "url": "https://api.transip.nl/v6/domains/example.com/dns",
         "status": 201,

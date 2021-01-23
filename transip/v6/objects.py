@@ -20,7 +20,7 @@
 import os
 import base64
 
-from typing import Optional, Type, List
+from typing import Optional, Type, List, Dict, Any
 
 from transip.base import ApiService, ApiObject
 from transip.mixins import (
@@ -29,6 +29,9 @@ from transip.mixins import (
     CreateAttrsTuple, UpdateAttrsTuple
 )
 from transip.exceptions import TransIPIOError
+
+# Typing alias for the _delete_attrs attributes in the DeleteMixin
+DeleteAttrsTuple = CreateAttrsTuple
 
 
 class ApiTestService(ApiService):
@@ -155,6 +158,17 @@ class DnsEntry(ApiObject):
 
     _id_attr: Optional[str] = None
 
+    def delete(self) -> None:
+        """
+        Delete a single DNS entry by calling the delete() method on its service
+        and providing all the DNS entry attributes.
+
+        This is different from the delete() method from the ObjectDeleteMixin
+        as the deletion of a DNS entry requires all attributes of a single DNS
+        entry and the DNS entries do not have an ID.
+        """
+        self.service.delete(self.attrs)
+
 
 class DnsEntryService(CreateMixin, ListMixin, ApiService):
     """Service to manage DNS entries of a domain."""
@@ -164,10 +178,65 @@ class DnsEntryService(CreateMixin, ListMixin, ApiService):
 
     _resp_list_attr: str = "dnsEntries"
     _req_create_attr: str = "dnsEntry"
-    _create_attrs: Optional[CreateAttrsTuple] = (
+    _create_attrs: CreateAttrsTuple = (
         ("name", "expire", "type", "content"),  # required
         tuple()  # optional
     )
+
+    # Additional data required to delete a single DNS entry, the DeleteMixin
+    # can't be used as DNS entries don't have an ID.
+    _req_delete_attr: str = "dnsEntry"
+    _delete_attrs: DeleteAttrsTuple = (
+        ("name", "expire", "type", "content"),  # required
+        tuple()  # optional
+    )
+
+    def get_delete_attrs(self) -> DeleteAttrsTuple:
+        """
+        Return the required and optional attributes for deleting a DNS entry.
+
+        Returns:
+            tuple: a tuple containing a tuple of required and optional
+                attributes.
+        """
+        return self._delete_attrs
+
+    def _check_delete_attrs(self, attrs) -> None:
+        """
+        Check required attributes.
+
+        Raises:
+            AttributeError: If any of the required attributes is missing.
+        """
+        required, optional = self.get_delete_attrs()
+        missing = [attr for attr in required if attr not in attrs]
+
+        if missing:
+            attrs_str = "', '".join(missing)
+            raise AttributeError((
+                f"'{self.__class__.__name__}' object has no "
+                f"attribute{'s'[:len(missing)!=1]} '{attrs_str}'"
+            ))
+
+    def delete(self, data: Optional[Dict[str, Any]] = None) -> None:
+        """
+        Delete a DNS entry.
+
+        This is different from the delete() method from the DeleteMixin as the
+        deletion of a DNS entry requires all attributes of a single DNS entry
+        and the DNS entries do not have an ID.
+        """
+        if data is None:
+            data = {}
+
+        # Check if all required attributes are supplied
+        self._check_delete_attrs(data)
+
+        # Requires the endpoint to be packed in dictionary with a specific key
+        data = {self._req_delete_attr: data}
+
+        if self.path:
+            self.client.delete(f"{self.path}", json=data)
 
 
 class Nameserver(ApiObject):

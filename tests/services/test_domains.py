@@ -86,3 +86,47 @@ class DomainsTest(unittest.TestCase):
         domain.dns.create(dns_entry_data)  # type: ignore
 
         assert len(responses.calls) == 2
+
+    @responses.activate
+    def test_dns_delete(self) -> None:
+        """Check if a single DNS entry can be deleted."""
+        dns_entry_data: Dict[str, Union[str, int]] = {
+            "name": "www",
+            "expire": 86400,
+            "type": "A",
+            "content": "127.0.0.1"
+        }
+        domain: Domain = self.client.domains.get("example.com")  # type: ignore
+
+        try:
+            domain.dns.delete(dns_entry_data)  # type: ignore
+        except Exception as exc:
+            assert False, (
+                "'transip.v6.objects.Domain.dns.delete' raised an exception "
+                f"{exc}"
+            )
+        # Ensure only two calls are being made: the retrieval of the domain and
+        # the deletion of the DNS entry
+        self.assertEqual(len(responses.calls), 2)
+
+    @responses.activate
+    def test_dns_delete_object(self) -> None:
+        """Check if a DNS entry can be deleted from the object itself."""
+        domain: Domain = self.client.domains.get("example.com")  # type: ignore
+        entries = domain.dns.list()
+
+        self.assertEqual(len(entries), 1)
+
+        entry: DnsEntry = entries[0]  # type: ignore
+        try:
+            # Delete the first DNS entry
+            entry.delete()
+        except Exception as exc:
+            assert False, (
+                "'transip.v6.objects.DnsEntry.delete' raised an exception "
+                f"{exc}"
+            )
+        # Ensure only three calls are being made; the retrieval of the domain,
+        # the listing of the DNS entries and the deletion of a single DNS
+        # entry.
+        self.assertEqual(len(responses.calls), 3)

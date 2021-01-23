@@ -426,12 +426,16 @@ class TransIP:
     def delete(
         self,
         path: str,
+        data: Optional[Any] = None,
+        json: Optional[Any] = None,
         params: Optional[Dict[str, Any]] = None
     ) -> Any:
         """Make a GET request to the TransIP API.
 
         Args:
             path (str): The path to append to the API URL
+            data (dict): The body to attach to the request
+            json (dict): The json body to attach to the request
             params (dict): URL parameters to append to the URL
 
         Returns:
@@ -441,5 +445,5 @@ class TransIP:
             TransIPHTTPError: When the return code of the request is not 2xx
         """
         return self.request(
-            "DELETE", path, params=params
+            "DELETE", path, data=data, json=json, params=params
         )
