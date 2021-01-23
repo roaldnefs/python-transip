@@ -41,7 +41,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=["cryptography>=3.3.1", "requests>=2.25.1"],
-    python_requires=">=3.6.12",
+    python_requires=">=3.6",
     entry_points={},
     classifiers=[
         "Development Status :: 1 - Planning",
