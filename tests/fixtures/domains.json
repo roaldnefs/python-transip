@@ -295,6 +295,36 @@
         }
     },
     {
+        "method": "PUT",
+        "url": "https://api.transip.nl/v6/domains/example.com/dns",
+        "status": 204,
+        "content_type": "application/json",
+        "match_json_params": {
+            "dnsEntries": [
+                {
+                    "name": "www",
+                    "expire": 86400,
+                    "type": "A",
+                    "content": "127.0.0.2"
+                }
+            ]
+        }
+    },
+    {
+        "method": "PATCH",
+        "url": "https://api.transip.nl/v6/domains/example.com/dns",
+        "status": 204,
+        "content_type": "application/json",
+        "match_json_params": {
+            "dnsEntry": {
+                  "name": "www",
+                  "expire": 86400,
+                  "type": "A",
+                  "content": "127.0.0.2"
+            }
+        }
+    },
+    {
         "method": "GET",
         "url": "https://api.transip.nl/v6/domains/example.com/nameservers",
         "json": {
