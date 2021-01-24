@@ -565,7 +565,7 @@ dns_entry_data = {
     "content": "127.0.0.1"
 }
 # Add the DNS record to the domain.
-domain.delete(dns_entry_data)
+domain.dns.create(dns_entry_data)
 ```
 
 #### Update single DNS entry
@@ -589,7 +589,7 @@ dns_entry_data = {
     "content": "127.0.0.2"  # The update content.
 }
 # Update the content of a single DNS record.
-domain.update(dns_entry_data)
+domain.dns.update(dns_entry_data)
 ```
 
 #### Update all DNS entries for a domain
@@ -636,7 +636,7 @@ dns_entry_data = {
     "content": "127.0.0.1"
 }
 # Delete the DNS record from the domain.
-domain.delete(dns_entry_data)
+domain.dns.delete(dns_entry_data)
 ```
 
 The **transip.v6.objects.DnsEntry** class also provides a **delete()** method to delete a **DnsEntry** object from an instance.
