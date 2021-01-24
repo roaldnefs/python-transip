@@ -47,6 +47,7 @@
         - [The **DnsEntry** class](#the-dnsentry-class)
         - [List all DNS entries for a domain](#list-all-dns-entries-for-a-domain)
         - [Add a new single DNS entry to a domain](#add-a-new-single-dns-entry-to-a-domain)
+        - [Update single DNS entry](#update-single-dns-entry)
         - [Remove a DNS entry from a domain](#remove-a-dns-entry-from-a-domain)
 - [VPS](#vps)
 - [HA-IP](#ha-ip)
@@ -524,6 +525,7 @@ The **DnsEntry** class makes the following attributes available:
 The class has the following methods:
 
 - **delete()** will delete the DNS-record from the domain.
+- **update()** will send the updated attributes to the TransIP API. This can only be used when updating the **content** attribute of a DnsEntry and when there aren't any other DNS records with the same **name**, **expire** and **type** attributes.
 
 #### List all DNS entries for a domain
 Retrieve the DNS records of a single domain registered in your TransIP account by calling **dns.list()** on a **transip.v6.objects.Domain** object. This will return a list of **transip.v6.objects.DnsEntry** objects.
@@ -563,6 +565,30 @@ dns_entry_data = {
 }
 # Add the DNS record to the domain.
 domain.delete(dns_entry_data)
+```
+
+#### Update single DNS entry
+Update a single DNS record of a domain by calling **dns.update(_data_)** on a **transip.v6.objects.Domain** object. The **data** keyword argument a dictionary containing the **name**, **expire**, **type** and **content** attributes.
+
+This can only be used when updating the **content** attribute of a DNS entry and when there aren't any other DNS records with the same **name**, **expire** and **type** attributes.
+
+For example:
+```python
+import transip
+# Initialize a client using the TransIP demo token.
+client = transip.TransIP(access_token=transip.v6.DEMO_TOKEN)
+
+# Retrieve a domain by its name.
+domain = client.domains.get('transipdemonstratie.nl')
+# Dictionary containing the information for a single updated DNS record.
+dns_entry_data = {
+    "name": "www",
+    "expire": 86400,
+    "type": "A",
+    "content": "127.0.0.2"  # The update content.
+}
+# Update the content of a single DNS record.
+domain.update(dns_entry_data)
 ```
 
 #### Remove a DNS entry from a domain

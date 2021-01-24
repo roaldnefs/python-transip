@@ -26,12 +26,9 @@ from transip.base import ApiService, ApiObject
 from transip.mixins import (
     GetMixin, DeleteMixin, ListMixin, CreateMixin, UpdateMixin,
     ObjectDeleteMixin, ObjectUpdateMixin,
-    CreateAttrsTuple, UpdateAttrsTuple
+    AttrsTuple
 )
 from transip.exceptions import TransIPIOError
-
-# Typing alias for the _delete_attrs attributes in the DeleteMixin
-DeleteAttrsTuple = CreateAttrsTuple
 
 
 class ApiTestService(ApiService):
@@ -130,11 +127,11 @@ class SshKeyService(GetMixin, CreateMixin, UpdateMixin, DeleteMixin, ListMixin,
     _resp_list_attr: str = "sshKeys"
     _resp_get_attr: str = "sshKey"
 
-    _create_attrs: Optional[CreateAttrsTuple] = (
+    _create_attrs: Optional[AttrsTuple] = (
         ("sshKey",),  # required
         ("description",)  # optional
     )
-    _update_attrs: Optional[UpdateAttrsTuple] = (
+    _update_attrs: Optional[AttrsTuple] = (
         ("description",),  # required
         tuple()  # optional
     )
@@ -154,7 +151,7 @@ class WhoisContactService(ListMixin, ApiService):
     _resp_list_attr: str = "contacts"
 
 
-class DnsEntry(ApiObject):
+class DnsEntry(ObjectUpdateMixin, ApiObject):
 
     _id_attr: Optional[str] = None
 
@@ -165,9 +162,23 @@ class DnsEntry(ApiObject):
 
         This is different from the delete() method from the ObjectDeleteMixin
         as the deletion of a DNS entry requires all attributes of a single DNS
-        entry and the DNS entries do not have an ID.
+        entry and the DnsEntry does not have an ID.
         """
-        self.service.delete(self.attrs)
+        self.service.delete(self.attrs)  # type: ignore
+
+    def update(self) -> None:
+        """
+        Update the changes made to the DnsEntry.
+
+        Overwrites the default update() method from the ObjectUpdateMixin
+        because all attributes will need to be send when updating an DnsEntry
+        and the DnsEntry does not have an ID.
+        """
+        updated_data = self._get_updated_data()
+        if not updated_data:
+            return
+
+        self.service.update(updated_data)  # type: ignore
 
 
 class DnsEntryService(CreateMixin, ListMixin, ApiService):
@@ -176,9 +187,20 @@ class DnsEntryService(CreateMixin, ListMixin, ApiService):
     _path: str = "/domains/{parent_id}/dns"
     _obj_cls: Optional[Type[ApiObject]] = DnsEntry
 
+    # Additional data from creating a new single DNS entry using the
+    # CreateMixin.
     _resp_list_attr: str = "dnsEntries"
     _req_create_attr: str = "dnsEntry"
-    _create_attrs: CreateAttrsTuple = (
+    _create_attrs: AttrsTuple = (
+        ("name", "expire", "type", "content"),  # required
+        tuple()  # optional
+    )
+
+    # Additional data required to update a single DNS entry, the update()
+    # method from the UpdateMixin can't be used as DNS entries don't have an
+    # ID.
+    _req_update_attr: str = "dnsEntry"
+    _update_attrs: AttrsTuple = (
         ("name", "expire", "type", "content"),  # required
         tuple()  # optional
     )
@@ -186,12 +208,12 @@ class DnsEntryService(CreateMixin, ListMixin, ApiService):
     # Additional data required to delete a single DNS entry, the DeleteMixin
     # can't be used as DNS entries don't have an ID.
     _req_delete_attr: str = "dnsEntry"
-    _delete_attrs: DeleteAttrsTuple = (
+    _delete_attrs: AttrsTuple = (
         ("name", "expire", "type", "content"),  # required
         tuple()  # optional
     )
 
-    def get_delete_attrs(self) -> DeleteAttrsTuple:
+    def get_delete_attrs(self) -> AttrsTuple:
         """
         Return the required and optional attributes for deleting a DNS entry.
 
@@ -201,14 +223,33 @@ class DnsEntryService(CreateMixin, ListMixin, ApiService):
         """
         return self._delete_attrs
 
-    def _check_delete_attrs(self, attrs) -> None:
+    def get_update_attrs(self) -> AttrsTuple:
         """
-        Check required attributes.
+        Return the required and optional attributes for updating a DNS entry.
+
+        Returns:
+            tuple: a tuple containing a tuple of required and optional
+                attributes.
+        """
+        return self._update_attrs
+
+    def _check_required_attrs(
+        self,
+        attrs: Dict[str, Any],
+        expected_attrs: AttrsTuple,
+    ) -> None:
+        """
+        Check if all the required attributes are included.
+
+        Args:
+            attrs: Dictionary containing the attributes to check.
+            expected_attrs: The expected attributes in the form of a tuple
+                containing a tuple with required and optional attributes.
 
         Raises:
             AttributeError: If any of the required attributes is missing.
         """
-        required, optional = self.get_delete_attrs()
+        required, optional = expected_attrs
         missing = [attr for attr in required if attr not in attrs]
 
         if missing:
@@ -230,13 +271,34 @@ class DnsEntryService(CreateMixin, ListMixin, ApiService):
             data = {}
 
         # Check if all required attributes are supplied
-        self._check_delete_attrs(data)
+        self._check_required_attrs(data, self.get_delete_attrs())
 
         # Requires the endpoint to be packed in dictionary with a specific key
         data = {self._req_delete_attr: data}
 
         if self.path:
             self.client.delete(f"{self.path}", json=data)
+
+    def update(self, data: Optional[Dict[str, Any]] = None) -> None:
+        """
+        Update a single DnsEntry.
+
+        This is different from the update() method from the UpdateMixin because
+        a DnsEntry doesn't have a ID and the HTTP method needs to be PATCH
+        instead of PUT.
+        """
+        if data is None:
+            data = {}
+
+        # Check if all required attributes are supplied.
+        self._check_required_attrs(data, self.get_update_attrs())
+
+        # Requires the endpoint to be packed in dictionary with a specific key
+        data = {self._req_update_attr: data}
+
+        if self.path:
+            # Use the PATCH method to update a single DnsEntry.
+            self.client.patch(f"{self.path}", json=data)
 
 
 class Nameserver(ApiObject):
@@ -291,7 +353,7 @@ class DomainService(CreateMixin, GetMixin, DeleteMixin, ListMixin, ApiService):
     _resp_list_attr: str = "domains"
     _resp_get_attr: str = "domain"
 
-    _create_attrs: Optional[CreateAttrsTuple] = (
+    _create_attrs: Optional[AttrsTuple] = (
         ("domainName",),  # required
         ("contacts", "nameservers", "dnsEntries")  # optional
     )

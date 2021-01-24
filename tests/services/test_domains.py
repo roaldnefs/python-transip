@@ -67,12 +67,15 @@ class DomainsTest(unittest.TestCase):
 
     @responses.activate
     def test_dns_list(self) -> None:
+        """
+        Check if the DNS records for a single domain can be listed.
+        """
         domain: Domain = self.client.domains.get("example.com")  # type: ignore
         entries: List[DnsEntry] = domain.dns.list()  # type: ignore
-        entry: DnsEntry = entries[0]
 
-        assert len(entries) == 1
-        assert entry.name == "www"  # type: ignore
+        self.assertEqual(len(entries), 1)
+        entry: DnsEntry = entries[0]
+        self.assertEqual(entry.content, "127.0.0.1")  # type: ignore
 
     @responses.activate
     def test_dns_create(self) -> None:
@@ -86,6 +89,44 @@ class DomainsTest(unittest.TestCase):
         domain.dns.create(dns_entry_data)  # type: ignore
 
         assert len(responses.calls) == 2
+
+    @responses.activate
+    def test_dns_update(self) -> None:
+        """
+        Check if a single DNS entry can be updated.
+        """
+        dns_entry_data: Dict[str, Union[str, int]] = {
+            "name": "www",
+            "expire": 86400,
+            "type": "A",
+            "content": "127.0.0.2"  # original content is 127.0.0.1
+        }
+        domain: Domain = self.client.domains.get("example.com")  # type: ignore
+
+        try:
+            domain.dns.update(dns_entry_data)
+        except Exception as exc:
+            assert False, f"'transip.v6.objects.Domain.dns.update' raised an exception {exc}"
+
+    @responses.activate
+    def test_dns_update_object(self) -> None:
+        """
+        Check if a single DNS entry can be updated from the ApiObject itself.
+        """
+        domain: Domain = self.client.domains.get("example.com")  # type: ignore
+        entries: List[DnsEntry] = domain.dns.list()  # type: ignore
+
+        self.assertEqual(len(entries), 1)
+        entry: DnsEntry = entries[0]
+        self.assertEqual(entry.content, "127.0.0.1")  # type: ignore
+
+        entry.content = '127.0.0.2'
+        try:
+            entry.update()
+        except Exception as exc:
+            assert False, f"'transip.v6.objects.DnsEntry.update' raised an exception {exc}"
+
+        self.assertEqual(entry.content, "127.0.0.2")  # type: ignore
 
     @responses.activate
     def test_dns_delete(self) -> None:

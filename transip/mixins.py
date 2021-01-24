@@ -23,13 +23,12 @@ from transip import TransIP
 from transip.base import ApiObject, ApiService
 
 
-# Typing alias for the _create_attrs attribute in the CreateMixin
-CreateAttrsTuple = Tuple[
+# Typing alias for the _create_attrs, _update_attrs and _delete_attrs
+# attributes in the CreateMixin, UpdateMixin and DeleteMixin
+AttrsTuple = Tuple[
     Union[Tuple[()], Tuple[str, ...]],
     Union[Tuple[()], Tuple[str, ...]]
 ]
-# Typing alias for the _update_attrs attribute in the UpdateMixin
-UpdateAttrsTuple = CreateAttrsTuple
 
 
 class GetMixin:
@@ -134,7 +133,7 @@ class UpdateMixin:
     path: str
 
     _req_update_attr: Optional[str] = None
-    _update_attrs: Optional[CreateAttrsTuple] = None
+    _update_attrs: Optional[AttrsTuple] = None
 
     def get_update_attrs(self) -> Tuple[
         Union[Tuple[()], Tuple[str, ...]],
@@ -198,7 +197,7 @@ class CreateMixin:
     path: str
 
     _req_create_attr: Optional[str] = None
-    _create_attrs: Optional[CreateAttrsTuple] = None
+    _create_attrs: Optional[AttrsTuple] = None
 
     def _check_create_attrs(self, attrs) -> None:
         """
