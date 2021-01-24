@@ -2,6 +2,8 @@
 All notable changes in **python-transip** are documented below.
 
 ## [Unreleased]
+### Added
+- The option to replace all existing nameservers of a single domain at once from the `transip.v6.objects.Domain.nameservers` service.
 
 ## [0.4.0] (2021-01-24)
 ### Added

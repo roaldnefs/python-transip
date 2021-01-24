@@ -58,12 +58,34 @@ class DomainsTest(unittest.TestCase):
 
     @responses.activate
     def test_nameservers_list(self) -> None:
+        """
+        Check if the nameservers of a single domain can be listed.
+        """
         domain: Domain = self.client.domains.get("example.com")  # type: ignore
         nameservers: List[Nameserver] = domain.nameservers.list()  # type: ignore
+        self.assertEqual(len(nameservers), 1)
+
         nameserver: Nameserver = nameservers[0]
 
-        assert len(nameservers) == 1
-        assert nameserver.get_id() == "ns0.transip.nl"  # type: ignore
+        self.assertEqual(nameserver.get_id(), "ns0.transip.nl")  # type: ignore
+
+    @responses.activate
+    def test_nameservers_replaces(self) -> None:
+        """
+        Check if the nameservers of a single domain can be replaced.
+        """
+        domain: Domain = self.client.domains.get("example.com")  # type: ignore
+        nameservers: List[Nameserver] = domain.nameservers.list()  # type: ignore
+        self.assertEqual(len(nameservers), 1)
+
+        # Update the hostname of the first nameserver
+        nameservers[0].hostname = "ns1.transip.nl"
+
+        # Replace all existing nameservers.
+        try:
+            domain.nameservers.replace(nameservers)  # type: ignore
+        except Exception as exc:
+            assert False, f"'transip.v6.objects.Domain.nameservers.replace' raised an exception {exc}"
 
     @responses.activate
     def test_dns_list(self) -> None:
