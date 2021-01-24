@@ -24,7 +24,7 @@ from typing import Optional, Type, List, Dict, Any
 
 from transip.base import ApiService, ApiObject
 from transip.mixins import (
-    GetMixin, DeleteMixin, ListMixin, CreateMixin, UpdateMixin,
+    GetMixin, DeleteMixin, ListMixin, CreateMixin, UpdateMixin, ReplaceMixin,
     ObjectDeleteMixin, ObjectUpdateMixin,
     AttrsTuple
 )
@@ -181,7 +181,7 @@ class DnsEntry(ObjectUpdateMixin, ApiObject):
         self.service.update(updated_data)  # type: ignore
 
 
-class DnsEntryService(CreateMixin, ListMixin, ApiService):
+class DnsEntryService(CreateMixin, ListMixin, ReplaceMixin, ApiService):
     """Service to manage DNS entries of a domain."""
 
     _path: str = "/domains/{parent_id}/dns"
@@ -209,6 +209,14 @@ class DnsEntryService(CreateMixin, ListMixin, ApiService):
     # can't be used as DNS entries don't have an ID.
     _req_delete_attr: str = "dnsEntry"
     _delete_attrs: AttrsTuple = (
+        ("name", "expire", "type", "content"),  # required
+        tuple()  # optional
+    )
+
+    # Additional data from replacing all existing DnsEntry objects using the
+    # ReplaceMixin.
+    _req_replace_attr: str = "dnsEntries"
+    _replace_attrs: AttrsTuple = (
         ("name", "expire", "type", "content"),  # required
         tuple()  # optional
     )

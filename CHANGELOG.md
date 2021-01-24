@@ -10,5 +10,6 @@ All notable changes in **python-transip** are documented below.
 - The option to list all products available in TransIP from the `transip.TransIP.products` service.
 - The option to update a single SSH key from `transip.v6.objects.SshKey` object.
 - The option to update the content of a single DNS record from the `transip.v6.objects.Domain.dns` service, as well as from the `transip.v6.objects.DnsEntry` object.
+- The option to replace all existing DNS records of a single domain at once from the `transip.v6.objects.Domain.dns` service.
 
 [Unreleased]: https://github.com/roaldnefs/python-transip/compare/v0.3.0...HEAD

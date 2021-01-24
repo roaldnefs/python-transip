@@ -78,6 +78,28 @@ class DomainsTest(unittest.TestCase):
         self.assertEqual(entry.content, "127.0.0.1")  # type: ignore
 
     @responses.activate
+    def test_dns_replace(self) -> None:
+        """
+        Check if the existing DNS records for a single domain can be replaced
+        at once.
+        """
+        domain: Domain = self.client.domains.get("example.com")  # type: ignore
+        records: List[DnsEntry] = domain.dns.list()  # type: ignore
+
+        # Ensure we have a single DNS record
+        self.assertEqual(len(records), 1)
+        # Update the content of the first DNS record in the list of existing
+        # records.
+        records[0].content = '127.0.0.2'
+
+        # Replace all existing records.
+        try:
+            domain.dns.replace(records)  # type: ignore
+        except Exception as exc:
+            assert False, f"'transip.v6.objects.Domain.dns.replace' raised an exception {exc}"
+
+
+    @responses.activate
     def test_dns_create(self) -> None:
         dns_entry_data: Dict[str, Union[str, int]] = {
             "name": "www",

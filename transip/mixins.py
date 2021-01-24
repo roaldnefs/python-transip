@@ -126,7 +126,8 @@ class ListMixin:
 
 
 class UpdateMixin:
-    """Update an ApiObject.
+    """
+    Update an ApiObject.
     """
 
     client: TransIP
@@ -140,7 +141,7 @@ class UpdateMixin:
         Union[Tuple[()], Tuple[str, ...]]
     ]:
         """
-        Return the required and optional attributes for updating a new object.
+        Return the required and optional attributes for updating an object.
 
         Returns:
             tuple: a tuple containing a tuple of required and optional
@@ -181,12 +182,74 @@ class UpdateMixin:
         self._check_update_attrs(data)
 
         # Some endpoints require the attributes to be packed in dictionary with
-        # a specific key while others endpoint do not
+        # a specific key while others endpoint may not
         if self._req_update_attr:
             data = {self._req_update_attr: data}
 
         if self.path:
             self.client.put(f"{self.path}/{id}", json=data)
+
+
+class ReplaceMixin:
+    """
+    Replace a list of ApiObject at once by wiping to old objects and replacing
+    them with the provided list of ApiObjects.
+    """
+
+    client: TransIP
+    path: str
+
+    _req_replace_attr: Optional[str] = None
+    _replace_attrs: Optional[AttrsTuple] = None
+
+    def get_replace_attrs(self) -> Tuple[
+        Union[Tuple[()], Tuple[str, ...]],
+        Union[Tuple[()], Tuple[str, ...]]
+    ]:
+        """
+        Return the required and optional attributes for replacing a object.
+
+        Returns:
+            tuple: a tuple containing a tuple of required and optional
+                attributes.
+        """
+        if not self._replace_attrs:
+            return (tuple(), tuple())
+        else:
+            return self._replace_attrs
+
+    def replace(self, objs: List[Type[ApiObject]]) -> None:
+        """
+        Replace all existing objects with the provided once.
+
+        Args:
+            objs: List of ApiObjects to replace the existing once with.
+        """
+        data = []
+
+        required, optional = self.get_replace_attrs()
+
+        for obj in objs:
+            obj_data = {}
+
+            # Ensure all required attributes are added
+            for attr in required:
+                obj_data[attr] = getattr(obj, attr)
+            # Ensure all optional attributes are added
+            for attr in optional:
+                obj_data[attr] = getattr(obj, attr)
+            # Overwrite the existing attributes with any updated attributes
+            obj_data.update(obj._updated_attrs)  # type: ignore
+
+            data.append(obj_data)
+
+        # Some endpoints require the attributes to be packed in dictionary with
+        # a specific key while others endpoint may not
+        if self._req_replace_attr:
+            data = {self._req_replace_attr: data}  # type: ignore
+
+        if self.path:
+            self.client.put(self.path, json=data)
 
 
 class CreateMixin:

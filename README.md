@@ -48,6 +48,7 @@
         - [List all DNS entries for a domain](#list-all-dns-entries-for-a-domain)
         - [Add a new single DNS entry to a domain](#add-a-new-single-dns-entry-to-a-domain)
         - [Update single DNS entry](#update-single-dns-entry)
+        - [Update all DNS entries for a domain](#update-all-dns-entries-for-a-domain)
         - [Remove a DNS entry from a domain](#remove-a-dns-entry-from-a-domain)
 - [VPS](#vps)
 - [HA-IP](#ha-ip)
@@ -589,6 +590,31 @@ dns_entry_data = {
 }
 # Update the content of a single DNS record.
 domain.update(dns_entry_data)
+```
+
+#### Update all DNS entries for a domain
+Update all DNS records of a single domain registered in your TransIP account at once by calling **dns.replace()** on a **transip.v6.objects.Domain** object.
+
+**Note:** This will wipe all existing DNS records with the provided records.
+
+For example:
+```python
+import transip
+# Initialize a client using the TransIP demo token.
+client = transip.TransIP(access_token=transip.v6.DEMO_TOKEN)
+
+# Retrieve a domain by its name.
+domain = client.domains.get('transipdemonstratie.nl')
+# Retrieve the DNS records of a single domain.
+records = domain.dns.list()
+
+for record in records:
+    # Update the A-record for localhost
+    if record.name == 'localhost' and record.type == 'A':
+        record.content = '127.0.0.1'
+
+# Replace all the records with the updated ones
+domain.dns.replace(records)
 ```
 
 #### Remove a DNS entry from a domain
