@@ -2,6 +2,8 @@
 All notable changes in **python-transip** are documented below.
 
 ## [Unreleased]
+
+## [0.4.0] (2021-01-24)
 ### Added
 - This `CHANGELOG.md` file to be able to list all notable changes for each version of **python-transip**.
 - The `transip.TransIP.api_test` service to allow calling the test resource to make sure everything is working.
@@ -12,4 +14,5 @@ All notable changes in **python-transip** are documented below.
 - The option to update the content of a single DNS record from the `transip.v6.objects.Domain.dns` service, as well as from the `transip.v6.objects.DnsEntry` object.
 - The option to replace all existing DNS records of a single domain at once from the `transip.v6.objects.Domain.dns` service.
 
-[Unreleased]: https://github.com/roaldnefs/python-transip/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/roaldnefs/python-transip/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/roaldnefs/python-transip/compare/v0.3.0...v0.4.0
