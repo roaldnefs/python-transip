@@ -50,6 +50,10 @@
         - [Update single DNS entry](#update-single-dns-entry)
         - [Update all DNS entries for a domain](#update-all-dns-entries-for-a-domain)
         - [Remove a DNS entry from a domain](#remove-a-dns-entry-from-a-domain)
+    - [Nameservers](#nameserver)
+        - [The **Nameserver** class](#the-nameserver-class)
+        - [List nameservers for a domain](#list-nameservers-for-a-domain)
+        - [Update nameservers for a domain](#update-nameservers-for-a-domain)
 - [VPS](#vps)
 - [HA-IP](#ha-ip)
 - [Colocation](#colocation)
@@ -640,6 +644,61 @@ domain.dns.delete(dns_entry_data)
 ```
 
 The **transip.v6.objects.DnsEntry** class also provides a **delete()** method to delete a **DnsEntry** object from an instance.
+
+### Nameservers
+Manage the nameserver of a domain. 
+#### The **Nameserver** class
+
+When listing all nameservers of a **transip.v6.objects.Domain** object, a list of **transip.v6.objects.Nameserver** objects is returned.
+
+**_class_ Nameserver**
+
+The **Nameserver** class makes the following attributes available:
+
+- **hostname**: The hostname of this nameserver.
+- **ipv4**: The optional ipv4 glue record for this nameserver.
+- **ipv6**: The optional ipv6 glue record for this nameserver
+
+#### List nameservers for a domain
+Retrieve the nameserver of a single domain registered in your TransIP account by calling **nameserver.list()** on a **transip.v6.objects.Domain** object. This will return a list of **transip.v6.objects.Nameserver** objects.
+
+For example:
+```python
+import transip
+# Initialize a client using the TransIP demo token.
+client = transip.TransIP(access_token=transip.v6.DEMO_TOKEN)
+
+# Retrieve a domain by its name.
+domain = client.domains.get('transipdemonstratie.nl')
+# Retrieve the nameservers of a single domain.
+nameservers = domain.nameservers.list()
+# Show the nameserver information on the screen.
+for nameserver in nameservers:
+    print(f"Nameserver: {nameserver.hostname}")
+```
+
+#### Update nameservers for a domain
+Update all the nameservers of a single domain registered in your TransIP account at once by calling **nameservers.replace()** on a **transip.v6.objects.Domain** object.
+
+**Note:** This will wipe all nameservers previously configured on the domain.
+
+For example:
+```python
+import transip
+# Initialize a client using the TransIP demo token.
+client = transip.TransIP(access_token=transip.v6.DEMO_TOKEN)
+
+# Retrieve a domain by its name.
+domain = client.domains.get('transipdemonstratie.nl')
+# Retrieve the nameservers of the domain.
+nameservers = domain.nameservers.list()
+
+# Update the ipv4 glue record of the first nameserver.
+nameserver[0].ipv4 = '195.135.195.195'
+
+# Replace all the records with the updated ones
+domain.nameservers.replace(nameservers)
+```
 
 ## VPS
 The documentation for managing **VPSs** and related resources has not yet been documented. Feel free to file an [issue](https://github.com/roaldnefs/python-transip/issues/new/choose) for adding the missing section(s) in the documentation.

@@ -347,7 +347,7 @@
         "match_json_params": {
             "nameservers": [
                 {
-                    "hostname": "ns0.transip.nl",
+                    "hostname": "ns1.transip.nl",
                     "ipv4": "",
                     "ipv6": ""
                 }

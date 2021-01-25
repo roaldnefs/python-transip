@@ -314,13 +314,21 @@ class Nameserver(ApiObject):
     _id_attr: Optional[str] = "hostname"
 
 
-class NameserverService(ListMixin, ApiService):
+class NameserverService(ListMixin, ReplaceMixin, ApiService):
     """Service to nameservers of a domain."""
 
     _path: str = "/domains/{parent_id}/nameservers"
     _obj_cls: Optional[Type[ApiObject]] = Nameserver
 
     _resp_list_attr: str = "nameservers"
+
+    # Additional data for replacing all existing Nameserver objects using the
+    # ReplaceMixin
+    _req_replace_attr: str = "nameservers"
+    _replace_attrs: AttrsTuple = (
+        ("hostname",),  # required
+        ("ipv4", "ipv6")  # optional
+    )
 
 
 class Domain(ApiObject):
