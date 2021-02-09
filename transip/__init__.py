@@ -108,6 +108,9 @@ class TransIP:
         self.vpss: Type['ApiService'] = (
             objects.VpsService(self)  # type: ignore
         )
+        self.colocations: Type['ApiService'] = (
+            objects.ColocationService(self)  # type: ignore
+        )
 
     @property
     def url(self) -> str:

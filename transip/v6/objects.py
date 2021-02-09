@@ -460,3 +460,17 @@ class VpsService(GetMixin, DeleteMixin, ListMixin, ApiService):
 
     _resp_list_attr: str = "vpss"
     _resp_get_attr: str = "vps"
+
+
+class Colocation(ApiObject):
+
+    _id_attr: str = "name"
+
+
+class ColocationService(GetMixin, ListMixin, ApiService):
+
+    _path: str = "/colocations"
+    _obj_cls: Optional[Type[ApiObject]] = Colocation
+
+    _resp_list_attr: str = "colocations"
+    _resp_get_attr: str = "colocation"

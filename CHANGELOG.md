@@ -4,6 +4,8 @@ All notable changes in **python-transip** are documented below.
 ## [Unreleased]
 ### Added
 - The option to replace all existing nameservers of a single domain at once from the `transip.v6.objects.Domain.nameservers` service.
+- The option to list all colocations from the `transip.TransIP.colocations` service ([#24](https://github.com/roaldnefs/python-transip/issues/24)).
+- The option to retrieve a single colocation by name from the `transip.TransIP.colocations` service ([#24](https://github.com/roaldnefs/python-transip/issues/24)).
 
 ## [0.4.0] (2021-01-24)
 ### Added
