@@ -57,6 +57,10 @@
 - [VPS](#vps)
 - [HA-IP](#ha-ip)
 - [Colocation](#colocation)
+    - [Colocations](#colocations)
+        - [The **Colocation** class](#the-colocation-class)
+        - [List all colocations](#list-all-colocations)
+        - [Get colocation](#get-colocation)
 
 ## Introduction
 Welcome to the Python TransIP documentation.
@@ -708,3 +712,49 @@ The documentation for managing **HA-IPs** and related resources has not yet been
 
 ## Colocation
 The documentation for managing **colocations** and related resources has not yet been documented. Feel free to file an [issue](https://github.com/roaldnefs/python-transip/issues/new/choose) for adding the missing section(s) in the documentation.
+
+### Colocations
+Manage colocations.
+
+#### The **Colocation** class
+When listing all colocations in your TransIP account, a list of **transip.v6.objects.Colocation** objects is returned.
+
+**_class_ Colocation**
+
+The **Colocation** class makes the following attributes available:
+
+- **name**: The colocation name.
+- **ipRanges**: The list of IP ranges.
+
+#### List all colocations
+Retrieve the colocations registered in your TransIP account by calling **transip.TransIP.colocations.list()**. This will return a list of **transip.v6.objects.Colocation** objects.
+
+For example:
+```python
+import transip
+# Initialize a client using the TransIP demo token.
+client = transip.TransIP(access_token=transip.v6.DEMO_TOKEN)
+
+# Retrieve the colocations registered in your TransIP account.
+colocations = client.colocations.list()
+# Show the colocations information on the screen.
+for colocation in colocations:
+    ip_ranges = ' '.join(colocation.ipRanges)
+    print(f"Colocation: {colocation.name} has IP ranges: {ip_ranges}")
+```
+
+#### Get colocation
+Retrieve a single colocation registered in your TransIP account by its ID by calling **transip.TransIP.colocations.get(_name_)**. This will return a **transip.v6.objects.Colocation** object.
+
+For example:
+```python
+import transip
+# Initialize a client using the TransIP demo token.
+client = transip.TransIP(access_token=transip.v6.DEMO_TOKEN)
+
+# Retrieve a colocation by its name.
+colocation = client.colocations.get('example2')
+# Show colocation information on the screen.
+ip_ranges = ' '.join(colocation.ipRanges)
+print(f"Colocation: {colocation.name} has IP ranges: {ip_ranges}")
+```
