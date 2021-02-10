@@ -41,9 +41,15 @@ def load_rsa_private_key(key: Union[bytes, str]) -> RSAPrivateKey:
     if isinstance(key, str):
         key = key.encode()
 
-    return serialization.load_pem_private_key(
+    private_key = serialization.load_pem_private_key(
         key, password=None, backend=default_backend()
     )
+
+    # Check type of the loaded private key
+    if not isinstance(private_key, RSAPrivateKey):
+        raise ValueError('The supplied key must be a RSA private key')
+
+    return private_key
 
 
 def generate_message_signature(
@@ -63,11 +69,11 @@ def generate_message_signature(
     if isinstance(message, str):
         message = message.encode()
 
-    # Convert the private key content to a RSAPrivateKey object
+    # Convert the private key content to an asymmetric private key type
     if isinstance(private_key, str):
         private_key = load_rsa_private_key(private_key)
 
-    # Sign the message using the RSAPrivateKey object
+    # Sign the message using the private key
     signature: bytes = private_key.sign(message, PKCS1v15(), SHA512())
 
     # Return the BASE64 encoded SHA512 signature
