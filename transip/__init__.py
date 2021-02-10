@@ -54,6 +54,8 @@ class TransIP:
             TransIP API
         private_key_file (str): Path to the private key for accessing the
             TransIP API
+        global_key (bool): Allow the access token to be used from all
+            IP-addresses instead of only the whitelisted ones.
     """
 
     def __init__(
@@ -63,6 +65,7 @@ class TransIP:
         access_token: Optional[str] = None,
         private_key: Optional[str] = None,
         private_key_file: Optional[str] = None,
+        global_key: bool = False,
     ) -> None:
         self._api_version: str = api_version
         self._url: str = f"https://api.transip.nl/v{api_version}"
@@ -80,6 +83,7 @@ class TransIP:
         self._access_token: Optional[str] = access_token
         self._private_key: Optional[str] = private_key
         self._private_key_file: Optional[str] = private_key_file
+        self._global_key: Optional[bool] = global_key
         self._set_auth_info()
 
         # Dynamically import the services for the specified API version
@@ -154,9 +158,7 @@ class TransIP:
             # TODO(roaldnefs): Allow a custom label to be specified when
             # generating a new access token
             # "label": "python-transip",
-            # TODO(roaldnefs): Allow the access token to only be use from
-            # whitelisted IP-addresses
-            "global_key": False
+            "global_key": self._global_key
         }
 
         headers: Dict[str, str] = self.headers.copy()
