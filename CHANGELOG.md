@@ -3,6 +3,10 @@ All notable changes in **python-transip** are documented below.
 
 ## [Unreleased]
 
+## [0.6.0] (2021-11-01)
+### Added
+- Python 3.10 support ([#49](https://github.com/roaldnefs/python-transip/pull/49)).
+
 ## [0.5.0] (2021-02-10)
 ### Added
 - The option to replace all existing nameservers of a single domain at once from the `transip.v6.objects.Domain.nameservers` service.
@@ -21,6 +25,7 @@ All notable changes in **python-transip** are documented below.
 - The option to update the content of a single DNS record from the `transip.v6.objects.Domain.dns` service, as well as from the `transip.v6.objects.DnsEntry` object.
 - The option to replace all existing DNS records of a single domain at once from the `transip.v6.objects.Domain.dns` service.
 
-[Unreleased]: https://github.com/roaldnefs/python-transip/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/roaldnefs/python-transip/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/roaldnefs/python-transip/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/roaldnefs/python-transip/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/roaldnefs/python-transip/compare/v0.3.0...v0.4.0
