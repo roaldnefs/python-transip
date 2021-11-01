@@ -44,7 +44,7 @@ setup(
     python_requires=">=3.6",
     entry_points={},
     classifiers=[
-        "Development Status :: 1 - Planning",
+        "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "Intended Audience :: System Administrators",
         "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
