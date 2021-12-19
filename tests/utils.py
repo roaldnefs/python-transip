@@ -61,7 +61,7 @@ def load_responses_fixtures(path) -> None:
         matchers: List[Any] = []
         if fixture.get('match_json_params'):
             matchers.append(
-                responses.json_params_matcher(fixture['match_json_params'])  # type: ignore
+                responses.matchers.json_params_matcher(fixture['match_json_params'])  # type: ignore
             )
         if fixture.get('match_urlencoded_params'):
             matchers.append(
