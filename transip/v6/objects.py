@@ -373,6 +373,20 @@ class DomainService(CreateMixin, GetMixin, DeleteMixin, ListMixin, ApiService):
         ("domainName",),  # required
         ("contacts", "nameservers", "dnsEntries")  # optional
     )
+    
+
+class Tld(ApiObject):
+
+    _id_attr: str = "name"
+
+
+class TldService(GetMixin, ListMixin, ApiService):
+
+    _path: str = "/tlds"
+    _obj_cls: Optional[Type[ApiObject]] = Tld
+
+    _resp_list_attr: str = "tlds"
+    _resp_get_attr: str = "tld"
 
 
 class InvoiceItem(ApiObject):
