@@ -462,9 +462,31 @@ class InvoiceService(GetMixin, ListMixin, ApiService):
     _resp_get_attr: str = "invoice"
 
 
+class VpsAddon(ApiObject):
+    
+    _id_attr: str = "name"
+
+
+class VpsAddonService(ListMixin, ApiService):
+    """Service to manage addons of a VPS."""
+    
+    _path: str = "/vps/{parent_id}/addons"
+    _obj_cls: Optional[Type[ApiObject]] = VpsAddon
+    
+    _resp_list_attr: str = "active" # or cancellable or available?
+
+
 class Vps(ApiObject):
 
     _id_attr: str = "name"
+    
+    @property
+    def addons(self) -> VpsAddonService:
+        """Return the service to manage the addons of the VPS."""
+        return VpsAddonService(
+            self.service.client,
+            parent=self  # type: ignore
+        )
 
 
 class VpsService(GetMixin, DeleteMixin, ListMixin, ApiService):
@@ -474,8 +496,8 @@ class VpsService(GetMixin, DeleteMixin, ListMixin, ApiService):
 
     _resp_list_attr: str = "vpss"
     _resp_get_attr: str = "vps"
-
-
+    
+    
 class Colocation(ApiObject):
 
     _id_attr: str = "name"
