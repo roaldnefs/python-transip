@@ -473,7 +473,7 @@ class VpsAddonService(ListMixin, ApiService):
     _path: str = "/vps/{parent_id}/addons"
     _obj_cls: Optional[Type[ApiObject]] = VpsAddon
     
-    _resp_list_attr: str = "active" # or cancellable or available?
+    _resp_list_attr: str = "addons" # or cancellable or available?
 
 
 class Vps(ApiObject):
