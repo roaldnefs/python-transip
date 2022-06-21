@@ -523,13 +523,13 @@ class Vps(ApiObject):
 
     _id_attr: str = "name"
     
-    # @property
-    # def addons(self) -> VpsAddonService:
-    #     """Return the service to manage the addons of the VPS."""
-    #     return VpsAddonService(
-    #         self.service.client,
-    #         parent=self  # type: ignore
-    #     )
+    @property
+    def addons(self) -> VpsAddonService:
+        """Return the service to manage the addons of the VPS."""
+        return VpsAddonService(
+            self.service.client,
+            parent=self  # type: ignore
+        )
         
     @property
     def licenses(self) -> VpsLicenseService:
