@@ -475,7 +475,7 @@ class VpsAddonService(ListMixin, ApiService):
     
     _resp_list_attr: str = "addons"
     
-    def list(self) -> List[Type[ApiObject]]:
+    def list(self, needle: Optional[str] = None) -> List[Type[ApiObject]]:
         """
         Retrieve a list of addons.
         Overwrites the default list() method of the ListMixin as the addons
@@ -483,8 +483,14 @@ class VpsAddonService(ListMixin, ApiService):
         """
         objs: List[Type[ApiObject]] = []
         data = self.client.get(self.path)[self._resp_list_attr]
+        haystack = []
         # Loop over the individual product lists of all product categories,
         # e.g. vps, haip
+        if needle is None:
+            haystack = data.values()
+        else:
+            haystack.append(data[needle])
+
         for obj_list in data.values():
             for obj in obj_list:
                 objs.append(self._obj_cls(self, obj))  # type: ignore
@@ -504,7 +510,7 @@ class VpsLicenseService(ListMixin, ApiService):
     
     _resp_list_attr: str = "licenses"
     
-    def list(self) -> List[Type[ApiObject]]:
+    def list(self, needle: Optional[str] = None) -> List[Type[ApiObject]]:
         """
         Retrieve a list of licenses.
         Overwrites the default list() method of the ListMixin as the licenses
@@ -512,9 +518,15 @@ class VpsLicenseService(ListMixin, ApiService):
         """
         objs: List[Type[ApiObject]] = []
         data = self.client.get(self.path)[self._resp_list_attr]
+        haystack = []
         # Loop over the individual product lists of all product categories,
         # e.g. vps, haip
-        for obj_list in data.values():
+        if needle is None:
+            haystack = data.values()
+        else:
+            haystack.append(data[needle])
+
+        for obj_list in haystack:
             for obj in obj_list:
                 objs.append(self._obj_cls(self, obj))  # type: ignore
         return objs
