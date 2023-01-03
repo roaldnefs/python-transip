@@ -4,7 +4,7 @@
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/python-transip?color=187dc1&logo=python&logoColor=white&style=for-the-badge)](https://pypi.org/project/python-transip/)
 [![PyPI - Format](https://img.shields.io/pypi/format/python-transip?color=187dc1&logo=python&logoColor=white&style=for-the-badge)](https://pypi.org/project/python-transip/)
 [![License](https://img.shields.io/github/license/roaldnefs/python-transip?color=187dc1&style=for-the-badge)](https://raw.githubusercontent.com/roaldnefs/python-transip/main/COPYING.LESSER)
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/roaldnefs/python-transip/tests?color=187dc1&label=CI&logo=github&style=for-the-badge)](https://github.com/roaldnefs/python-transip/actions)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/roaldnefs/python-transip/tests.yml?color=187dc1&label=CI&logo=github&style=for-the-badge)](https://github.com/roaldnefs/python-transip/actions)
 [![GitHub contributors](https://img.shields.io/github/contributors/roaldnefs/python-transip?color=187dc1&logo=github&style=for-the-badge)](https://github.com/roaldnefs/python-transip/graphs/contributors)
 
 **python-transip** is an Python wrapper for the **TransIP REST API V6**.
@@ -650,7 +650,7 @@ domain.dns.delete(dns_entry_data)
 The **transip.v6.objects.DnsEntry** class also provides a **delete()** method to delete a **DnsEntry** object from an instance.
 
 ### Nameservers
-Manage the nameserver of a domain. 
+Manage the nameserver of a domain.
 #### The **Nameserver** class
 
 When listing all nameservers of a **transip.v6.objects.Domain** object, a list of **transip.v6.objects.Nameserver** objects is returned.
