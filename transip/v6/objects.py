@@ -373,6 +373,20 @@ class DomainService(CreateMixin, GetMixin, DeleteMixin, ListMixin, ApiService):
         ("domainName",),  # required
         ("contacts", "nameservers", "dnsEntries")  # optional
     )
+    
+
+class Tld(ApiObject):
+
+    _id_attr: str = "name"
+
+
+class TldService(GetMixin, ListMixin, ApiService):
+
+    _path: str = "/tlds"
+    _obj_cls: Optional[Type[ApiObject]] = Tld
+
+    _resp_list_attr: str = "tlds"
+    _resp_get_attr: str = "tld"
 
 
 class InvoiceItem(ApiObject):
@@ -448,9 +462,94 @@ class InvoiceService(GetMixin, ListMixin, ApiService):
     _resp_get_attr: str = "invoice"
 
 
+class VpsAddon(ApiObject):
+    
+    _id_attr: str = "name"
+
+
+class VpsAddonService(ListMixin, ApiService):
+    """Service to manage addons of a VPS."""
+    
+    _path: str = "/vps/{parent_id}/addons"
+    _obj_cls: Optional[Type[ApiObject]] = VpsAddon
+    
+    _resp_list_attr: str = "addons"
+    
+    def list(self, needle: Optional[str] = None) -> List[Type[ApiObject]]:
+        """
+        Retrieve a list of addons.
+        Overwrites the default list() method of the ListMixin as the addons
+        are stored in further down in the result dictionary.
+        """
+        objs: List[Type[ApiObject]] = []
+        data = self.client.get(self.path)[self._resp_list_attr]
+        haystack = []
+        # Loop over the individual product lists of all product categories,
+        # e.g. vps, haip
+        if needle is None:
+            haystack = data.values()
+        else:
+            haystack.append(data[needle])
+
+        for obj_list in data.values():
+            for obj in obj_list:
+                objs.append(self._obj_cls(self, obj))  # type: ignore
+        return objs
+
+
+class VpsLicense(ApiObject):
+    
+    _id_attr: str = "name"
+
+
+class VpsLicenseService(ListMixin, ApiService):
+    """Service to manage licenses of a VPS."""
+    
+    _path: str = "/vps/{parent_id}/licenses"
+    _obj_cls: Optional[Type[ApiObject]] = VpsLicense
+    
+    _resp_list_attr: str = "licenses"
+    
+    def list(self, needle: Optional[str] = None) -> List[Type[ApiObject]]:
+        """
+        Retrieve a list of licenses.
+        Overwrites the default list() method of the ListMixin as the licenses
+        are stored in further down in the result dictionary.
+        """
+        objs: List[Type[ApiObject]] = []
+        data = self.client.get(self.path)[self._resp_list_attr]
+        haystack = []
+        # Loop over the individual product lists of all product categories,
+        # e.g. vps, haip
+        if needle is None:
+            haystack = data.values()
+        else:
+            haystack.append(data[needle])
+
+        for obj_list in haystack:
+            for obj in obj_list:
+                objs.append(self._obj_cls(self, obj))  # type: ignore
+        return objs
+
 class Vps(ApiObject):
 
     _id_attr: str = "name"
+    
+    @property
+    def addons(self) -> VpsAddonService:
+        """Return the service to manage the addons of the VPS."""
+        return VpsAddonService(
+            self.service.client,
+            parent=self  # type: ignore
+        )
+        
+    @property
+    def licenses(self) -> VpsLicenseService:
+        """Return the service to manage the licenses of the VPS."""
+        return VpsLicenseService(
+            self.service.client,
+            parent=self  # type: ignore
+        )
 
 
 class VpsService(GetMixin, DeleteMixin, ListMixin, ApiService):
@@ -460,8 +559,8 @@ class VpsService(GetMixin, DeleteMixin, ListMixin, ApiService):
 
     _resp_list_attr: str = "vpss"
     _resp_get_attr: str = "vps"
-
-
+    
+    
 class Colocation(ApiObject):
 
     _id_attr: str = "name"
