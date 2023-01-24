@@ -56,7 +56,7 @@ class TransIP:
             TransIP API
         global_key (bool): Allow the access token to be used from all
             IP-addresses instead of only the whitelisted ones.
-        transip_domain_extension (str): supply a different transip domain to use as api endpoint, possible options: .eu, .be, .nl (default).
+        transip_domain_extension (str): supply a different transip domain to use as api endpoint, possible options: eu, be, nl (default).
     """
 
     def __init__(
@@ -67,7 +67,7 @@ class TransIP:
         private_key: Optional[str] = None,
         private_key_file: Optional[str] = None,
         global_key: bool = False,
-        transip_domain_extension: str = ".nl",
+        transip_domain_extension: str = "nl",
     ) -> None:
         self._api_version: str = api_version
         self._url: str = f"https://api.transip.{transip_domain_extension}/v{api_version}"
