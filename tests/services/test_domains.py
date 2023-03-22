@@ -23,7 +23,7 @@ import unittest
 from typing import List, Dict, Any, Union
 
 from transip import TransIP
-from transip.v6.objects import Domain, WhoisContact, Nameserver, DnsEntry
+from transip.v6.objects import Domain, WhoisContact, Nameserver, DnsEntry, MailForward, MailForwardService
 from tests.utils import load_responses_fixtures
 
 
@@ -120,7 +120,6 @@ class DomainsTest(unittest.TestCase):
         except Exception as exc:
             assert False, f"'transip.v6.objects.Domain.dns.replace' raised an exception {exc}"
 
-
     @responses.activate
     def test_dns_create(self) -> None:
         dns_entry_data: Dict[str, Union[str, int]] = {
@@ -215,3 +214,83 @@ class DomainsTest(unittest.TestCase):
         # the listing of the DNS entries and the deletion of a single DNS
         # entry.
         self.assertEqual(len(responses.calls), 3)
+
+    @responses.activate
+    def test_mail_forwards_list(self) -> None:
+        """
+        Check if the mail forwards of a single domain can be listed.
+        """
+        domain: Domain = self.client.domains.get("example.com")  # type: ignore
+        mail_forwards: List[MailForward] = domain.mail_forwards.list()  # type: ignore
+        self.assertEqual(len(mail_forwards), 1)
+
+        forward: MailForward = mail_forwards[0]
+
+        self.assertEqual(forward.get_id(), 123)  # type: ignore
+
+    @responses.activate
+    def test_mail_forwards_get(self) -> None:
+        forward_id: int = 123
+
+        domain: Domain = self.client.domains.get("example.com")  # type: ignore
+        forward: MailForward = domain.mail_forwards.get(forward_id)  # type: ignore
+
+        self.assertEqual(forward.get_id(), forward_id)  # type: ignore
+
+    @responses.activate
+    def test_delete(self) -> None:
+        forward_id: int = 123
+        domain: Domain = self.client.domains.get("example.com")  # type: ignore
+
+        try:
+            domain.mail_forwards.delete(forward_id)  # type: ignore
+        except Exception as exc:
+            assert False, f"'transip.TransIP.mail_forwards.delete' raised an exception {exc}"
+
+    @responses.activate
+    def test_delete_object(self) -> None:
+        forward_id: int = 123
+        forward: MailForward = self.client.domains.get("example.com").mail_forwards.get(forward_id)  # type: ignore
+
+        try:
+            forward.delete()  # type: ignore
+        except Exception as exc:
+            assert False, f"'transip.v6.objects.MailForward.delete' raised an exception {exc}"
+
+    @responses.activate
+    def test_update_object(self) -> None:
+        forward_id: int = 123
+        forward: MailForward = self.client.domains.get("example.com").mail_forwards.get(forward_id)  # type: ignore
+        forward.localPart = "different_local_part"
+        forward.forwardTo = "forward_to@differentdomain.com"
+
+        try:
+            forward.update()
+        except Exception as exc:
+            assert False, f"'transip.v6.objects.MailForward.update' raised an exception {exc}"
+
+    @responses.activate
+    def test_update(self) -> None:
+        forward_id: int = 123
+        mail_forward_data: Dict[str, str] = {
+            "localPart": "different_local_part",
+            "forwardTo": "forward_to@differentdomain.com"
+        }
+
+        try:
+            self.client.domains.get("example.com").mail_forwards.update(  # type: ignore
+                forward_id, mail_forward_data
+            )
+        except Exception as exc:
+            assert False, f"'transip.TransIP.mail_forwards.update' raised an exception {exc}"
+
+    @responses.activate
+    def test_create(self) -> None:
+        mail_forward_data: Dict[str, str] = {
+            "localPart": "different_local_part",
+            "forwardTo": "forward_to@differentdomain.com"
+        }
+        self.client.domains.get("example.com").mail_forwards.create(mail_forward_data)  # type: ignore
+
+        assert len(responses.calls) == 2
+        assert responses.calls[1].response.status_code == 201
