@@ -353,5 +353,63 @@
                 }
             ]
         }
+    },
+    {
+        "method": "GET",
+        "url": "https://api.transip.nl/v6/email/example.com/mail-forwards",
+        "json": {
+            "forwards": [
+                {
+                    "id": 123,
+                    "localPart": "forward_mailbox",
+                    "domain": "example.com",
+                    "status": "ready",
+                    "forwardTo": "mailbox@otherdomain.com"
+                }
+            ]
+        },
+        "status": 200,
+        "content_type": "application/json"
+    },
+    {
+        "method": "GET",
+        "url": "https://api.transip.nl/v6/email/example.com/mail-forwards/123",
+        "json": {
+            "forward": {
+                "id": 123,
+                "localPart": "forward_mailbox",
+                "domain": "example.com",
+                "status": "ready",
+                "forwardTo": "mailbox@otherdomain.com"
+            }
+        },
+        "status": 200,
+        "content_type": "application/json"
+    },
+    {
+        "method": "POST",
+        "url": "https://api.transip.nl/v6/email/example.com/mail-forwards",
+        "status": 201,
+        "content_type": "application/json",
+        "match_json_params": {
+            "localPart": "different_local_part",
+            "forwardTo": "forward_to@differentdomain.com"
+        }
+    },
+    {
+        "method": "PUT",
+        "url": "https://api.transip.nl/v6/email/example.com/mail-forwards/123",
+        "status": 204,
+        "content_type": "application/json",
+        "match_json_params": {
+            "localPart": "different_local_part",
+            "forwardTo": "forward_to@differentdomain.com"
+        }
+    },
+    {
+        "method": "DELETE",
+        "url": "https://api.transip.nl/v6/email/example.com/mail-forwards/123",
+        "status": 204,
+        "content_type": "application/json"
     }
 ]

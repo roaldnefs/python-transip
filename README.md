@@ -54,6 +54,13 @@
         - [The **Nameserver** class](#the-nameserver-class)
         - [List nameservers for a domain](#list-nameservers-for-a-domain)
         - [Update nameservers for a domain](#update-nameservers-for-a-domain)
+    - [Mail Forwards](#mail-forwards)
+        - [The **MailForward** class](#the-mailforward-class)
+        - [List all mail forwards for a domain](#list-all-mail-forwards)
+        - [Get mail forward by id](#get-mail-forward-by-id)
+        - [Add a new mail forward](#add-a-new-mail-forward)
+        - [Update a mail forward](#update-a-mail-forward)
+        - [Delete a mail forward](#delete-a-mail-forward)
 - [VPS](#vps)
 - [HA-IP](#ha-ip)
 - [Colocation](#colocation)
@@ -703,6 +710,124 @@ nameserver[0].ipv4 = '195.135.195.195'
 # Replace all the records with the updated ones
 domain.nameservers.replace(nameservers)
 ```
+
+### Mail Forwards
+### The **MailForward** class
+When listing all mail forwards for a domain, a list of **transip.v6.objects.MailForward** objects is returned.
+
+**_class_ MailForward**
+
+The **MailForward** class makes the following attributes available:
+
+- **id**: The mail forward identifier.
+- **localPart**: The local part of the mailbox for the forward.
+- **domain**: The domain to which the forward applies.
+- **status**: Status of the forward
+- **forwardTo**: The email address to forward to.
+
+The class has the following methods:
+
+- **delete()** will delete the mail forward
+- **update()** will send the updated attributes to the TransIP API.
+
+#### List all mail forwards
+Retrieve all mail forwards for a domain by calling **mail_forwards.list()** on a **transip.v6.objects.Domain** object. 
+This will return a list of **transip.v6.objects.MailForward** objects.
+
+For example:
+```python
+import transip
+# Initialize a client using the TransIP demo token.
+client = transip.TransIP(access_token=transip.v6.DEMO_TOKEN)
+
+# List all mail forwards for a domain.
+domain = client.domains.get("transipdemonstratie.nl")
+mail_forwards = domain.mail_forwards.list()
+
+# Show mail forwards
+for mail_forward in mail_forwards:
+    print(f"id: {mail_forward.id}, Domain: {mail_forward.domain}, forwardTo: {mail_forward.forwardTo}, "
+          f"localPart: {mail_forward.localPart}, status: {mail_forward.status}")
+```
+
+#### Get mail forward by id
+Retrieve a single mail forward by its ID by calling **mail_forwards.get()** on a **transip.v6.objects.Domain** object.  
+This will return a **transip.v6.objects.MailForward** object.
+
+For example:
+```python
+import transip
+# Initialize a client using the TransIP demo token.
+client = transip.TransIP(access_token=transip.v6.DEMO_TOKEN)
+domain = client.domains.get("transipdemonstratie.nl")
+
+# Retrieve a mail forward by its ID.
+mail_forward = domain.mail_forwards.get(123)
+
+print(f"id: {mail_forward.id}, Domain: {mail_forward.domain}, forwardTo: {mail_forward.forwardTo}, "
+      f"localPart: {mail_forward.localPart}, status: {mail_forward.status}")
+```
+
+#### Add a new mail forward
+Add a new mail forward by calling **mail_forwards.create(_data_)** on a **transip.v6.objects.Domain** object. 
+The **data** keyword argument requires a dictionary with the **localPart** and **forwardTo** attributes.
+
+**Note:** Providing an empty string as the `localPart` creates a catch-all address
+
+For example:
+```python
+import transip
+# Initialize a client using the TransIP demo token.
+client = transip.TransIP(access_token=transip.v6.DEMO_TOKEN)
+
+# Data used to create a new mail forward.
+forward_data = {
+    "localPart": "forward",
+    "forwardTo": "mailbox@domain.com"
+}
+
+domain = client.domains.get("transipdemonstratie.nl")
+domain.mail_forwards.create(forward_data)
+```
+
+#### Update a mail forward
+Update an existing mail forward by calling **mail_forwards.update(_id_, _data_)** on a **transip.v6.objects.Domain** object.
+
+For example:
+```python
+import transip
+# Initialize a client using the TransIP demo token.
+client = transip.TransIP(access_token=transip.v6.DEMO_TOKEN)
+
+# Data used to create a new mail forward.
+forward_data = {
+    "localPart": "forward",
+    "forwardTo": "mailbox@domain.com"
+}
+
+# Update mail forward with id 123.
+domain = client.domains.get("transipdemonstratie.nl")
+domain.mail_forwards.update(123, forward_data)
+```
+
+The **transip.v6.objects.MailForward** class also provides an **update()** method to update a **MailForward** object 
+from an instance after changing any of the update-able attributes.
+
+#### Delete a mail forward
+Delete an existing mail forward by calling **mail_forwards.delete(_id_)** on a **transip.v6.objects.Domain** object.
+The **id** keyword argument is the ID of the mail forward provided by TransIP.
+
+For example:
+```python
+import transip
+# Initialize a client using the TransIP demo token.
+client = transip.TransIP(access_token=transip.v6.DEMO_TOKEN)
+
+domain = client.domains.get("transipdemonstratie.nl")
+domain.mail_forwards.delete(224063)
+```
+
+The **transip.v6.objects.MailForward** class also provides a **delete()** method to delete a **MailForward** object from an instance.
 
 ## VPS
 The documentation for managing **VPSs** and related resources has not yet been documented. Feel free to file an [issue](https://github.com/roaldnefs/python-transip/issues/new/choose) for adding the missing section(s) in the documentation.
