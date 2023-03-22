@@ -331,6 +331,32 @@ class NameserverService(ListMixin, ReplaceMixin, ApiService):
     )
 
 
+class MailForward(ObjectUpdateMixin, ObjectDeleteMixin, ApiObject):
+
+    _id_attr: Optional[str] = "id"
+
+
+class MailForwardService(GetMixin, CreateMixin, UpdateMixin, DeleteMixin,
+                         ListMixin, ApiService):
+    """Service to manage mail forwards for a domain."""
+
+    _path: str = "/email/{parent_id}/mail-forwards"
+    _obj_cls: Optional[Type[ApiObject]] = MailForward
+
+    _resp_list_attr: str = "forwards"
+    _resp_get_attr: str = "forward"
+
+    _create_attrs: Optional[AttrsTuple] = (
+        ("localPart", "forwardTo",),  # required
+        tuple()  # optional
+    )
+
+    _update_attrs: Optional[AttrsTuple] = (
+        ("localPart", "forwardTo",),  # required
+        tuple()  # optional
+    )
+
+
 class Domain(ApiObject):
 
     _id_attr: str = "name"
@@ -355,6 +381,14 @@ class Domain(ApiObject):
     def nameservers(self) -> NameserverService:
         """Return the service to manage the nameservers of the domain."""
         return NameserverService(
+            self.service.client,
+            parent=self  # type: ignore
+        )
+
+    @property
+    def mail_forwards(self) -> MailForwardService:
+        """Return the service to manage mail forwards for a domain."""
+        return MailForwardService(
             self.service.client,
             parent=self  # type: ignore
         )
